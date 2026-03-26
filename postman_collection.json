@@ -1,0 +1,207 @@
+{
+  "item": [
+    {
+      "id": "59e6f231-f28e-4ad3-9441-9c46b7a629e3",
+      "name": "AUTH",
+      "description": {
+        "content": "Routes for auth",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "551f7441-0f07-4af8-9ed0-5e5ed3fdf062",
+          "name": "Signup",
+          "request": {
+            "description": {
+              "content": "Controller: signUp\nSchema: signupSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| firstName | string | Required |\n| lastName | string | Required |\n| email | string | Required |\n| phoneNumber | string | Required |\n| profilePhoto | string | Optional |\n| password | string | Required |\n| contact | alternatives | Optional |\n| contact.countryCode | string | Optional |\n| contact.phoneNo | alternatives | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "signup"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"pramit\",\n  \"lastName\": \"mangukiya\",\n  \"email\": \"pramitmangukiya602@gmail.com\",\n  \"phoneNumber\": \"9725097885\",\n  \"profilePhoto\": \"sample_profilePhoto\",\n  \"password\": \"Admin@123\",\n  \"contact\": {\n    \"countryCode\": \"+91\",\n    \"phoneNo\": \"9725097885\"\n  }\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "7ec83b6d-68b1-464a-93c1-03650baeed5c",
+          "name": "Login",
+          "request": {
+            "description": {
+              "content": "Controller: login\nSchema: loginSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| email | string | Required |\n| password | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "login"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"pramitmangukiya602@gmail.com\",\n  \"password\": \"Admin@123\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "f84bb6c5-eecc-4c9b-a37a-708fd1f65782",
+          "name": "Forgot Password",
+          "request": {
+            "description": {
+              "content": "Controller: forgot_password\nSchema: forgotPasswordSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| email | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "forgot-password"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"pramitmangukiya602@gmail.com\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "8133688b-8747-451f-87f4-b2f5a4fb160a",
+          "name": "Reset Password",
+          "request": {
+            "description": {
+              "content": "Controller: reset_password\nSchema: resetPasswordSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| email | string | Required |\n| otp | alternatives | Required |\n| password | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "reset-password"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"otp\": \"sample_string\",\n  \"password\": \"Password123!\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "ac6f284d-6290-41f4-a26e-7f96dc856f55",
+          "name": "Verify Otp",
+          "request": {
+            "description": {
+              "content": "Controller: otp_verification\nSchema: verifyOtpSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| email | string | Required |\n| otp | alternatives | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "verify-otp"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"otp\": \"sample_string\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "any",
+      "value": "http://localhost:5000",
+      "key": "BASE_URL"
+    },
+    {
+      "type": "any",
+      "value": "",
+      "key": "TOKEN"
+    }
+  ],
+  "info": {
+    "_postman_id": "3c9d9db8-2c27-417e-afc1-fbdb2719ce4a",
+    "name": "Delvoura API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Auto generated API collection",
+      "type": "text/plain"
+    }
+  }
+}

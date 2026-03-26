@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "59e6f231-f28e-4ad3-9441-9c46b7a629e3",
+      "id": "fb2799f3-523d-4d5f-b262-b100b5261274",
       "name": "AUTH",
       "description": {
         "content": "Routes for auth",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "551f7441-0f07-4af8-9ed0-5e5ed3fdf062",
+          "id": "0f134a0f-36be-45f7-b63a-f0c7f22ee008",
           "name": "Signup",
           "request": {
             "description": {
@@ -43,7 +43,7 @@
           "event": []
         },
         {
-          "id": "7ec83b6d-68b1-464a-93c1-03650baeed5c",
+          "id": "b79277e8-e86b-4ba8-8543-e7d9e5b1d639",
           "name": "Login",
           "request": {
             "description": {
@@ -77,7 +77,7 @@
           "event": []
         },
         {
-          "id": "f84bb6c5-eecc-4c9b-a37a-708fd1f65782",
+          "id": "00e81a8d-7abe-4cc7-83c5-d7ae80107f03",
           "name": "Forgot Password",
           "request": {
             "description": {
@@ -111,7 +111,7 @@
           "event": []
         },
         {
-          "id": "8133688b-8747-451f-87f4-b2f5a4fb160a",
+          "id": "c5b8e2f3-595d-480a-b4bf-84dfe2b1ffac",
           "name": "Reset Password",
           "request": {
             "description": {
@@ -145,7 +145,7 @@
           "event": []
         },
         {
-          "id": "ac6f284d-6290-41f4-a26e-7f96dc856f55",
+          "id": "3a9371f5-12c8-4313-af50-fc9758f8a447",
           "name": "Verify Otp",
           "request": {
             "description": {
@@ -196,7 +196,7 @@
     }
   ],
   "info": {
-    "_postman_id": "3c9d9db8-2c27-417e-afc1-fbdb2719ce4a",
+    "_postman_id": "9273fc4a-3f53-446d-86e3-c6def964e1b7",
     "name": "Delvoura API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

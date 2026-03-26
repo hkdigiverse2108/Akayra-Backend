@@ -370,7 +370,7 @@ async function main() {
       const existingReq = existingRequests[pathKey];
 
       const pathParams = fullPath.match(/:(\w+)/g) || [];
-      pathParams.forEach(param => {
+      pathParams.forEach((param: any) => {
         const key = param.substring(1);
         let val = `sample_${key}`;
         if (existingReq && existingReq.url && existingReq.url.variable) {

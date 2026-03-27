@@ -1,72 +1,11 @@
+
 import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
-import { faqModel, faqCategoryModel } from '../../database';
+import { faqModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
-import { 
-    addFaqCategorySchema, editFaqCategorySchema, deleteFaqCategorySchema,
-    addFaqSchema, editFaqSchema, deleteFaqSchema, getFaqByIdSchema, getFaqsSchema
-} from '../../validation';
+import { addFaqSchema, editFaqSchema, deleteFaqSchema, getFaqByIdSchema, getFaqsSchema } from '../../validation';
 
-// ─── FAQ Category ──────────────────────────────────────────────────
-export const add_faq_category = async (req, res) => {
-    reqInfo(req)
-    try {
-        const { error, value } = addFaqCategorySchema.validate(req.body || {});
-        if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
-
-        let isExist = await getFirstMatch(faqCategoryModel, { title: value.title, isDeleted: false }, {}, {});
-        if (isExist) return res.status(HTTP_STATUS.CONFLICT).json(new apiResponse(HTTP_STATUS.CONFLICT, responseMessage?.dataAlreadyExist("title"), {}, {}));
-
-        const response = await createData(faqCategoryModel, value);
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.addDataSuccess('FAQ Category'), response, {}));
-    } catch (error) {
-        console.log(error)
-        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
-    }
-};
-
-export const edit_faq_category_by_id = async (req, res) => {
-    reqInfo(req)
-    try {
-        const { error, value } = editFaqCategorySchema.validate(req.body || {});
-        if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
-
-        const response = await updateData(faqCategoryModel, { _id: isValidObjectId(value.faqCategoryId) }, value, {});
-        if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound('FAQ Category'), {}, {}));
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.updateDataSuccess('FAQ Category'), response, {}));
-    } catch (error) {
-        console.log(error)
-        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
-    }
-};
-
-export const delete_faq_category_by_id = async (req, res) => {
-    reqInfo(req)
-    try {
-        const { error, value } = deleteFaqCategorySchema.validate(req.params || {});
-        if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
-        const response = await deleteData(faqCategoryModel, { _id: isValidObjectId(value.id) });
-        if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound('FAQ Category'), {}, {}));
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.deleteDataSuccess('FAQ Category'), response, {}));
-    } catch (error) {
-        console.log(error)
-        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
-    }
-};
-
-export const get_all_faq_category = async (req, res) => {
-    reqInfo(req)
-    try {
-        const response = await getData(faqCategoryModel, { isDeleted: false }, {}, { lean: true, sort: { createdAt: -1 } });
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('FAQ Category'), response, {}));
-    } catch (error) {
-        console.log(error)
-        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
-    }
-};
-
-// ─── FAQ ──────────────────────────────────────────────────────────
 export const add_faq = async (req, res) => {
-    reqInfo(req)
+    reqInfo(req);
     try {
         const { error, value } = addFaqSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
@@ -74,13 +13,13 @@ export const add_faq = async (req, res) => {
         const response = await createData(faqModel, value);
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.addDataSuccess('FAQ'), response, {}));
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
 
 export const edit_faq_by_id = async (req, res) => {
-    reqInfo(req)
+    reqInfo(req);
     try {
         const { error, value } = editFaqSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
@@ -89,27 +28,28 @@ export const edit_faq_by_id = async (req, res) => {
         if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound('FAQ'), {}, {}));
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.updateDataSuccess('FAQ'), response, {}));
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
 
 export const delete_faq_by_id = async (req, res) => {
-    reqInfo(req)
+    reqInfo(req);
     try {
         const { error, value } = deleteFaqSchema.validate(req.params || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
+
         const response = await deleteData(faqModel, { _id: isValidObjectId(value.id) });
         if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound('FAQ'), {}, {}));
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.deleteDataSuccess('FAQ'), response, {}));
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
 
 export const get_all_faq = async (req, res) => {
-    reqInfo(req)
+    reqInfo(req);
     try {
         const { error, value } = getFaqsSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
@@ -126,21 +66,22 @@ export const get_all_faq = async (req, res) => {
         const totalCount = await countData(faqModel, criteria);
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('FAQ'), { faq_data: response, totalData: totalCount, state: resolvePagination(page, limit) }, {}));
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
 
 export const get_faq_by_id = async (req, res) => {
-    reqInfo(req)
+    reqInfo(req);
     try {
         const { error, value } = getFaqByIdSchema.validate(req.params);
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error?.details[0]?.message, {}, {}));
+
         const response = await getFirstMatch(faqModel, { _id: isValidObjectId(value.id), isDeleted: false }, {}, {});
         if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage?.getDataNotFound("FAQ"), {}, {}));
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage?.getDataSuccess("FAQ"), response, {}));
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage?.internalServerError, {}, error));
     }
 };

@@ -19,6 +19,7 @@ import { aboutRouter } from './about'
 import { igPostRouter } from './ig-post'
 import { sizeRouter } from './size'
 import { colorRouter } from './color'
+import { faqCategoryRouter } from './faq-category'
 
 const router = Router()
 
@@ -30,6 +31,7 @@ router.use('/review', reviewRouter)
 router.use('/banner', bannerRouter)
 router.use('/blog', blogRouter)
 router.use('/faq', faqRouter)
+router.use('/faq-category', faqCategoryRouter)
 router.use('/newsletter', newsletterRouter)
 router.use('/contact', contactRouter)
 router.use('/settings', settingsRouter)

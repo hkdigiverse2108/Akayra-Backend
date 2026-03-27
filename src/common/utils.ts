@@ -57,7 +57,7 @@ export const generateToken = async (data = {}, expiresIn = {}) => {
 };
 
 export const isValidObjectId = (id = "") => {
-  return Types.ObjectId.isValid(id) ? id : false;
+  return Types.ObjectId.isValid(id) ? new Types.ObjectId(id) : false;
 };
 
 export const parseDateRange = (start?: any, end?: any) => {

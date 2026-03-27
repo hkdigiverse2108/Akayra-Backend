@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "fb2799f3-523d-4d5f-b262-b100b5261274",
+      "id": "3abe2dc9-5b0c-42c5-9637-88292a03ed31",
       "name": "AUTH",
       "description": {
         "content": "Routes for auth",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "0f134a0f-36be-45f7-b63a-f0c7f22ee008",
+          "id": "5687a80c-ce73-41ea-ae32-24389f317828",
           "name": "Signup",
           "request": {
             "description": {
@@ -43,7 +43,7 @@
           "event": []
         },
         {
-          "id": "b79277e8-e86b-4ba8-8543-e7d9e5b1d639",
+          "id": "451a69d2-6762-4add-8ad7-c1d9da6798d7",
           "name": "Login",
           "request": {
             "description": {
@@ -77,7 +77,7 @@
           "event": []
         },
         {
-          "id": "00e81a8d-7abe-4cc7-83c5-d7ae80107f03",
+          "id": "739acbf1-b612-4b30-8083-38fde3021f17",
           "name": "Forgot Password",
           "request": {
             "description": {
@@ -111,7 +111,7 @@
           "event": []
         },
         {
-          "id": "c5b8e2f3-595d-480a-b4bf-84dfe2b1ffac",
+          "id": "39179425-26b7-4226-b5a5-3b9b5ab3f21a",
           "name": "Reset Password",
           "request": {
             "description": {
@@ -145,7 +145,7 @@
           "event": []
         },
         {
-          "id": "3a9371f5-12c8-4313-af50-fc9758f8a447",
+          "id": "0f360792-45f1-4bc9-888e-63d216caabcc",
           "name": "Verify Otp",
           "request": {
             "description": {
@@ -180,6 +180,3087 @@
         }
       ],
       "event": []
+    },
+    {
+      "id": "4d46cf50-1a8a-478a-a229-03e7331fd67e",
+      "name": "CATEGORY",
+      "description": {
+        "content": "Routes for category",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b9709054-2de7-470b-900d-2d85e154ed3b",
+          "name": "Add Category",
+          "request": {
+            "description": {
+              "content": "Controller: add_category\nSchema: addCategorySchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| name | string | Required |\n| image | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "category",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hello51\",\n  \"image\": \"sample_image\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "a212dd1a-572b-4f2b-95f6-a8b81c0d62d0",
+          "name": "Edit Category",
+          "request": {
+            "description": {
+              "content": "Controller: edit_category_by_id\nSchema: editCategorySchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| categoryId | string | Required |\n| name | string | Optional |\n| image | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "category",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryId\": \"69c4df0b9fadb940c263011b\",\n  \"name\": \"Test123\",\n  \"image\": \"sample_image\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "176bc282-80fe-4e83-8646-140ce4aa9d08",
+          "name": "Delete Category",
+          "request": {
+            "description": {
+              "content": "Controller: delete_category_by_id\nSchema: deleteCategorySchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "category",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "79670e1a-a016-4589-8d0c-e035e45a830f",
+          "name": "Get Categories",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_category\nSchema: getCategoriesSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| page | number | Optional |\n| limit | number | Optional |\n| search | string | Optional |\n| activeFilter | boolean | Optional |\n| startDateFilter | string | Optional |\n| endDateFilter | string | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "category",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "sample_search"
+                },
+                {
+                  "key": "activeFilter",
+                  "value": "true"
+                },
+                {
+                  "key": "startDateFilter",
+                  "value": "sample_startDateFilter"
+                },
+                {
+                  "key": "endDateFilter",
+                  "value": "sample_endDateFilter"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "cb1aa26e-d764-4596-b431-08bfd63e8e22",
+          "name": "Get Category By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_category_by_id\nSchema: getCategoryByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "category",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "69c4df0b9fadb940c263011b",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "9503f40f-4508-436e-9116-233d1262f7ce",
+      "name": "BRAND",
+      "description": {
+        "content": "Routes for brand",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "48695760-130d-4fd1-b562-2055128449d0",
+          "name": "Add Brand",
+          "request": {
+            "description": {
+              "content": "Controller: add_brand\nSchema: addBrandSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| name | string | Required |\n| image | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "brand",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"sample_name\",\n  \"image\": \"sample_image\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "fd78e26b-256f-4f50-8244-184c0c501959",
+          "name": "Edit Brand",
+          "request": {
+            "description": {
+              "content": "Controller: edit_brand_by_id\nSchema: editBrandSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| brandId | string | Required |\n| name | string | Optional |\n| image | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "brand",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"brandId\": \"sample_brandId\",\n  \"name\": \"sample_name\",\n  \"image\": \"sample_image\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "a46ede3f-d04e-40a3-96b3-2b63a083d255",
+          "name": "Delete Brand",
+          "request": {
+            "description": {
+              "content": "Controller: delete_brand_by_id\nSchema: deleteBrandSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "brand",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "abc616d8-479e-48ff-bb75-708b70672066",
+          "name": "Get Brands",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_brand\nSchema: getBrandsSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| page | number | Optional |\n| limit | number | Optional |\n| search | string | Optional |\n| sortFilter | string | Optional |\n| activeFilter | boolean | Optional |\n| startDateFilter | string | Optional |\n| endDateFilter | string | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "brand",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "sample_search"
+                },
+                {
+                  "key": "sortFilter",
+                  "value": "sample_sortFilter"
+                },
+                {
+                  "key": "activeFilter",
+                  "value": "true"
+                },
+                {
+                  "key": "startDateFilter",
+                  "value": "sample_startDateFilter"
+                },
+                {
+                  "key": "endDateFilter",
+                  "value": "sample_endDateFilter"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "2044f21d-b4ba-43e7-b74f-7aa4ab9ca2df",
+          "name": "Get Brand By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_brand_by_id\nSchema: getBrandByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "brand",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "c7089f5c-468c-48b5-ac0f-9d5641dea984",
+      "name": "PRODUCT",
+      "description": {
+        "content": "Routes for product",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a3b5d21a-03e5-45f1-b9c4-ad068ce42e16",
+          "name": "Add Product",
+          "request": {
+            "description": {
+              "content": "Controller: add_product\nSchema: addProductSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| title | string | Required |\n| thumbnail | string | Optional |\n| images | array | Optional |\n| categoryId | string | Required |\n| brandId | string | Optional |\n| sku | string | Optional |\n| mrp | number | Required |\n| sellingPrice | number | Required |\n| cogsPrice | number | Optional |\n| shortDescription | string | Optional |\n| longDescription | string | Optional |\n| additionalInformation | string | Optional |\n| sizeIds | array | Optional |\n| colorIds | array | Optional |\n| isTrending | boolean | Optional |\n| isDealOfDay | boolean | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "product",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"sample_title\",\n  \"thumbnail\": \"sample_thumbnail\",\n  \"images\": [\n    \"sample_string\"\n  ],\n  \"categoryId\": \"sample_categoryId\",\n  \"brandId\": \"sample_brandId\",\n  \"sku\": \"sample_sku\",\n  \"mrp\": 123,\n  \"sellingPrice\": 123,\n  \"cogsPrice\": 123,\n  \"shortDescription\": \"sample_shortDescription\",\n  \"longDescription\": \"sample_longDescription\",\n  \"additionalInformation\": \"sample_additionalInformation\",\n  \"sizeIds\": [\n    \"sample_string\"\n  ],\n  \"colorIds\": [\n    \"sample_string\"\n  ],\n  \"isTrending\": true,\n  \"isDealOfDay\": true,\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "d915e27d-4ced-4b64-ac08-4b18824e5714",
+          "name": "Edit Product",
+          "request": {
+            "description": {
+              "content": "Controller: edit_product_by_id\nSchema: editProductSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| productId | string | Required |\n| title | string | Optional |\n| thumbnail | string | Optional |\n| images | array | Optional |\n| categoryId | string | Optional |\n| brandId | string | Optional |\n| sku | string | Optional |\n| mrp | number | Optional |\n| sellingPrice | number | Optional |\n| cogsPrice | number | Optional |\n| shortDescription | string | Optional |\n| longDescription | string | Optional |\n| additionalInformation | string | Optional |\n| sizeIds | array | Optional |\n| colorIds | array | Optional |\n| isTrending | boolean | Optional |\n| isDealOfDay | boolean | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "product",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"sample_productId\",\n  \"title\": \"sample_title\",\n  \"thumbnail\": \"sample_thumbnail\",\n  \"images\": [\n    \"sample_string\"\n  ],\n  \"categoryId\": \"sample_categoryId\",\n  \"brandId\": \"sample_brandId\",\n  \"sku\": \"sample_sku\",\n  \"mrp\": 123,\n  \"sellingPrice\": 123,\n  \"cogsPrice\": 123,\n  \"shortDescription\": \"sample_shortDescription\",\n  \"longDescription\": \"sample_longDescription\",\n  \"additionalInformation\": \"sample_additionalInformation\",\n  \"sizeIds\": [\n    \"sample_string\"\n  ],\n  \"colorIds\": [\n    \"sample_string\"\n  ],\n  \"isTrending\": true,\n  \"isDealOfDay\": true,\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "72642751-7dd3-4b14-b0ee-47cd02e04383",
+          "name": "Delete Product",
+          "request": {
+            "description": {
+              "content": "Controller: delete_product_by_id\nSchema: deleteProductSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "product",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "23409d25-1dac-4f3c-b7be-295a61092460",
+          "name": "Get Products",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_product\nSchema: getProductsSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| page | number | Optional |\n| limit | number | Optional |\n| search | string | Optional |\n| categoryId | string | Optional |\n| brandId | string | Optional |\n| isTrending | boolean | Optional |\n| isDealOfDay | boolean | Optional |\n| sortFilter | string | Optional |\n| activeFilter | boolean | Optional |\n| startDateFilter | string | Optional |\n| endDateFilter | string | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "product",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "sample_search"
+                },
+                {
+                  "key": "categoryId",
+                  "value": "sample_categoryId"
+                },
+                {
+                  "key": "brandId",
+                  "value": "sample_brandId"
+                },
+                {
+                  "key": "isTrending",
+                  "value": "true"
+                },
+                {
+                  "key": "isDealOfDay",
+                  "value": "true"
+                },
+                {
+                  "key": "sortFilter",
+                  "value": "sample_sortFilter"
+                },
+                {
+                  "key": "activeFilter",
+                  "value": "true"
+                },
+                {
+                  "key": "startDateFilter",
+                  "value": "sample_startDateFilter"
+                },
+                {
+                  "key": "endDateFilter",
+                  "value": "sample_endDateFilter"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "27e20c33-c76e-4945-a851-d82cdb6e6be1",
+          "name": "Get Product By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_product_by_id\nSchema: getProductByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "product",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "bd352bec-2a81-44bb-87bb-042159c42a5d",
+      "name": "REVIEW",
+      "description": {
+        "content": "Routes for review",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6b79b382-fa9b-4816-b01f-4926c6b6766c",
+          "name": "Add Review",
+          "request": {
+            "description": {
+              "content": "Controller: add_review\nSchema: addReviewSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| productId | string | Required |\n| name | string | Optional |\n| personName | string | Optional |\n| email | string | Optional |\n| image | string | Optional |\n| description | string | Optional |\n| rating | number | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "review",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"sample_productId\",\n  \"name\": \"sample_name\",\n  \"personName\": \"sample_personName\",\n  \"email\": \"test@example.com\",\n  \"image\": \"sample_image\",\n  \"description\": \"sample_description\",\n  \"rating\": 123\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "30012a1c-baec-4840-bd12-605e40994c2f",
+          "name": "Edit Review",
+          "request": {
+            "description": {
+              "content": "Controller: edit_review_by_id\nSchema: editReviewSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| reviewId | string | Required |\n| name | string | Optional |\n| personName | string | Optional |\n| email | string | Optional |\n| image | string | Optional |\n| description | string | Optional |\n| rating | number | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "review",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reviewId\": \"sample_reviewId\",\n  \"name\": \"sample_name\",\n  \"personName\": \"sample_personName\",\n  \"email\": \"test@example.com\",\n  \"image\": \"sample_image\",\n  \"description\": \"sample_description\",\n  \"rating\": 123,\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "9c973cbd-9598-4371-8bcf-a84bf00248b9",
+          "name": "Delete Review",
+          "request": {
+            "description": {
+              "content": "Controller: delete_review_by_id\nSchema: deleteReviewSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "review",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "5307c8ff-6ce4-469e-a87d-06ffc745f7d1",
+          "name": "Get Reviews",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_review\nSchema: getReviewsSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| page | number | Optional |\n| limit | number | Optional |\n| productId | string | Optional |\n| activeFilter | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "review",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "productId",
+                  "value": "sample_productId"
+                },
+                {
+                  "key": "activeFilter",
+                  "value": "true"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "e804faaa-d32b-45fe-90cd-02aa1931da97",
+          "name": "Get Review By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_review_by_id\nSchema: getReviewByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "review",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b0c43fdd-cdc6-49f5-9f6b-299b539f35cd",
+      "name": "BANNER",
+      "description": {
+        "content": "Routes for banner",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "71f775de-333d-49e1-a7cd-7784a488f08e",
+          "name": "Add Banner",
+          "request": {
+            "description": {
+              "content": "Controller: add_banner\nSchema: addBannerSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| type | string | Required |\n| title | string | Required |\n| subtitle | string | Optional |\n| ctaButton | string | Optional |\n| ctaButtonRedirection | string | Optional |\n| pageRedirection | string | Optional |\n| endDate | date | Optional |\n| image | string | Optional |\n| priority | number | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "banner",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"sample_type\",\n  \"title\": \"sample_title\",\n  \"subtitle\": \"sample_subtitle\",\n  \"ctaButton\": \"sample_ctaButton\",\n  \"ctaButtonRedirection\": \"sample_ctaButtonRedirection\",\n  \"pageRedirection\": \"sample_pageRedirection\",\n  \"endDate\": \"\",\n  \"image\": \"sample_image\",\n  \"priority\": 123,\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "09d042d1-49c6-4d8c-a5e4-e58e8323d012",
+          "name": "Edit Banner",
+          "request": {
+            "description": {
+              "content": "Controller: edit_banner_by_id\nSchema: editBannerSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| bannerId | string | Required |\n| type | string | Optional |\n| title | string | Optional |\n| subtitle | string | Optional |\n| ctaButton | string | Optional |\n| ctaButtonRedirection | string | Optional |\n| pageRedirection | string | Optional |\n| endDate | date | Optional |\n| image | string | Optional |\n| priority | number | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "banner",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bannerId\": \"sample_bannerId\",\n  \"type\": \"sample_type\",\n  \"title\": \"sample_title\",\n  \"subtitle\": \"sample_subtitle\",\n  \"ctaButton\": \"sample_ctaButton\",\n  \"ctaButtonRedirection\": \"sample_ctaButtonRedirection\",\n  \"pageRedirection\": \"sample_pageRedirection\",\n  \"endDate\": \"\",\n  \"image\": \"sample_image\",\n  \"priority\": 123,\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "483a9943-75d6-4f86-b9e5-f4934e6fc0d4",
+          "name": "Delete Banner",
+          "request": {
+            "description": {
+              "content": "Controller: delete_banner_by_id\nSchema: deleteBannerSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "banner",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "89e5b426-8dbc-4903-8dac-973fb50e7b8c",
+          "name": "Get Banners",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_banner\nSchema: getBannersSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| type | string | Optional |\n| activeFilter | boolean | Optional |\n| page | number | Optional |\n| limit | number | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "banner",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "sample_type"
+                },
+                {
+                  "key": "activeFilter",
+                  "value": "true"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "6072b4ba-ed59-421d-a0e9-339e699e9b95",
+          "name": "Get Banner By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_banner_by_id\nSchema: getBannerByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "banner",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "b636133b-7df1-4644-a86d-5475df2860d9",
+      "name": "BLOG",
+      "description": {
+        "content": "Routes for blog",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "08076055-ad46-4ae9-9655-3045996817b2",
+          "name": "Add Blog",
+          "request": {
+            "description": {
+              "content": "Controller: add_blog\nSchema: addBlogSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| titleTag | string | Optional |\n| metaDescription | string | Optional |\n| urlSlug | string | Required |\n| imageAltText | string | Optional |\n| thumbnail | string | Optional |\n| title | string | Required |\n| description | string | Optional |\n| tagLine | string | Optional |\n| tags | array | Optional |\n| categoryIds | array | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "blog",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titleTag\": \"sample_titleTag\",\n  \"metaDescription\": \"sample_metaDescription\",\n  \"urlSlug\": \"sample_urlSlug\",\n  \"imageAltText\": \"sample_imageAltText\",\n  \"thumbnail\": \"sample_thumbnail\",\n  \"title\": \"sample_title\",\n  \"description\": \"sample_description\",\n  \"tagLine\": \"sample_tagLine\",\n  \"tags\": [\n    \"sample_string\"\n  ],\n  \"categoryIds\": [\n    \"sample_string\"\n  ],\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "fe7b8bd4-10f7-4e60-b502-e0bb04b72730",
+          "name": "Edit Blog",
+          "request": {
+            "description": {
+              "content": "Controller: edit_blog_by_id\nSchema: editBlogSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| blogId | string | Required |\n| titleTag | string | Optional |\n| metaDescription | string | Optional |\n| urlSlug | string | Optional |\n| imageAltText | string | Optional |\n| thumbnail | string | Optional |\n| title | string | Optional |\n| description | string | Optional |\n| tagLine | string | Optional |\n| tags | array | Optional |\n| categoryIds | array | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "blog",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blogId\": \"sample_blogId\",\n  \"titleTag\": \"sample_titleTag\",\n  \"metaDescription\": \"sample_metaDescription\",\n  \"urlSlug\": \"sample_urlSlug\",\n  \"imageAltText\": \"sample_imageAltText\",\n  \"thumbnail\": \"sample_thumbnail\",\n  \"title\": \"sample_title\",\n  \"description\": \"sample_description\",\n  \"tagLine\": \"sample_tagLine\",\n  \"tags\": [\n    \"sample_string\"\n  ],\n  \"categoryIds\": [\n    \"sample_string\"\n  ],\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "d21edddf-7f97-4981-849a-63205a70c112",
+          "name": "Delete Blog",
+          "request": {
+            "description": {
+              "content": "Controller: delete_blog_by_id\nSchema: deleteBlogSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "blog",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "5253b07f-1a6a-4b37-83cb-177cfb2ca3e6",
+          "name": "Get Blogs",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_blog\nSchema: getBlogsSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| page | number | Optional |\n| limit | number | Optional |\n| search | string | Optional |\n| activeFilter | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "blog",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "sample_search"
+                },
+                {
+                  "key": "activeFilter",
+                  "value": "true"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "a1ca3ad8-acb6-4d2e-8b66-b8bd466447f6",
+          "name": "Get Blog By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_blog_by_id\nSchema: getBlogByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "blog",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "a09f96b0-abf7-498e-8cd4-bd309af1a1ab",
+      "name": "FAQ",
+      "description": {
+        "content": "Routes for faq",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0509728e-1e52-4334-b520-d81b5b2181f4",
+          "name": "Add Faq Category",
+          "request": {
+            "description": {
+              "content": "Controller: add_faq_category\nSchema: addFaqCategorySchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| title | string | Required |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "faq",
+                "category",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"sample_title\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "d5cf9b12-bba1-4ebb-9816-e1b1d98f4576",
+          "name": "Edit Faq Category",
+          "request": {
+            "description": {
+              "content": "Controller: edit_faq_category_by_id\nSchema: editFaqCategorySchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| faqCategoryId | string | Required |\n| title | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "faq",
+                "category",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"faqCategoryId\": \"sample_faqCategoryId\",\n  \"title\": \"sample_title\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "495bf5d6-fbcf-45a6-b0a1-a484b44725f7",
+          "name": "Delete Faq Category",
+          "request": {
+            "description": {
+              "content": "Controller: delete_faq_category_by_id\nSchema: deleteFaqCategorySchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "faq",
+                "category",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "426d6e4a-2c15-4ac4-9576-780d17b2770d",
+          "name": "Get All",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_faq_category",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "faq",
+                "category",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "48f21036-d030-478b-8dc2-d628b21ad77f",
+          "name": "Add Faq",
+          "request": {
+            "description": {
+              "content": "Controller: add_faq\nSchema: addFaqSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| question | string | Required |\n| answer | string | Required |\n| priority | number | Optional |\n| faqCategoryId | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "faq",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"sample_question\",\n  \"answer\": \"sample_answer\",\n  \"priority\": 123,\n  \"faqCategoryId\": \"sample_faqCategoryId\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "569c3bb3-c86b-450c-baef-2a1c167ac761",
+          "name": "Edit Faq",
+          "request": {
+            "description": {
+              "content": "Controller: edit_faq_by_id\nSchema: editFaqSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| faqId | string | Required |\n| question | string | Optional |\n| answer | string | Optional |\n| priority | number | Optional |\n| faqCategoryId | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "faq",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"faqId\": \"sample_faqId\",\n  \"question\": \"sample_question\",\n  \"answer\": \"sample_answer\",\n  \"priority\": 123,\n  \"faqCategoryId\": \"sample_faqCategoryId\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "18d34f68-6716-46ee-82eb-9c51debd3afe",
+          "name": "Delete Faq",
+          "request": {
+            "description": {
+              "content": "Controller: delete_faq_by_id\nSchema: deleteFaqSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "faq",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "942dc111-a705-4e25-a83d-5b4ac76fa69e",
+          "name": "Get Faqs",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_faq\nSchema: getFaqsSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| faqCategoryId | string | Optional |\n| activeFilter | boolean | Optional |\n| page | number | Optional |\n| limit | number | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "faq",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "faqCategoryId",
+                  "value": "sample_faqCategoryId"
+                },
+                {
+                  "key": "activeFilter",
+                  "value": "true"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "eddc5371-c6d7-42c4-92c2-1aed7511e438",
+          "name": "Get Faq By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_faq_by_id\nSchema: getFaqByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "faq",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f3be2d6c-4ec2-48d8-a0b8-2b3098282599",
+      "name": "NEWSLETTER",
+      "description": {
+        "content": "Routes for newsletter",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9a9d190e-0893-41cf-bcd2-6e7082529136",
+          "name": "Subscribe Newsletter",
+          "request": {
+            "description": {
+              "content": "Controller: subscribe_newsletter\nSchema: subscribeNewsletterSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| email | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "newsletter",
+                "subscribe"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "492e948e-258d-416e-8207-40ddd2e9efea",
+          "name": "Delete Newsletter",
+          "request": {
+            "description": {
+              "content": "Controller: delete_newsletter_by_id\nSchema: deleteNewsletterSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "newsletter",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "348aa520-2096-43ef-8a6f-6467e692d7ef",
+          "name": "Get Newsletter",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_newsletter\nSchema: getNewsletterSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| page | number | Optional |\n| limit | number | Optional |\n| search | string | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "newsletter",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "sample_search"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "5d418e5b-5f63-4d03-a44d-bf6cb8ba70dd",
+      "name": "CONTACT",
+      "description": {
+        "content": "Routes for contact",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b3e36fec-69ed-4cee-aa0d-cbbd483554e7",
+          "name": "Add Contact",
+          "request": {
+            "description": {
+              "content": "Controller: add_contact\nSchema: addContactSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| name | string | Required |\n| email | string | Required |\n| mobileNumber | string | Required |\n| subject | string | Optional |\n| message | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "contact",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"sample_name\",\n  \"email\": \"test@example.com\",\n  \"mobileNumber\": \"sample_mobileNumber\",\n  \"subject\": \"sample_subject\",\n  \"message\": \"sample_message\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "15eb639b-7055-4799-a6a3-3499f869e999",
+          "name": "Mark Read Contact",
+          "request": {
+            "description": {
+              "content": "Controller: mark_contact_read\nSchema: markReadContactSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| contactId | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "contact",
+                "mark-read"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contactId\": \"sample_contactId\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "b0c16525-eeef-4568-9cb7-cd180a798caf",
+          "name": "Delete Contact",
+          "request": {
+            "description": {
+              "content": "Controller: delete_contact_by_id\nSchema: deleteContactSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "contact",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "727c63f8-56b3-4041-8c07-62a7afe88c23",
+          "name": "Get Contacts",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_contact\nSchema: getContactsSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| page | number | Optional |\n| limit | number | Optional |\n| search | string | Optional |\n| isRead | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "contact",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "sample_search"
+                },
+                {
+                  "key": "isRead",
+                  "value": "true"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "bb3886e3-3386-4596-a24d-99b46ddb5198",
+      "name": "SETTINGS",
+      "description": {
+        "content": "Routes for settings",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "383b0c4e-2f63-4f79-ab71-50f47a490285",
+          "name": "Get Item",
+          "request": {
+            "description": {
+              "content": "Controller: get_settings",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "settings"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "f59d5061-2ad7-4f08-95f2-5024ee9a3586",
+          "name": "Update Settings",
+          "request": {
+            "description": {
+              "content": "Controller: update_settings\nSchema: updateSettingsSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| address | string | Optional |\n| contact | string | Optional |\n| email | string | Optional |\n| instagram | string | Optional |\n| facebook | string | Optional |\n| youtube | string | Optional |\n| twitter | string | Optional |\n| isOutOfStockProductShow | boolean | Optional |\n| freeDeliveryAbove | number | Optional |\n| isCODAvailable | boolean | Optional |\n| isRazorpay | boolean | Optional |\n| isPhonePe | boolean | Optional |\n| isShipRocket | boolean | Optional |\n| isCashFree | boolean | Optional |\n| securePaymentImages | array | Optional |\n| securePaymentTitle | string | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "settings",
+                "update"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"sample_address\",\n  \"contact\": \"sample_contact\",\n  \"email\": \"test@example.com\",\n  \"instagram\": \"sample_instagram\",\n  \"facebook\": \"sample_facebook\",\n  \"youtube\": \"sample_youtube\",\n  \"twitter\": \"sample_twitter\",\n  \"isOutOfStockProductShow\": true,\n  \"freeDeliveryAbove\": 123,\n  \"isCODAvailable\": true,\n  \"isRazorpay\": true,\n  \"isPhonePe\": true,\n  \"isShipRocket\": true,\n  \"isCashFree\": true,\n  \"securePaymentImages\": [\n    \"sample_string\"\n  ],\n  \"securePaymentTitle\": \"sample_securePaymentTitle\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "a8bdd14c-7c5d-42b5-81d6-467beeedcb68",
+      "name": "COUPON",
+      "description": {
+        "content": "Routes for coupon",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c9769fd1-2247-4d16-8c03-fab4f0fd4bd5",
+          "name": "Add Coupon",
+          "request": {
+            "description": {
+              "content": "Controller: add_coupon\nSchema: addCouponSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| code | string | Required |\n| type | string | Required |\n| discountPercent | number | Optional |\n| discountAmount | number | Optional |\n| buyQty | number | Optional |\n| getFreeQty | number | Optional |\n| minOrderAmount | number | Optional |\n| maxDiscountCap | number | Optional |\n| productIds | array | Optional |\n| expiryDate | date | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "coupon",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"sample_code\",\n  \"type\": \"sample_type\",\n  \"discountPercent\": 123,\n  \"discountAmount\": 123,\n  \"buyQty\": 123,\n  \"getFreeQty\": 123,\n  \"minOrderAmount\": 123,\n  \"maxDiscountCap\": 123,\n  \"productIds\": [\n    \"sample_string\"\n  ],\n  \"expiryDate\": \"\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "5ae96a12-ac61-485c-bd7c-61c5a0100a3e",
+          "name": "Apply Coupon",
+          "request": {
+            "description": {
+              "content": "Controller: apply_coupon\nSchema: applyCouponSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| code | string | Required |\n| orderAmount | number | Required |\n| productIds | array | Optional |\n| isPrepaid | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "coupon",
+                "apply"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"sample_code\",\n  \"orderAmount\": 123,\n  \"productIds\": [\n    \"sample_string\"\n  ],\n  \"isPrepaid\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "b0c5fac3-e28d-4268-bb8d-97cca42337ee",
+          "name": "Edit Coupon",
+          "request": {
+            "description": {
+              "content": "Controller: edit_coupon_by_id\nSchema: editCouponSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| couponId | string | Required |\n| code | string | Optional |\n| type | string | Optional |\n| discountPercent | number | Optional |\n| discountAmount | number | Optional |\n| buyQty | number | Optional |\n| getFreeQty | number | Optional |\n| minOrderAmount | number | Optional |\n| maxDiscountCap | number | Optional |\n| productIds | array | Optional |\n| expiryDate | date | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "coupon",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"couponId\": \"sample_couponId\",\n  \"code\": \"sample_code\",\n  \"type\": \"sample_type\",\n  \"discountPercent\": 123,\n  \"discountAmount\": 123,\n  \"buyQty\": 123,\n  \"getFreeQty\": 123,\n  \"minOrderAmount\": 123,\n  \"maxDiscountCap\": 123,\n  \"productIds\": [\n    \"sample_string\"\n  ],\n  \"expiryDate\": \"\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "32dbb7c0-c695-41e0-9f75-f99c85f2770c",
+          "name": "Delete Coupon",
+          "request": {
+            "description": {
+              "content": "Controller: delete_coupon_by_id\nSchema: deleteCouponSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "coupon",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "03a521e4-a0c6-4a49-8810-e4df2ee41044",
+          "name": "Get Coupons",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_coupon\nSchema: getCouponsSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| page | number | Optional |\n| limit | number | Optional |\n| search | string | Optional |\n| activeFilter | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "coupon",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": "sample_search"
+                },
+                {
+                  "key": "activeFilter",
+                  "value": "true"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "ad341932-34e4-4725-ab61-f0d199c5a01a",
+      "name": "POLICY",
+      "description": {
+        "content": "Routes for policy",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "91db9dfe-c739-40ef-9095-880e3d1506e5",
+          "name": "Add Policy",
+          "request": {
+            "description": {
+              "content": "Controller: add_policy\nSchema: addPolicySchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| type | string | Required |\n| title | string | Required |\n| description | string | Required |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "policy",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"sample_type\",\n  \"title\": \"sample_title\",\n  \"description\": \"sample_description\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "1c01e0df-8dae-47ca-8e3f-851d4c870315",
+          "name": "Edit Policy",
+          "request": {
+            "description": {
+              "content": "Controller: edit_policy\nSchema: editPolicySchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| type | string | Required |\n| title | string | Optional |\n| description | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "policy",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"sample_type\",\n  \"title\": \"sample_title\",\n  \"description\": \"sample_description\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "9fe041d0-25bf-4cc8-8f37-9be736dcb9e1",
+          "name": "Get Policy By Type",
+          "request": {
+            "description": {
+              "content": "Controller: get_policy_by_type\nSchema: getPolicyByTypeSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| type | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "policy",
+                ":type"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "sample_type"
+                }
+              ],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "type"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_type",
+                  "key": "type"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "ad777506-b7b5-42da-8cdd-31582ac43d06",
+      "name": "CART",
+      "description": {
+        "content": "Routes for cart",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a82aa5de-25ba-4ceb-8a5e-60724be4a166",
+          "name": "Add To Cart",
+          "request": {
+            "description": {
+              "content": "Controller: add_to_cart\nSchema: addToCartSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| productId | string | Required |\n| quantity | number | Optional |\n| size | string | Optional |\n| color | string | Optional |\n| sessionId | string | Optional |\n| note | string | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "cart",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"sample_productId\",\n  \"quantity\": 123,\n  \"size\": \"sample_size\",\n  \"color\": \"sample_color\",\n  \"sessionId\": \"sample_sessionId\",\n  \"note\": \"sample_note\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "c5d5e866-a72b-4a75-bf0e-212de34ebf9e",
+          "name": "Update Cart Item",
+          "request": {
+            "description": {
+              "content": "Controller: update_cart_item\nSchema: updateCartItemSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| cartId | string | Required |\n| productId | string | Required |\n| quantity | number | Required |\n| size | string | Optional |\n| color | string | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "cart",
+                "update"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cartId\": \"sample_cartId\",\n  \"productId\": \"sample_productId\",\n  \"quantity\": 123,\n  \"size\": \"sample_size\",\n  \"color\": \"sample_color\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "74c15741-f931-4ce1-a324-c02fa7a00183",
+          "name": "Clear Cart",
+          "request": {
+            "description": {
+              "content": "Controller: clear_cart\nSchema: clearCartSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| cartId | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "cart",
+                "clear"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cartId\": \"sample_cartId\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "0117a260-616c-4df2-a300-dc8c9c9f6197",
+          "name": "Get Cart",
+          "request": {
+            "description": {
+              "content": "Controller: get_cart\nSchema: getCartSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| sessionId | string | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "cart"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "sessionId",
+                  "value": "sample_sessionId"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "2537a4e0-eaf1-46db-b822-74d747265b24",
+      "name": "WISHLIST",
+      "description": {
+        "content": "Routes for wishlist",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e81646c9-03a1-4bb9-b953-8cdf9c9fbc09",
+          "name": "Add Wishlist",
+          "request": {
+            "description": {
+              "content": "Controller: add_to_wishlist\nSchema: addWishlistSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| productId | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "wishlist",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"sample_productId\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "6fcf488a-4544-4b45-8363-853823ec8567",
+          "name": "Remove Wishlist",
+          "request": {
+            "description": {
+              "content": "Controller: remove_from_wishlist\nSchema: removeWishlistSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "wishlist",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "a18eaa96-d498-4d0a-835b-5d13cded306f",
+          "name": "Get Wishlist",
+          "request": {
+            "description": {
+              "content": "Controller: get_my_wishlist\nSchema: getWishlistSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| page | number | Optional |\n| limit | number | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "wishlist"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "80c35765-77de-42b1-9e08-b3c80322f02a",
+      "name": "ABOUT",
+      "description": {
+        "content": "Routes for about",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "65f1fcb0-26d4-4fa5-bf03-0a3129e790b2",
+          "name": "Add About Section",
+          "request": {
+            "description": {
+              "content": "Controller: add_about_section\nSchema: addAboutSectionSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| title | string | Optional |\n| subtitle | string | Optional |\n| description | string | Optional |\n| image | string | Optional |\n| priority | number | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "about",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"sample_title\",\n  \"subtitle\": \"sample_subtitle\",\n  \"description\": \"sample_description\",\n  \"image\": \"sample_image\",\n  \"priority\": 123,\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "9acb40c8-4077-4dab-bba0-edf4db22ed4e",
+          "name": "Edit About Section",
+          "request": {
+            "description": {
+              "content": "Controller: edit_about_section_by_id\nSchema: editAboutSectionSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| sectionId | string | Required |\n| title | string | Optional |\n| subtitle | string | Optional |\n| description | string | Optional |\n| image | string | Optional |\n| priority | number | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "about",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sectionId\": \"sample_sectionId\",\n  \"title\": \"sample_title\",\n  \"subtitle\": \"sample_subtitle\",\n  \"description\": \"sample_description\",\n  \"image\": \"sample_image\",\n  \"priority\": 123,\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "13f732d9-8885-430d-bbc1-f9de597c0094",
+          "name": "Delete About Section",
+          "request": {
+            "description": {
+              "content": "Controller: delete_about_section_by_id\nSchema: deleteAboutSectionSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "about",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "c32a8879-e70a-45ad-95e2-d6084af914bf",
+          "name": "Get All",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_about_sections",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "about",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "0a4a5025-bc3a-4eb1-b0f4-e8f9bbec5c52",
+          "name": "Get About Section By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_about_section_by_id\nSchema: getAboutSectionByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "about",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "8d6bd0e1-fb08-4715-99a8-19c03c95a7c0",
+      "name": "SIZE",
+      "description": {
+        "content": "Routes for size",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "64bdc112-9b21-4746-9484-2a55385113d7",
+          "name": "Add Size",
+          "request": {
+            "description": {
+              "content": "Controller: add_size\nSchema: addSizeSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| name | string | Required |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "size",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"sample_name\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "084c619c-1812-4c8c-96b1-f20c35a09da0",
+          "name": "Edit Size",
+          "request": {
+            "description": {
+              "content": "Controller: edit_size_by_id\nSchema: editSizeSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| sizeId | string | Required |\n| name | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "size",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sizeId\": \"sample_sizeId\",\n  \"name\": \"sample_name\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "b9c8b65c-4697-46c3-bf9a-506ad8cbf007",
+          "name": "Delete Size",
+          "request": {
+            "description": {
+              "content": "Controller: delete_size_by_id\nSchema: deleteSizeSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "size",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "4528c336-8e89-4764-9782-60f3297eb915",
+          "name": "Get All",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_size",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "size",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "75e6d044-367d-41ac-9422-d94619cbef4a",
+          "name": "Get Size By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_size_by_id\nSchema: getSizeByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "size",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "87ced798-2860-4a84-b0d0-e305dc2d22d3",
+      "name": "COLOR",
+      "description": {
+        "content": "Routes for color",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2b5fb0ed-93c8-4def-85df-2a2eb7bf2604",
+          "name": "Add Color",
+          "request": {
+            "description": {
+              "content": "Controller: add_color\nSchema: addColorSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| name | string | Required |\n| hexCode | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "color",
+                "add"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"sample_name\",\n  \"hexCode\": \"sample_hexCode\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "c0615462-1a16-463d-bae1-4e20cc1c5ba0",
+          "name": "Edit Color",
+          "request": {
+            "description": {
+              "content": "Controller: edit_color_by_id\nSchema: editColorSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| colorId | string | Required |\n| name | string | Optional |\n| hexCode | string | Optional |\n| isActive | boolean | Optional |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "color",
+                "edit"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"colorId\": \"sample_colorId\",\n  \"name\": \"sample_name\",\n  \"hexCode\": \"sample_hexCode\",\n  \"isActive\": true\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "da406644-e63f-4b6d-a347-de715d56b837",
+          "name": "Delete Color",
+          "request": {
+            "description": {
+              "content": "Controller: delete_color_by_id\nSchema: deleteColorSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "color",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"sample_id\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "bfe01a20-685a-4701-9d80-d814f3496fc3",
+          "name": "Get All",
+          "request": {
+            "description": {
+              "content": "Controller: get_all_color",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "color",
+                "all"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "4f2e44d5-f65a-469a-abe5-a482ad11f6c3",
+          "name": "Get Color By Id",
+          "request": {
+            "description": {
+              "content": "Controller: get_color_by_id\nSchema: getColorByIdSchema\n\n### Validation Rules\n| Field | Type | Requirement |\n|---|---|---|\n| id | string | Required |\n",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "color",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        }
+      ],
+      "event": []
     }
   ],
   "event": [],
@@ -196,7 +3277,7 @@
     }
   ],
   "info": {
-    "_postman_id": "9273fc4a-3f53-446d-86e3-c6def964e1b7",
+    "_postman_id": "b6c2ca60-c21d-4866-8f55-8127a1de2a9c",
     "name": "Delvoura API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

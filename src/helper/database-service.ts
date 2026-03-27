@@ -25,7 +25,7 @@ export const findOneAndPopulate = async (modelName, criteria, projection, option
 }
 
 export const countData = async (modelName, criteria) => {
-    return modelName.count(criteria);
+    return modelName.countDocuments(criteria);
 }
 
 export const createData = async (modelName, objToSave) => {
@@ -63,3 +63,7 @@ export const findAllWithPopulateWithSorting = async (modelName, criteria, projec
     options.lean = true;
     return modelName.find(criteria, projection, options).collation({locale: "en"}).populate(populateModel);
 }
+
+export const deleteData = async (model, criteria) => {
+    return await model.findOneAndUpdate(criteria, { isDeleted: true }, { new: true });
+};

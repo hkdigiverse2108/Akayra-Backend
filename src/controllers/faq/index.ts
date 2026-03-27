@@ -60,11 +60,18 @@ export const get_all_faq = async (req, res) => {
         if (faqCategoryId) criteria.faqCategoryId = isValidObjectId(faqCategoryId);
         if (activeFilter === true) criteria.isActive = true;
         if (activeFilter === false) criteria.isActive = false;
-        if (page && limit) { options.skip = (parseInt(page) - 1) * parseInt(limit); options.limit = parseInt(limit); }
+        if (page && limit) {
+            options.skip = (parseInt(page) - 1) * parseInt(limit);
+            options.limit = parseInt(limit);
+        }
 
         const response = await getData(faqModel, criteria, {}, options);
         const totalCount = await countData(faqModel, criteria);
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('FAQ'), { faq_data: response, totalData: totalCount, state: resolvePagination(page, limit) }, {}));
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('FAQ'), {
+            faq_data: response,
+            totalData: totalCount,
+            state: resolvePagination(page, limit)
+        }, {}));
     } catch (error) {
         console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));

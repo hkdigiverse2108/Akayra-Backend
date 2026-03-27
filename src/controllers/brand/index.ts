@@ -80,10 +80,11 @@ export const get_all_brand = async (req, res) => {
 
         const response = await getData(brandModel, criteria, {}, options);
         const totalCount = await countData(brandModel, criteria);
-        const stateObj = resolvePagination(page, limit);
 
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Brand'), {
-            brand_data: response, totalData: totalCount, state: stateObj
+            brand_data: response,
+            totalData: totalCount,
+            state: resolvePagination(page, limit)
         }, {}));
     } catch (error) {
         console.log(error)

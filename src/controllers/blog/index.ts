@@ -59,14 +59,29 @@ export const get_all_blog = async (req, res) => {
         let { page, limit, search, activeFilter } = value;
         let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { createdAt: -1 } };
 
-        if (search) criteria.$or = [{ title: { $regex: search, $options: 'si' } }, { tags: { $in: [new RegExp(search, 'i')] } }];
+        if (search) {
+            criteria.$or = [
+                { title: { $regex: search, $options: 'si' } },
+                { tags: { $in: [new RegExp(search, 'i')] } }
+            ];
+        }
+
         if (activeFilter === true) criteria.isActive = true;
         if (activeFilter === false) criteria.isActive = false;
-        if (page && limit) { options.skip = (parseInt(page) - 1) * parseInt(limit); options.limit = parseInt(limit); }
+
+        if (page && limit) {
+            options.skip = (parseInt(page) - 1) * parseInt(limit);
+            options.limit = parseInt(limit);
+        }
 
         const response = await getData(blogModel, criteria, {}, options);
         const totalCount = await countData(blogModel, criteria);
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Blog'), { blog_data: response, totalData: totalCount, state: resolvePagination(page, limit) }, {}));
+        
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Blog'), {
+            blog_data: response,
+            totalData: totalCount,
+            state: resolvePagination(page, limit)
+        }, {}));
     } catch (error) {
         console.log(error)
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));

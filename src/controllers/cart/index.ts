@@ -87,12 +87,13 @@ export const clear_cart = async (req, res) => {
 
 export const get_cart = async (req, res) => {
     reqInfo(req)
+    let { user } = req.headers
     try {
         const { error, value } = getCartSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        const userId = req?.user?._id;
-        const criteria: any = userId ? { userId: isValidObjectId(userId.toString()), isDeleted: false } : { sessionId: value.sessionId, isDeleted: false };
+        const userId = user?._id;
+        const criteria: any = userId ? { userId: isValidObjectId(user._id), isDeleted: false } : { sessionId: value.sessionId, isDeleted: false };
 
         const cart = await getFirstMatch(cartModel, criteria, {}, {});
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Cart'), cart || {}, {}));

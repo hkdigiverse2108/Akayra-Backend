@@ -66,8 +66,12 @@ export const get_all_blog = async (req, res) => {
             ];
         }
 
-        if (activeFilter === true) criteria.isActive = true;
-        if (activeFilter === false) criteria.isActive = false;
+        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
+        else if (activeFilter === false) criteria.isActive = false;
+
+        if (value.startDateFilter && value.endDateFilter) {
+            criteria.createdAt = { $gte: new Date(value.startDateFilter), $lte: new Date(value.endDateFilter) };
+        }
 
         if (page && limit) {
             options.skip = (parseInt(page) - 1) * parseInt(limit);
@@ -76,7 +80,7 @@ export const get_all_blog = async (req, res) => {
 
         const response = await getData(blogModel, criteria, {}, options);
         const totalCount = await countData(blogModel, criteria);
-        
+
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Blog'), {
             blog_data: response,
             totalData: totalCount,

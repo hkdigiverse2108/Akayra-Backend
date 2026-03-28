@@ -30,6 +30,8 @@ export const getReviewsSchema = Joi.object({
     limit: Joi.number().optional(),
     productId: Joi.string().optional(),
     activeFilter: Joi.boolean().optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
 })
 
 export const getReviewByIdSchema = Joi.object({

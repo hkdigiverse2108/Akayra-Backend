@@ -20,6 +20,8 @@ export const getFaqByIdSchema = Joi.object({ id: Joi.string().required() })
 export const getFaqsSchema = Joi.object({
     faqCategoryId: Joi.string().optional(),
     activeFilter: Joi.boolean().optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
     page: Joi.number().optional(),
     limit: Joi.number().optional(),
 })

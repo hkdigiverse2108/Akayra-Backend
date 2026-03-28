@@ -69,8 +69,12 @@ export const get_all_review = async (req, res) => {
         let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { createdAt: -1 } };
 
         if (productId) criteria.productId = isValidObjectId(productId);
-        if (activeFilter === true) criteria.isActive = true;
-        if (activeFilter === false) criteria.isActive = false;
+        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
+        else if (activeFilter === false) criteria.isActive = false;
+
+        if (value.startDateFilter && value.endDateFilter) {
+            criteria.createdAt = { $gte: new Date(value.startDateFilter), $lte: new Date(value.endDateFilter) };
+        }
 
         if (page && limit) {
             options.skip = (parseInt(page) - 1) * parseInt(limit);
@@ -82,7 +86,9 @@ export const get_all_review = async (req, res) => {
         const stateObj = resolvePagination(page, limit);
 
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Review'), {
-            review_data: response, totalData: totalCount, state: stateObj
+            review_data: response,
+            totalData: totalCount,
+            state: stateObj
         }, {}));
     } catch (error) {
         console.log(error)

@@ -56,6 +56,9 @@ export const get_all_contact = async (req, res) => {
         if (search) criteria.$or = [{ name: { $regex: search, $options: 'si' } }, { email: { $regex: search, $options: 'si' } }];
         if (isRead === true) criteria.isRead = true;
         if (isRead === false) criteria.isRead = false;
+        if (value.startDateFilter && value.endDateFilter) {
+            criteria.createdAt = { $gte: new Date(value.startDateFilter), $lte: new Date(value.endDateFilter) };
+        }
         if (page && limit) { options.skip = (parseInt(page) - 1) * parseInt(limit); options.limit = parseInt(limit); }
 
         const response = await getData(contactModel, criteria, {}, options);

@@ -23,7 +23,9 @@ import { faqCategoryRouter } from './faq-category'
 
 const router = Router()
 
+
 router.use('/auth', authRouter)
+
 router.use('/category', categoryRouter)
 router.use('/brand', brandRouter)
 router.use('/product', productRouter)

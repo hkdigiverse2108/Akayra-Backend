@@ -1,7 +1,7 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
 import { igPostModel } from '../../database';
-import { createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
-import { addIgPostSchema, editIgPostSchema, deleteIgPostSchema, getIgPostByIdSchema } from '../../validation';
+import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
+import { addIgPostSchema, editIgPostSchema, deleteIgPostSchema, getIgPostByIdSchema, getIgPostsSchema } from '../../validation';
 
 export const add_ig_post = async (req, res) => {
     reqInfo(req)
@@ -47,8 +47,32 @@ export const delete_ig_post_by_id = async (req, res) => {
 export const get_all_ig_post = async (req, res) => {
     reqInfo(req)
     try {
-        const response = await getData(igPostModel, { isDeleted: false }, {}, { lean: true, sort: { priority: -1, createdAt: -1 } });
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Instagram Post'), response, {}));
+        const { error, value } = getIgPostsSchema.validate(req.query || {});
+        if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
+
+        let { activeFilter, page, limit, startDateFilter, endDateFilter } = value;
+        let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { priority: -1, createdAt: -1 } };
+
+        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
+        else if (activeFilter === false) criteria.isActive = false;
+
+        if (startDateFilter && endDateFilter) {
+            criteria.createdAt = { $gte: new Date(startDateFilter), $lte: new Date(endDateFilter) };
+        }
+
+        if (page && limit) {
+            options.skip = (parseInt(page) - 1) * parseInt(limit);
+            options.limit = parseInt(limit);
+        }
+
+        const response = await getData(igPostModel, criteria, {}, options);
+        const totalCount = await countData(igPostModel, criteria);
+
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Instagram Post'), {
+            ig_post_data: response,
+            totalData: totalCount,
+            state: resolvePagination(page, limit)
+        }, {}));
     } catch (error) {
         console.log(error)
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));

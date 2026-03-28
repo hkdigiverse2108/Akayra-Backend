@@ -13,6 +13,8 @@ export const getContactsSchema = Joi.object({
     limit: Joi.number().optional(),
     search: Joi.string().optional(),
     isRead: Joi.boolean().optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
 })
 
 export const deleteContactSchema = Joi.object({ id: Joi.string().required() })

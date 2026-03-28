@@ -58,8 +58,12 @@ export const get_all_faq = async (req, res) => {
         let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { priority: 1, createdAt: -1 } };
 
         if (faqCategoryId) criteria.faqCategoryId = isValidObjectId(faqCategoryId);
-        if (activeFilter === true) criteria.isActive = true;
-        if (activeFilter === false) criteria.isActive = false;
+        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
+        else if (activeFilter === false) criteria.isActive = false;
+
+        if (value.startDateFilter && value.endDateFilter) {
+            criteria.createdAt = { $gte: new Date(value.startDateFilter), $lte: new Date(value.endDateFilter) };
+        }
         if (page && limit) {
             options.skip = (parseInt(page) - 1) * parseInt(limit);
             options.limit = parseInt(limit);

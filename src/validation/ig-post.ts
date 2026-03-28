@@ -17,3 +17,10 @@ export const editIgPostSchema = Joi.object({
 })
 export const deleteIgPostSchema = Joi.object({ id: Joi.string().required() })
 export const getIgPostByIdSchema = Joi.object({ id: Joi.string().required() })
+export const getIgPostsSchema = Joi.object({
+    activeFilter: Joi.boolean().optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
+    page: Joi.number().optional(),
+    limit: Joi.number().optional(),
+})

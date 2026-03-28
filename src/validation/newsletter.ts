@@ -10,4 +10,6 @@ export const getNewsletterSchema = Joi.object({
     page: Joi.number().optional(),
     limit: Joi.number().optional(),
     search: Joi.string().optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
 })

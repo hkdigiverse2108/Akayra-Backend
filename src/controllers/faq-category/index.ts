@@ -53,8 +53,33 @@ export const delete_faq_category_by_id = async (req, res) => {
 export const get_all_faq_category = async (req, res) => {
     reqInfo(req);
     try {
-        const response = await getData(faqCategoryModel, { isDeleted: false }, {}, { lean: true, sort: { createdAt: -1 } });
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('FAQ Category'), response, {}));
+        const { error, value } = getFaqCategoriesSchema.validate(req.query || {});
+        if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
+
+        let { activeFilter, page, limit, startDateFilter, endDateFilter, search } = value;
+        let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { createdAt: -1 } };
+
+        if (search) criteria.title = { $regex: search, $options: 'si' };
+        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
+        else if (activeFilter === false) criteria.isActive = false;
+
+        if (startDateFilter && endDateFilter) {
+            criteria.createdAt = { $gte: new Date(startDateFilter), $lte: new Date(endDateFilter) };
+        }
+
+        if (page && limit) {
+            options.skip = (parseInt(page) - 1) * parseInt(limit);
+            options.limit = parseInt(limit);
+        }
+
+        const response = await getData(faqCategoryModel, criteria, {}, options);
+        const totalCount = await countData(faqCategoryModel, criteria);
+
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('FAQ Category'), {
+            faq_category_data: response,
+            totalData: totalCount,
+            state: resolvePagination(page, limit)
+        }, {}));
     } catch (error) {
         console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));

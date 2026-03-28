@@ -74,8 +74,8 @@ export const get_all_product = async (req, res) => {
         if (brandId) criteria.brandId = isValidObjectId(brandId);
         if (isTrending === true) criteria.isTrending = true;
         if (isDealOfDay === true) criteria.isDealOfDay = true;
-        if (activeFilter === true) criteria.isActive = true;
-        if (activeFilter === false) criteria.isActive = false;
+        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
+        else if (activeFilter === false) criteria.isActive = false;
         if (startDateFilter && endDateFilter) criteria.createdAt = { $gte: new Date(startDateFilter), $lte: new Date(endDateFilter) };
 
         if (sortFilter === "priceAsc") options.sort = { sellingPrice: 1 };

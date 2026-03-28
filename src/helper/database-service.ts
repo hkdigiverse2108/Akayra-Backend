@@ -1,5 +1,5 @@
 export const updateData = async (modelName, criteria, dataToSet, options) => {
-    options.new = true;
+    options.returnDocument = 'after';
     options.lean = true;
     return modelName.findOneAndUpdate(criteria, dataToSet, options);
 }

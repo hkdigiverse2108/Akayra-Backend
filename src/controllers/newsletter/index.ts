@@ -43,6 +43,9 @@ export const get_all_newsletter = async (req, res) => {
         let { page, limit, search } = value;
         let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { createdAt: -1 } };
         if (search) criteria.email = { $regex: search, $options: 'si' };
+        if (value.startDateFilter && value.endDateFilter) {
+            criteria.createdAt = { $gte: new Date(value.startDateFilter), $lte: new Date(value.endDateFilter) };
+        }
         if (page && limit) { options.skip = (parseInt(page) - 1) * parseInt(limit); options.limit = parseInt(limit); }
 
         const response = await getData(newsletterModel, criteria, {}, options);

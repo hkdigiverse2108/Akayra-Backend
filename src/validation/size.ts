@@ -11,3 +11,11 @@ export const editSizeSchema = Joi.object({
 })
 export const deleteSizeSchema = Joi.object({ id: Joi.string().required() })
 export const getSizeByIdSchema = Joi.object({ id: Joi.string().required() })
+export const getSizesSchema = Joi.object({
+    activeFilter: Joi.boolean().optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
+    search: Joi.string().optional(),
+    page: Joi.number().optional(),
+    limit: Joi.number().optional(),
+})

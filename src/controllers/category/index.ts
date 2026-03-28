@@ -67,8 +67,8 @@ export const get_all_category = async (req, res) => {
         else if (sortFilter === "nameDesc") options.sort = { name: -1 };
         else options.sort = { createdAt: -1 };
 
-        if (activeFilter === true) criteria.isActive = true;
-        if (activeFilter === false) criteria.isActive = false;
+        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
+        else if (activeFilter === false) criteria.isActive = false;
 
         if (startDateFilter && endDateFilter) criteria.createdAt = { $gte: new Date(startDateFilter), $lte: new Date(endDateFilter) };
 
@@ -80,12 +80,10 @@ export const get_all_category = async (req, res) => {
         const response = await getData(categoryModel, criteria, {}, options);
         const totalCount = await countData(categoryModel, criteria);
 
-        const stateObj = resolvePagination(page, limit)
-
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Category'), {
             category_data: response,
             totalData: totalCount,
-            state: stateObj
+            state: resolvePagination(page, limit)
         }, {}));
     } catch (error) {
         console.log(error)

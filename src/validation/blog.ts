@@ -36,4 +36,6 @@ export const getBlogsSchema = Joi.object({
     limit: Joi.number().optional(),
     search: Joi.string().optional(),
     activeFilter: Joi.boolean().optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
 })

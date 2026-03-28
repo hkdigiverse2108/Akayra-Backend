@@ -13,3 +13,13 @@ export const editColorSchema = Joi.object({
 })
 export const deleteColorSchema = Joi.object({ id: Joi.string().required() })
 export const getColorByIdSchema = Joi.object({ id: Joi.string().required() })
+
+export const getAllColorSchema = Joi.object({
+    page: Joi.number().optional(),
+    limit: Joi.number().optional(),
+    search: Joi.string().optional(),
+    activeFilter: Joi.boolean().optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
+    sortFilter: Joi.string().optional(),
+})

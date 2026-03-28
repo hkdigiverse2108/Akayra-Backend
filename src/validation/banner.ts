@@ -35,4 +35,6 @@ export const getBannersSchema = Joi.object({
     activeFilter: Joi.boolean().optional(),
     page: Joi.number().optional(),
     limit: Joi.number().optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
 })

@@ -1,7 +1,7 @@
 "use strict"
 import { Request, Response } from 'express'
 import { userModel, userSessionModel } from '../../database'
-import { apiResponse, HTTP_STATUS, getUniqueOtp, getOtpExpireTime, generateHash, compareHash, generateToken } from '../../common'
+import { apiResponse, HTTP_STATUS, getUniqueOtp, getOtpExpireTime, generateHash, compareHash, generateToken, USER_ROLES } from '../../common'
 import { email_verification_mail, reqInfo, responseMessage, getFirstMatch, createData, updateData } from '../../helper'
 import { signupSchema, verifyOtpSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } from '../../validation'
 
@@ -21,6 +21,7 @@ export const signUp = async (req: Request, res: Response) => {
         if (isAlready?.isBlock == true) return res.status(HTTP_STATUS.FORBIDDEN).json(new apiResponse(HTTP_STATUS.FORBIDDEN, responseMessage?.accountBlock, {}, {}))
 
         const hashPassword = await generateHash(value.password)
+        value.role = USER_ROLES.ADMIN
         delete value.password
         value.password = hashPassword
         let response: any = await createData(userModel, value)
@@ -87,28 +88,25 @@ export const login = async (req: Request, res: Response) => { //email or passwor
         const { error, value } = loginSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        response = await updateData(userModel, { email: value?.email, isActive: true, userType: 0 }, { $addToSet: { deviceToken: value?.deviceToken }, isLoggedIn: true }, { select: '-__v -createdAt -updatedAt' })
+        let user = await getFirstMatch(userModel, { email: value?.email, isActive: true }, {}, {})
+        if (!user) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage?.invalidUserPasswordEmail, {}, {}))
+        if (user?.isBlock == true) return res.status(HTTP_STATUS.FORBIDDEN).json(new apiResponse(HTTP_STATUS.FORBIDDEN, responseMessage?.accountBlock, {}, {}))
 
-        if (!response) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage?.invalidUserPasswordEmail, {}, {}))
-        if (response?.isBlock == true) return res.status(HTTP_STATUS.FORBIDDEN).json(new apiResponse(HTTP_STATUS.FORBIDDEN, responseMessage?.accountBlock, {}, {}))
-
-        const passwordMatch = await compareHash(value.password, response.password)
+        const passwordMatch = await compareHash(value.password, user.password)
         if (!passwordMatch) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage?.invalidUserPasswordEmail, {}, {}))
         const token = await generateToken({
-            _id: response._id,
-            type: response.userType,
+            _id: user._id,
+            type: user.userType,
             status: "Login",
             generatedOn: (new Date().getTime())
         })
 
         await createData(userSessionModel, {
-            createdBy: response._id,
+            createdBy: user._id,
         })
         response = {
-            isEmailVerified: response?.isEmailVerified,
-            userType: response?.userType,
-            _id: response?._id,
-            email: response?.email,
+            _id: user?._id,
+            email: user?.email,
             token,
         }
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage?.loginSuccess, response, {}))

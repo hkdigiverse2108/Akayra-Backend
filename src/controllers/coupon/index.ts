@@ -60,8 +60,12 @@ export const get_all_coupon = async (req, res) => {
         let { page, limit, search, activeFilter } = value;
         let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { createdAt: -1 } };
         if (search) criteria.code = { $regex: search, $options: 'si' };
-        if (activeFilter === true) criteria.isActive = true;
-        if (activeFilter === false) criteria.isActive = false;
+        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
+        else if (activeFilter === false) criteria.isActive = false;
+
+        if (value.startDateFilter && value.endDateFilter) {
+            criteria.createdAt = { $gte: new Date(value.startDateFilter), $lte: new Date(value.endDateFilter) };
+        }
         if (page && limit) { options.skip = (parseInt(page) - 1) * parseInt(limit); options.limit = parseInt(limit); }
 
         const response = await getData(couponModel, criteria, {}, options);

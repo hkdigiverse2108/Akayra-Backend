@@ -1,7 +1,7 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
 import { faqCategoryModel } from '../../database';
-import { createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
-import { addFaqCategorySchema, editFaqCategorySchema, deleteFaqCategorySchema } from '../../validation';
+import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
+import { addFaqCategorySchema, editFaqCategorySchema, deleteFaqCategorySchema, getFaqCategoriesSchema } from '../../validation';
 
 export const add_faq_category = async (req, res) => {
     reqInfo(req);

@@ -1,4 +1,4 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, apiResponse } from '../../common';
 import { policyModel } from '../../database';
 import { createData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addPolicySchema, editPolicySchema, getPolicyByTypeSchema } from '../../validation';
@@ -38,10 +38,10 @@ export const edit_policy = async (req, res) => {
 export const get_policy_by_type = async (req, res) => {
     reqInfo(req)
     try {
-        const { error, value } = getPolicyByTypeSchema.validate(req.params || {});
+        const { error, value } = getPolicyByTypeSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error?.details[0]?.message, {}, {}));
 
-        const response = await getFirstMatch(policyModel, { type: value.type }, {}, {});
+        const response = await getFirstMatch(policyModel, { type: value.typeFilter }, {}, {});
         if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage?.getDataNotFound("Policy"), {}, {}));
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage?.getDataSuccess("Policy"), response, {}));
     } catch (error) {

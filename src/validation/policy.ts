@@ -16,6 +16,6 @@ export const editPolicySchema = Joi.object({
 })
 
 export const getPolicyByTypeSchema = Joi.object({
-    type: Joi.string().valid(...Object.values(POLICY_TYPE)).required(),
+    typeFilter: Joi.string().valid(...Object.values(POLICY_TYPE)).required(),
 })
 

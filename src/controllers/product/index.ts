@@ -9,9 +9,15 @@ export const add_product = async (req, res) => {
         const { error, value } = addProductSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
+        // Validate ObjectIds before creation
+        if (value.categoryId) value.categoryId = isValidObjectId(value.categoryId);
+        if (value.brandId) value.brandId = isValidObjectId(value.brandId);
+        if (value.sizeIds) value.sizeIds = value.sizeIds.map(id => isValidObjectId(id)).filter(id => id !== null);
+        if (value.colorIds) value.colorIds = value.colorIds.map(id => isValidObjectId(id)).filter(id => id !== null);
+
         // Auto-calculate discount and netProfit
-        value.discount = value.mrp - value.sellingPrice;
-        if (value.cogsPrice) value.netProfit = value.sellingPrice - value.cogsPrice;
+        value.discount = (value.mrp || 0) - (value.sellingPrice || 0);
+        if (value.cogsPrice) value.netProfit = (value.sellingPrice || 0) - value.cogsPrice;
 
         const response = await createData(productModel, value);
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.addDataSuccess('Product'), response, {}));
@@ -27,11 +33,27 @@ export const edit_product_by_id = async (req, res) => {
         const { error, value } = editProductSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        // Auto-recalculate if prices change
-        if (value.mrp && value.sellingPrice) value.discount = value.mrp - value.sellingPrice;
-        if (value.sellingPrice && value.cogsPrice) value.netProfit = value.sellingPrice - value.cogsPrice;
+        const productId = isValidObjectId(value.productId);
+        if (!productId) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Invalid Product ID", {}, {}));
 
-        const response = await updateData(productModel, { _id: isValidObjectId(value.productId) }, value, {});
+        // Validate other ObjectIds if they are being updated
+        if (value.categoryId) value.categoryId = isValidObjectId(value.categoryId);
+        if (value.brandId) value.brandId = isValidObjectId(value.brandId);
+        if (value.sizeIds) value.sizeIds = value.sizeIds.map(id => isValidObjectId(id)).filter(id => id !== null);
+        if (value.colorIds) value.colorIds = value.colorIds.map(id => isValidObjectId(id)).filter(id => id !== null);
+
+        // Auto-recalculate if prices change
+        if (value.mrp !== undefined || value.sellingPrice !== undefined) {
+            const product = await getFirstMatch(productModel, { _id: productId }, {}, {});
+            const mrp = value.mrp !== undefined ? value.mrp : product.mrp;
+            const sellingPrice = value.sellingPrice !== undefined ? value.sellingPrice : product.sellingPrice;
+            const cogsPrice = value.cogsPrice !== undefined ? value.cogsPrice : product.cogsPrice;
+
+            value.discount = mrp - sellingPrice;
+            if (sellingPrice !== undefined && cogsPrice !== undefined) value.netProfit = sellingPrice - cogsPrice;
+        }
+
+        const response = await updateData(productModel, { _id: productId }, value, {});
         if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound('Product'), {}, {}));
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.updateDataSuccess('Product'), response, {}));
     } catch (error) {

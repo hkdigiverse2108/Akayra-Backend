@@ -6,7 +6,7 @@ import { Collection, Item, ItemGroup, HeaderDefinition, Url } from 'postman-coll
 
 const ROUTES_DIR = path.join(__dirname, '../src/Routes');
 const CONTROLLERS_DIR = path.join(__dirname, '../src/controllers');
-const VALIDATION_DIR = path.join(__dirname, '../src/validation');
+const VALIDATION_DIR = path.join(__dirname, '../src/valdiation');
 const OUTPUT_FILE = path.join(__dirname, '../postman_collection.json');
 const DEBUG_FILE = path.join(__dirname, '../debug_output.txt');
 
@@ -374,7 +374,7 @@ async function main() {
         const key = param.substring(1);
         let val = `sample_${key}`;
         if (existingReq && existingReq.url && existingReq.url.variable) {
-          const extVar = existingReq.url.variable.find((v:any) => v.key === key);
+          const extVar = existingReq.url.variable.find((v: any) => v.key === key);
           if (extVar && extVar.value) val = extVar.value;
         }
         // @ts-ignore
@@ -385,15 +385,15 @@ async function main() {
       if (result?.sample && route.method !== 'GET') {
         let mergedSample = { ...result.sample };
         let existingJson: any = {};
-        
+
         if (existingReq && existingReq.body) {
           if (existingReq.body.mode === 'raw' && existingReq.body.raw) {
-            try { existingJson = JSON.parse(existingReq.body.raw); } catch(e) {}
+            try { existingJson = JSON.parse(existingReq.body.raw); } catch (e) { }
           } else if (existingReq.body.mode === 'formdata' && Array.isArray(existingReq.body.formdata)) {
             existingReq.body.formdata.forEach((field: any) => {
               if (field.type === 'text') {
-                try { existingJson[field.key] = JSON.parse(field.value); } 
-                catch(e) { existingJson[field.key] = field.value; }
+                try { existingJson[field.key] = JSON.parse(field.value); }
+                catch (e) { existingJson[field.key] = field.value; }
               }
             });
           }
@@ -431,7 +431,7 @@ async function main() {
           } else {
             let val = typeof value === 'object' && value !== null ? JSON.stringify(value) : String(value);
             if (existingReq && existingReq.url && Array.isArray(existingReq.url.query)) {
-              const extQuery = existingReq.url.query.find((q:any) => q.key === key);
+              const extQuery = existingReq.url.query.find((q: any) => q.key === key);
               if (extQuery && extQuery.value) val = extQuery.value;
             }
             url.addQueryParams([{ key: key, value: val }]);

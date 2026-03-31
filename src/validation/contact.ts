@@ -12,7 +12,6 @@ export const getContactsSchema = Joi.object({
     page: Joi.number().optional(),
     limit: Joi.number().optional(),
     search: Joi.string().optional(),
-    isRead: Joi.boolean().optional(),
     startDateFilter: Joi.string().optional(),
     endDateFilter: Joi.string().optional(),
 })

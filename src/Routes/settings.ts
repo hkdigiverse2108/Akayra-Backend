@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { settingsController } from "../controllers";
+import { adminJWT, userJWT } from "../helper";
 
 const router = Router();
 
-router.get("/", settingsController.get_settings);
-router.put("/update", settingsController.update_settings);
+router.put("/update", adminJWT, settingsController.update_settings);
+router.get("/", userJWT, settingsController.get_settings);
 
 export const settingsRouter = router;

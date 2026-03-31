@@ -6,7 +6,6 @@ const contactSchema = new mongoose.Schema({
     mobileNumber: { type: String, required: true },
     subject: { type: String },
     message: { type: String, required: true },
-    isRead: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
 }, { timestamps: true });
 

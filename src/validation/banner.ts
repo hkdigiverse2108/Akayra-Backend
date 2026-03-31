@@ -32,7 +32,9 @@ export const deleteBannerSchema = Joi.object({ id: Joi.string().required() })
 export const getBannerByIdSchema = Joi.object({ id: Joi.string().required() })
 export const getBannersSchema = Joi.object({
     type: Joi.string().valid(...Object.values(BANNER_TYPE)).optional(),
+    search: Joi.string().allow('', null).optional(),
     activeFilter: Joi.boolean().optional(),
+    sortFilter: Joi.string().allow('', null).optional(),
     page: Joi.number().optional(),
     limit: Joi.number().optional(),
     startDateFilter: Joi.string().optional(),

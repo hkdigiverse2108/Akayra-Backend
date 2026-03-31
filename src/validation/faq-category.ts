@@ -11,11 +11,13 @@ export const editFaqCategorySchema = Joi.object({
 })
 export const deleteFaqCategorySchema = Joi.object({ id: Joi.string().required() })
 export const getFaqCategoryByIdSchema = Joi.object({ id: Joi.string().required() })
+
 export const getFaqCategoriesSchema = Joi.object({
-    activeFilter: Joi.boolean().optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
-    search: Joi.string().optional(),
     page: Joi.number().optional(),
     limit: Joi.number().optional(),
+    search: Joi.string().allow('', null).optional(),
+    activeFilter: Joi.boolean().optional(),
+    sortFilter: Joi.string().allow('', null).optional(),
+    startDateFilter: Joi.string().optional(),
+    endDateFilter: Joi.string().optional(),
 })

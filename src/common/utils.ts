@@ -92,3 +92,9 @@ export const getPaginationState = (totalCount: number, pageValue: number, limitV
     page_limit: pageLimit,
   };
 };
+
+export const verifyToken = (authorization?: string) => {
+  if (!authorization) return null;
+  const token = authorization.startsWith("Bearer ") ? authorization.split(" ")[1] : authorization;
+  return jwt.verify(token, jwtSecretKey) as any;
+};

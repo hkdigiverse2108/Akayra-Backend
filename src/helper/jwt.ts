@@ -1,40 +1,47 @@
-import jwt from 'jsonwebtoken'
-import { apiResponse } from '../common'
+import { HTTP_STATUS, apiResponse, isValidObjectId, verifyToken } from '../common'
 import { Request, Response } from 'express'
 import { responseMessage } from './response'
+import { getFirstMatch } from './database-service';
+import { userModel } from '../database';
 
-const jwt_token_secret = process.env.JWT_TOKEN_SECRET;
+export const adminJWT = async (req: Request, res: Response, next) => {
+    let { authorization } = req.headers,
+        result: any;
+    try {
+        if (!authorization) return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, responseMessage?.tokenNotFound, {}, {}));
+
+        let isVerifyToken = verifyToken(authorization);
+        result = await getFirstMatch(userModel, { _id: isValidObjectId(isVerifyToken._id), isDeleted: false }, {}, {});
+
+        if (result?.isActive === false) return res.status(HTTP_STATUS.FORBIDDEN).json(new apiResponse(HTTP_STATUS.FORBIDDEN, responseMessage?.accountBlock, {}, {}));
+
+        req.headers.user = result;
+        return next();
+    } catch (error) {
+        console.log(error);
+        if (error.message === "invalid signature") return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, responseMessage.invalidToken, {}, {}));
+        else if (error.name === "TokenExpiredError") return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, responseMessage.tokenExpire, {}, {}));
+        return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, responseMessage.invalidToken, {}, {}));
+    }
+};
 
 export const userJWT = async (req: Request, res: Response, next) => {
-    let { authorization, userType } = req.headers,
-        result: any
-    if (authorization) {
-        try {
-            let isVerifyToken = jwt.verify(authorization, jwt_token_secret)
-            if (isVerifyToken?.type != userType && userType != "5") return res.status(403).json(new apiResponse(403, responseMessage?.accessDenied, {}, {}));
-            if (process?.env?.NODE_ENV == 'production') {
-                // 1 day expiration
-                if (parseInt(isVerifyToken.generatedOn + 86400000) < new Date().getTime()) {
-                    // if (parseInt(isVerifyToken.generatedOn + 120000) < new Date().getTime()) {
-                    return res.status(410).json(new apiResponse(410, responseMessage?.tokenExpire, {}, {}))
-                }
-            }
+    let { authorization } = req.headers,
+        result: any;
+    try {
+        if (!authorization) return next();
 
-            // result = await userModel.findOne({ _id: ObjectId(isVerifyToken._id), isActive: true })
-            if (result?.isBlock == false) return res.status(403).json(new apiResponse(403, responseMessage?.accountBlock, {}, {}));
-            if (result?.isActive == true && isVerifyToken.authToken == result.authToken) {
-                // Set in Header Decode Token Information
-                req.headers.user = result
-                return next()
-            } else {
-                return res.status(401).json(new apiResponse(401, responseMessage?.invalidToken, {}, {}))
-            }
-        } catch (err) {
-            if (err.message == "invalid signature") return res.status(403).json(new apiResponse(403, responseMessage?.differentToken, {}, {}))
-            console.log(err)
-            return res.status(401).json(new apiResponse(401, responseMessage.invalidToken, {}, {}))
-        }
-    } else {
-        return res.status(401).json(new apiResponse(401, responseMessage?.tokenNotFound, {}, {}))
+        let isVerifyToken = verifyToken(authorization);
+        result = await getFirstMatch(userModel, { _id: isValidObjectId(isVerifyToken._id), isDeleted: false }, {}, {});
+
+        if (result?.isActive === false) return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, responseMessage?.accountBlock, {}, {}));
+
+        req.headers.user = result;
+        return next();
+    } catch (error) {
+        console.log(error);
+        if (error.message === "invalid signature") return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, responseMessage.invalidToken, {}, {}));
+        else if (error.name === "TokenExpiredError") return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, responseMessage.tokenExpire, {}, {}));
+        return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, responseMessage.invalidToken, {}, {}));
     }
-}
+};

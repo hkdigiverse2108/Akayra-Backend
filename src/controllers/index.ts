@@ -1,4 +1,4 @@
-// export * as userController from './user/index'
+export * as userController from './user'
 export * as authController from "./auth"
 export * as adminController from "./admin"
 export * as categoryController from "./category"

@@ -20,6 +20,7 @@ import { igPostRouter } from './ig-post'
 import { sizeRouter } from './size'
 import { colorRouter } from './color'
 import { faqCategoryRouter } from './faq-category'
+import { userRouter } from './user'
 
 const router = Router()
 
@@ -45,5 +46,6 @@ router.use('/about', aboutRouter)
 router.use('/ig-post', igPostRouter)
 router.use('/size', sizeRouter)
 router.use('/color', colorRouter)
+router.use('/user', userRouter)
 
 export { router }

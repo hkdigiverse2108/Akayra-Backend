@@ -21,9 +21,9 @@ export const deleteBrandSchema = Joi.object({
 export const getBrandsSchema = Joi.object({
     page: Joi.number().optional(),
     limit: Joi.number().optional(),
-    search: Joi.string().optional(),
-    sortFilter: Joi.string().valid(...Object.values(SORT_BY_NAME)).optional(),
+    search: Joi.string().allow('', null).optional(),
     activeFilter: Joi.boolean().optional(),
+    sortFilter: Joi.string().allow('', null).optional(),
     startDateFilter: Joi.string().optional(),
     endDateFilter: Joi.string().optional(),
 })

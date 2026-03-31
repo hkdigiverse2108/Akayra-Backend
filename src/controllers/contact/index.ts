@@ -17,20 +17,6 @@ export const add_contact = async (req, res) => {
     }
 };
 
-export const mark_contact_read = async (req, res) => {
-    reqInfo(req)
-    try {
-        const { error, value } = markReadContactSchema.validate(req.body || {});
-        if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
-        const response = await updateData(contactModel, { _id: isValidObjectId(value.contactId) }, { isRead: true }, {});
-        if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound('Contact'), {}, {}));
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, 'Marked as read', response, {}));
-    } catch (error) {
-        console.log(error)
-        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
-    }
-};
-
 export const delete_contact_by_id = async (req, res) => {
     reqInfo(req)
     try {

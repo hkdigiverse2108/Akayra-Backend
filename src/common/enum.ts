@@ -69,3 +69,8 @@ export const PAYMENT_METHOD = {
   PHONEPE: "phonePe",
   COD: "cod",
 } as const;
+
+export const IG_POST_TYPE = {
+  IMAGE: "image",
+  VIDEO: "video",
+} as const;

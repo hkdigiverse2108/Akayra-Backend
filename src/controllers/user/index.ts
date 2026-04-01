@@ -1,4 +1,4 @@
-import { HTTP_STATUS, USER_ROLES, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, USER_ROLES, apiResponse, generateToken, isValidObjectId, resolvePagination } from '../../common';
 import { userModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addUserSchema, editUserSchema, deleteUserSchema, getUsersSchema, getUserByIdSchema } from '../../validation';
@@ -19,6 +19,14 @@ export const add_user = async (req, res) => {
         }
 
         const response = await createData(userModel, value);
+        const token = await generateToken({
+            _id: response._id,
+            type: response.userType,
+            status: "Login",
+            generatedOn: (new Date().getTime())
+        })
+
+        response.token = token;
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.addDataSuccess('user'), response, {}));
     } catch (error) {
         console.log(error)

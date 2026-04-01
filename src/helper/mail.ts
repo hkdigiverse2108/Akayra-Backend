@@ -2,6 +2,7 @@
 import nodemailer from 'nodemailer';
 
 const mail: any = process.env.MAIL;
+console.log("mail", mail)
 const option: any = {
     service: "gmail",
     host: 'smtp.gmail.com',
@@ -11,16 +12,17 @@ const option: any = {
     },
     auth: {
         user: process.env.MAIL,
-        pass: process.env.PASSWORD,
+        pass: process.env.MAIL_PASSWORD,
     },
 }
 const transPorter = nodemailer.createTransport(option)
 
 export const email_verification_mail = async (user: any, otp: any) => {
+    console.log("user => ",user)
     return new Promise(async (resolve, reject) => {
         try {
             const mailOptions = {
-                from: mail.MAIL, // sender address
+                from: mail, // sender address
                 to: user.email, // list of receivers
                 subject: "Email verification",
                 html: `<html lang="en-US">

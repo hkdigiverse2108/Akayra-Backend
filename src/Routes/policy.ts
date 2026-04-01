@@ -6,6 +6,6 @@ const router = Router();
 
 router.post("/add",adminJWT, policyController.add_policy);
 router.put("/edit",adminJWT, policyController.add_policy);
-router.get("/all",userJWT, policyController.get_policy_by_type);
+router.get("/all", policyController.get_policy_by_type);
 
 export const policyRouter = router;

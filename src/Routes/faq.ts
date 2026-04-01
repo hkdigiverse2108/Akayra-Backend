@@ -7,7 +7,7 @@ const router = Router();
 router.post("/add",adminJWT, faqController.add_faq);
 router.put("/edit",adminJWT, faqController.edit_faq_by_id);
 router.delete("/:id",adminJWT, faqController.delete_faq_by_id);
-router.get("/all",userJWT, faqController.get_all_faq);
+router.get("/all", faqController.get_all_faq);
 router.get("/:id",userJWT, faqController.get_faq_by_id);
 
 export const faqRouter = router;

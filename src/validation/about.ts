@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addAboutSectionSchema = Joi.object({
     title: Joi.string().optional(),
@@ -20,8 +21,5 @@ export const editAboutSectionSchema = Joi.object({
 export const deleteAboutSectionSchema = Joi.object({ id: Joi.string().required() })
 export const getAboutSectionByIdSchema = Joi.object({ id: Joi.string().required() })
 
-export const getAllAboutSectionsSchema = Joi.object({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-    activeFilter: Joi.boolean().optional(),
-})
+export const getAllAboutSectionsSchema = getPaginationAndFilterSchema;
+

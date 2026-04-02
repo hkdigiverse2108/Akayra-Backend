@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addContactSchema = Joi.object({
     name: Joi.string().required(),
@@ -8,13 +9,10 @@ export const addContactSchema = Joi.object({
     message: Joi.string().required(),
 })
 
-export const getContactsSchema = Joi.object({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-    search: Joi.string().optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
-})
+export const getContactsSchema = getPaginationAndFilterSchema.keys({
+    isRead: Joi.boolean().optional(),
+});
+
 
 export const deleteContactSchema = Joi.object({ id: Joi.string().required() })
 export const markReadContactSchema = Joi.object({ contactId: Joi.string().required() })

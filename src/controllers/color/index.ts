@@ -1,4 +1,4 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from '../../common';
 import { colorModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addColorSchema, editColorSchema, deleteColorSchema, getColorByIdSchema, getAllColorSchema } from '../../validation';
@@ -59,23 +59,7 @@ export const get_all_color = async (req, res) => {
         const { error, value } = getAllColorSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        let { page, limit, search, activeFilter, startDateFilter, endDateFilter, sortFilter } = value, criteria: any = { isDeleted: false }, options: any = { lean: true };
-
-        if (search) criteria.name = { $regex: search, $options: 'si' };
-
-        if (sortFilter === "nameAsc") options.sort = { name: 1 };
-        else if (sortFilter === "nameDesc") options.sort = { name: -1 };
-        else options.sort = { createdAt: -1 };
-
-        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
-        else if (activeFilter === false) criteria.isActive = false;
-
-        if (startDateFilter && endDateFilter) criteria.createdAt = { $gte: new Date(startDateFilter), $lte: new Date(endDateFilter) };
-
-        if (page && limit) {
-            options.skip = (parseInt(page) - 1) * parseInt(limit);
-            options.limit = parseInt(limit);
-        }
+        const { criteria, options, page, limit } = resolveSortAndFilter(value);
 
         const response = await getData(colorModel, criteria, {}, options);
         const totalCount = await countData(colorModel, criteria);
@@ -90,6 +74,7 @@ export const get_all_color = async (req, res) => {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
+
 
 export const get_color_by_id = async (req, res) => {
     reqInfo(req)

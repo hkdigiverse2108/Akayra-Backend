@@ -1,4 +1,4 @@
-import { HTTP_STATUS, USER_ROLES, apiResponse, generateToken, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, USER_ROLES, apiResponse, generateToken, isValidObjectId, resolvePagination, resolveSortAndFilter } from '../../common';
 import { userModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addUserSchema, editUserSchema, deleteUserSchema, getUsersSchema, getUserByIdSchema } from '../../validation';
@@ -81,28 +81,8 @@ export const get_all_user = async (req, res) => {
         const { error, value } = getUsersSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        let { page, limit, search, sortFilter, activeFilter } = value;
-        let criteria: any = { isDeleted: false, role: { $ne: USER_ROLES.ADMIN } }, options: any = { lean: true };
-
-        if (search) {
-            criteria.$or = [
-                { firstName: { $regex: search, $options: 'si' } },
-                { lastName: { $regex: search, $options: 'si' } },
-                { email: { $regex: search, $options: 'si' } }
-            ];
-        }
-
-        if (sortFilter === "nameAsc") options.sort = { firstName: 1 };
-        else if (sortFilter === "nameDesc") options.sort = { firstName: -1 };
-        else options.sort = { createdAt: -1 };
-
-        if (activeFilter === true) criteria.isActive = true;
-        if (activeFilter === false) criteria.isActive = false;
-
-        if (page && limit) {
-            options.skip = (parseInt(page) - 1) * parseInt(limit);
-            options.limit = parseInt(limit);
-        }
+        const { criteria, options, page, limit } = resolveSortAndFilter(value, ['firstName', 'lastName', 'email']);
+        criteria.role = { $ne: USER_ROLES.ADMIN };
 
         const response = await getData(userModel, criteria, {}, options);
         const totalCount = await countData(userModel, criteria);
@@ -117,6 +97,7 @@ export const get_all_user = async (req, res) => {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
+
 
 export const get_user_by_id = async (req, res) => {
     reqInfo(req)

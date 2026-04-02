@@ -1,4 +1,4 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from '../../common';
 import { faqCategoryModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addFaqCategorySchema, editFaqCategorySchema, deleteFaqCategorySchema, getFaqCategoriesSchema } from '../../validation';
@@ -56,21 +56,7 @@ export const get_all_faq_category = async (req, res) => {
         const { error, value } = getFaqCategoriesSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        let { activeFilter, page, limit, startDateFilter, endDateFilter, search } = value;
-        let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { createdAt: -1 } };
-
-        if (search) criteria.title = { $regex: search, $options: 'si' };
-        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
-        else if (activeFilter === false) criteria.isActive = false;
-
-        if (startDateFilter && endDateFilter) {
-            criteria.createdAt = { $gte: new Date(startDateFilter), $lte: new Date(endDateFilter) };
-        }
-
-        if (page && limit) {
-            options.skip = (parseInt(page) - 1) * parseInt(limit);
-            options.limit = parseInt(limit);
-        }
+        const { criteria, options, page, limit } = resolveSortAndFilter(value, ['title']);
 
         const response = await getData(faqCategoryModel, criteria, {}, options);
         const totalCount = await countData(faqCategoryModel, criteria);
@@ -85,3 +71,4 @@ export const get_all_faq_category = async (req, res) => {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
+

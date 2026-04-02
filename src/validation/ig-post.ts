@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { IG_POST_TYPE } from "../common/enum";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addIgPostSchema = Joi.object({
     title: Joi.string().optional(),
@@ -22,10 +23,6 @@ export const editIgPostSchema = Joi.object({
 })
 export const deleteIgPostSchema = Joi.object({ id: Joi.string().required() })
 export const getIgPostByIdSchema = Joi.object({ id: Joi.string().required() })
-export const getIgPostsSchema = Joi.object({
-    activeFilter: Joi.boolean().optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-})
+
+export const getIgPostsSchema = getPaginationAndFilterSchema;
+

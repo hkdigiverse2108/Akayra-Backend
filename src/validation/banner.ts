@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { BANNER_TYPE } from "../common";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addBannerSchema = Joi.object({
     type: Joi.string().valid(...Object.values(BANNER_TYPE)).required(),
@@ -30,13 +31,8 @@ export const editBannerSchema = Joi.object({
 
 export const deleteBannerSchema = Joi.object({ id: Joi.string().required() })
 export const getBannerByIdSchema = Joi.object({ id: Joi.string().required() })
-export const getBannersSchema = Joi.object({
+
+export const getBannersSchema = getPaginationAndFilterSchema.keys({
     type: Joi.string().valid(...Object.values(BANNER_TYPE)).optional(),
-    search: Joi.string().allow('', null).optional(),
-    activeFilter: Joi.boolean().optional(),
-    sortFilter: Joi.string().allow('', null).optional(),
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
-})
+});
+

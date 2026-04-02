@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { PRODUCT_SORT } from "../common";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addProductSchema = Joi.object({
     title: Joi.string().required(),
@@ -46,20 +46,14 @@ export const deleteProductSchema = Joi.object({
     id: Joi.string().required(),
 })
 
-export const getProductsSchema = Joi.object({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-    search: Joi.string().optional(),
+export const getProductsSchema = getPaginationAndFilterSchema.keys({
     categoryId: Joi.string().optional(),
     brandId: Joi.string().optional(),
     isTrending: Joi.boolean().optional(),
     isDealOfDay: Joi.boolean().optional(),
-    sortFilter: Joi.string().valid(...Object.values(PRODUCT_SORT)).optional(),
-    activeFilter: Joi.boolean().optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
 })
 
 export const getProductByIdSchema = Joi.object({
     id: Joi.string().required(),
 })
+

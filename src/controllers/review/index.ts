@@ -1,4 +1,4 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from '../../common';
 import { reviewModel, productModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addReviewSchema, editReviewSchema, deleteReviewSchema, getReviewsSchema, getReviewByIdSchema } from '../../validation';
@@ -65,21 +65,10 @@ export const get_all_review = async (req, res) => {
         const { error, value } = getReviewsSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        let { page, limit, productId, activeFilter } = value;
-        let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { createdAt: -1 } };
+        const { productId } = value;
+        const { criteria, options, page, limit } = resolveSortAndFilter(value, ['name', 'personName', 'description']);
 
         if (productId) criteria.productId = isValidObjectId(productId);
-        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
-        else if (activeFilter === false) criteria.isActive = false;
-
-        if (value.startDateFilter && value.endDateFilter) {
-            criteria.createdAt = { $gte: new Date(value.startDateFilter), $lte: new Date(value.endDateFilter) };
-        }
-
-        if (page && limit) {
-            options.skip = (parseInt(page) - 1) * parseInt(limit);
-            options.limit = parseInt(limit);
-        }
 
         const response = await getData(reviewModel, criteria, {}, options);
         const totalCount = await countData(reviewModel, criteria);
@@ -95,6 +84,7 @@ export const get_all_review = async (req, res) => {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
+
 
 export const get_review_by_id = async (req, res) => {
     reqInfo(req)

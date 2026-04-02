@@ -1,4 +1,4 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from '../../common';
 import { bannerModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addBannerSchema, editBannerSchema, deleteBannerSchema, getBannersSchema, getBannerByIdSchema } from '../../validation';
@@ -53,17 +53,11 @@ export const get_all_banner = async (req, res) => {
         const { error, value } = getBannersSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        let { type, activeFilter, page, limit } = value;
-        let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { priority: -1, createdAt: -1 } };
+        const { type, sortFilter } = value;
+        const { criteria, options, page, limit } = resolveSortAndFilter(value, ['title', 'subtitle']);
 
         if (type) criteria.type = type;
-        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
-        else if (activeFilter === false) criteria.isActive = false;
-
-        if (value.startDateFilter && value.endDateFilter) {
-            criteria.createdAt = { $gte: new Date(value.startDateFilter), $lte: new Date(value.endDateFilter) };
-        }
-        if (page && limit) { options.skip = (parseInt(page) - 1) * parseInt(limit); options.limit = parseInt(limit); }
+        if (!sortFilter) options.sort = { priority: -1, createdAt: -1 };
 
         const response = await getData(bannerModel, criteria, {}, options);
         const totalCount = await countData(bannerModel, criteria);
@@ -73,6 +67,7 @@ export const get_all_banner = async (req, res) => {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
+
 
 export const get_banner_by_id = async (req, res) => {
     reqInfo(req)

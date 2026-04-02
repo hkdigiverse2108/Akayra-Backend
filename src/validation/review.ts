@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addReviewSchema = Joi.object({
     productId: Joi.string().required(),
@@ -25,14 +26,10 @@ export const deleteReviewSchema = Joi.object({
     id: Joi.string().required(),
 })
 
-export const getReviewsSchema = Joi.object({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
+export const getReviewsSchema = getPaginationAndFilterSchema.keys({
     productId: Joi.string().optional(),
-    activeFilter: Joi.boolean().optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
 })
+
 
 export const getReviewByIdSchema = Joi.object({
     id: Joi.string().required(),

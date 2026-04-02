@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { USER_ROLES, isValidObjectId } from '../common';
+import { getPaginationAndFilterSchema } from './common';
 
 export const addUserSchema = Joi.object({
     firstName: Joi.string().required(),
@@ -32,14 +33,9 @@ export const deleteUserSchema = Joi.object({
     id: Joi.string().custom(isValidObjectId).required()
 });
 
-export const getUsersSchema = Joi.object({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-    search: Joi.string().allow('', null),
-    sortFilter: Joi.string().allow('', null),
-    activeFilter: Joi.boolean().allow(null)
-});
+export const getUsersSchema = getPaginationAndFilterSchema;
 
 export const getUserByIdSchema = Joi.object({
     id: Joi.string().custom(isValidObjectId).required()
 });
+

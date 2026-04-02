@@ -1,4 +1,4 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from '../../common';
 import { sizeModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addSizeSchema, editSizeSchema, deleteSizeSchema, getSizeByIdSchema, getSizesSchema } from '../../validation';
@@ -59,21 +59,7 @@ export const get_all_size = async (req, res) => {
         const { error, value } = getSizesSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        let { activeFilter, page, limit, startDateFilter, endDateFilter, search } = value;
-        let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { name: 1 } };
-
-        if (search) criteria.name = { $regex: search, $options: 'si' };
-        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
-        else if (activeFilter === false) criteria.isActive = false;
-
-        if (startDateFilter && endDateFilter) {
-            criteria.createdAt = { $gte: new Date(startDateFilter), $lte: new Date(endDateFilter) };
-        }
-
-        if (page && limit) {
-            options.skip = (parseInt(page) - 1) * parseInt(limit);
-            options.limit = parseInt(limit);
-        }
+        const { criteria, options, page, limit } = resolveSortAndFilter(value);
 
         const response = await getData(sizeModel, criteria, {}, options);
         const totalCount = await countData(sizeModel, criteria);
@@ -88,6 +74,7 @@ export const get_all_size = async (req, res) => {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
+
 
 export const get_size_by_id = async (req, res) => {
     reqInfo(req)

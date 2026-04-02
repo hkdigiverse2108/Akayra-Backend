@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addBlogSchema = Joi.object({
     titleTag: Joi.string().optional(),
@@ -29,14 +30,13 @@ export const editBlogSchema = Joi.object({
     isActive: Joi.boolean().optional(),
 })
 
-export const deleteBlogSchema = Joi.object({ id: Joi.string().required() })
-export const getBlogByIdSchema = Joi.object({ id: Joi.string().required() })
-export const getBlogsSchema = Joi.object({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-    search: Joi.string().allow('', null).optional(),
-    activeFilter: Joi.boolean().optional(),
-    sortFilter: Joi.string().allow('', null).optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
+export const deleteBlogSchema = Joi.object({
+    id: Joi.string().required()
 })
+
+export const getBlogByIdSchema = Joi.object({
+    id: Joi.string().required()
+})
+
+export const getBlogsSchema = getPaginationAndFilterSchema;
+

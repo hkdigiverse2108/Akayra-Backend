@@ -1,5 +1,6 @@
 import Joi from "joi";
 import { COUPON_TYPE } from "../common";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addCouponSchema = Joi.object({
     code: Joi.string().required(),
@@ -32,14 +33,9 @@ export const editCouponSchema = Joi.object({
 
 export const deleteCouponSchema = Joi.object({ id: Joi.string().required() })
 export const getCouponByIdSchema = Joi.object({ id: Joi.string().required() })
-export const getCouponsSchema = Joi.object({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-    search: Joi.string().optional(),
-    activeFilter: Joi.boolean().optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
-})
+
+export const getCouponsSchema = getPaginationAndFilterSchema;
+
 export const applyCouponSchema = Joi.object({
     code: Joi.string().required(),
     orderAmount: Joi.number().required(),

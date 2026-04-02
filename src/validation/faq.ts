@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addFaqSchema = Joi.object({
     question: Joi.string().required(),
@@ -18,13 +19,8 @@ export const editFaqSchema = Joi.object({
 
 export const deleteFaqSchema = Joi.object({ id: Joi.string().required() })
 export const getFaqByIdSchema = Joi.object({ id: Joi.string().required() })
-export const getFaqsSchema = Joi.object({
+
+export const getFaqsSchema = getPaginationAndFilterSchema.keys({
     faqCategoryId: Joi.string().optional(),
-    search: Joi.string().allow('', null).optional(),
-    activeFilter: Joi.boolean().optional(),
-    sortFilter: Joi.string().allow('', null).optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-})
+});
+

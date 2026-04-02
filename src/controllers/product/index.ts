@@ -1,4 +1,4 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from '../../common';
 import { productModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addProductSchema, editProductSchema, deleteProductSchema, getProductsSchema, getProductByIdSchema } from '../../validation';
@@ -83,34 +83,17 @@ export const get_all_product = async (req, res) => {
         const { error, value } = getProductsSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        let { page, limit, search, categoryId, brandId, isTrending, isDealOfDay, sortFilter, activeFilter, startDateFilter, endDateFilter } = value;
-        let criteria: any = { isDeleted: false }, options: any = { lean: true };
-
-        // Search by product name (keyword) or SKU
-        if (search) criteria.$or = [
-            { title: { $regex: search, $options: 'si' } },
-            { sku: { $regex: search, $options: 'si' } }
-        ];
+        const { categoryId, brandId, isTrending, isDealOfDay, sortFilter } = value;
+        const { criteria, options, page, limit } = resolveSortAndFilter(value, ['title', 'sku']);
 
         if (categoryId) criteria.categoryId = isValidObjectId(categoryId);
         if (brandId) criteria.brandId = isValidObjectId(brandId);
         if (isTrending === true) criteria.isTrending = true;
         if (isDealOfDay === true) criteria.isDealOfDay = true;
-        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
-        else if (activeFilter === false) criteria.isActive = false;
-        if (startDateFilter && endDateFilter) criteria.createdAt = { $gte: new Date(startDateFilter), $lte: new Date(endDateFilter) };
 
         if (sortFilter === "priceAsc") options.sort = { sellingPrice: 1 };
         else if (sortFilter === "priceDesc") options.sort = { sellingPrice: -1 };
-        else if (sortFilter === "nameAsc") options.sort = { title: 1 };
-        else if (sortFilter === "nameDesc") options.sort = { title: -1 };
         else if (sortFilter === "ratingDesc") options.sort = { rating: -1 };
-        else options.sort = { createdAt: -1 };
-
-        if (page && limit) {
-            options.skip = (parseInt(page) - 1) * parseInt(limit);
-            options.limit = parseInt(limit);
-        }
 
         const response = await getData(productModel, criteria, {}, options);
         const totalCount = await countData(productModel, criteria);
@@ -124,6 +107,7 @@ export const get_all_product = async (req, res) => {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
+
 
 export const get_product_by_id = async (req, res) => {
     reqInfo(req)

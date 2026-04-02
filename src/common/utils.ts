@@ -93,8 +93,42 @@ export const getPaginationState = (totalCount: number, pageValue: number, limitV
   };
 };
 
+export const resolveSortAndFilter = (value: any, searchFields: string[] = ['name']) => {
+    let { activeFilter, page, limit, startDateFilter, endDateFilter, search, sortFilter } = value;
+    let criteria: any = { isDeleted: false }, options: any = { lean: true };
+
+    if (search) {
+        if (searchFields.length === 1) {
+            criteria[searchFields[0]] = { $regex: search, $options: 'si' };
+        } else {
+            criteria.$or = searchFields.map(field => ({ [field]: { $regex: search, $options: 'si' } }));
+        }
+    }
+
+    if (activeFilter === true) criteria.isActive = true;
+    else if (activeFilter === false) criteria.isActive = false;
+
+    if (startDateFilter && endDateFilter) {
+        criteria.createdAt = { $gte: new Date(startDateFilter), $lte: new Date(endDateFilter) };
+    }
+
+    if (sortFilter === "nameAsc") options.sort = { [searchFields[0] || 'name']: 1 };
+    else if (sortFilter === "nameDesc") options.sort = { [searchFields[0] || 'name']: -1 };
+    else if (sortFilter === "newest") options.sort = { createdAt: -1 };
+    else if (sortFilter === "oldest") options.sort = { createdAt: 1 };
+    else options.sort = { createdAt: -1 }; // Default sort
+
+    const { skip, limit: limitValue, hasLimit } = resolvePagination(page, limit);
+    if (hasLimit) {
+        options.skip = skip;
+        options.limit = limitValue;
+    }
+
+    return { criteria, options, page: page || 1, limit: limitValue };
+};
+
 export const verifyToken = (authorization?: string) => {
   if (!authorization) return null;
   const token = authorization.startsWith("Bearer ") ? authorization.split(" ")[1] : authorization;
   return jwt.verify(token, jwtSecretKey) as any;
-};
+};

@@ -1,4 +1,4 @@
-import { HTTP_STATUS, USER_ROLES, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from '../../common';
 import { aboutSectionModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addAboutSectionSchema, editAboutSectionSchema, deleteAboutSectionSchema, getAboutSectionByIdSchema, getAllAboutSectionsSchema } from '../../validation';
@@ -49,21 +49,14 @@ export const delete_about_section_by_id = async (req, res) => {
 
 export const get_all_about_sections = async (req, res) => {
     reqInfo(req)
-    let { user } = req.headers
     try {
         const { error, value } = getAllAboutSectionsSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        let { activeFilter, page, limit } = value;
-        let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { priority: 1, createdAt: -1 } };
+        const { sortFilter } = value;
+        const { criteria, options, page, limit } = resolveSortAndFilter(value, ['title', 'subtitle', 'description']);
 
-        if (activeFilter === true) criteria.isActive = true;
-        if (activeFilter === false) criteria.isActive = false;
-
-        if (page && limit) {
-            options.skip = (parseInt(page) - 1) * parseInt(limit);
-            options.limit = parseInt(limit);
-        }
+        if (!sortFilter) options.sort = { priority: 1, createdAt: -1 };
 
         const response = await getData(aboutSectionModel, criteria, {}, options);
         const totalCount = await countData(aboutSectionModel, criteria);
@@ -79,6 +72,7 @@ export const get_all_about_sections = async (req, res) => {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
+
 
 export const get_about_section_by_id = async (req, res) => {
     reqInfo(req)

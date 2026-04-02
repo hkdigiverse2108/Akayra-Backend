@@ -1,4 +1,4 @@
-import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination } from '../../common';
+import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from '../../common';
 import { blogModel } from '../../database';
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from '../../helper';
 import { addBlogSchema, editBlogSchema, deleteBlogSchema, getBlogsSchema, getBlogByIdSchema } from '../../validation';
@@ -56,27 +56,7 @@ export const get_all_blog = async (req, res) => {
         const { error, value } = getBlogsSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        let { page, limit, search, activeFilter } = value;
-        let criteria: any = { isDeleted: false }, options: any = { lean: true, sort: { createdAt: -1 } };
-
-        if (search) {
-            criteria.$or = [
-                { title: { $regex: search, $options: 'si' } },
-                { tags: { $in: [new RegExp(search, 'i')] } }
-            ];
-        }
-
-        if (activeFilter === true || activeFilter === undefined) criteria.isActive = true;
-        else if (activeFilter === false) criteria.isActive = false;
-
-        if (value.startDateFilter && value.endDateFilter) {
-            criteria.createdAt = { $gte: new Date(value.startDateFilter), $lte: new Date(value.endDateFilter) };
-        }
-
-        if (page && limit) {
-            options.skip = (parseInt(page) - 1) * parseInt(limit);
-            options.limit = parseInt(limit);
-        }
+        const { criteria, options, page, limit } = resolveSortAndFilter(value, ['title', 'tags']);
 
         const response = await getData(blogModel, criteria, {}, options);
         const totalCount = await countData(blogModel, criteria);
@@ -91,6 +71,7 @@ export const get_all_blog = async (req, res) => {
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
+
 
 export const get_blog_by_id = async (req, res) => {
     reqInfo(req)

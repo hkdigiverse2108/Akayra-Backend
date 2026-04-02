@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { getPaginationAndFilterSchema } from "./common";
 
 export const addColorSchema = Joi.object({
     name: Joi.string().required(),
@@ -14,12 +15,4 @@ export const editColorSchema = Joi.object({
 export const deleteColorSchema = Joi.object({ id: Joi.string().required() })
 export const getColorByIdSchema = Joi.object({ id: Joi.string().required() })
 
-export const getAllColorSchema = Joi.object({
-    page: Joi.number().optional(),
-    limit: Joi.number().optional(),
-    search: Joi.string().optional(),
-    activeFilter: Joi.boolean().optional(),
-    startDateFilter: Joi.string().optional(),
-    endDateFilter: Joi.string().optional(),
-    sortFilter: Joi.string().optional(),
-})
+export const getAllColorSchema = getPaginationAndFilterSchema;

@@ -13,7 +13,6 @@ const productSchema = new mongoose.Schema({
     discount: { type: Number, default: 0 },
     shortDescription: { type: String },
     longDescription: { type: String },
-    additionalInformation: { type: String },
     brandId: { type: mongoose.Schema.Types.ObjectId, ref: 'brand' },
     sku: { type: String },
     isTrending: { type: Boolean, default: false },

@@ -15,6 +15,11 @@ const settingsSchema = new mongoose.Schema({
     isPhonePe: { type: Boolean, default: false },
     isShipRocket: { type: Boolean, default: false },
     isCashFree: { type: Boolean, default: false },
+    razorpayApiKey: { type: String },
+    razorpayApiSecret: { type: String },
+    phonePeApiKey: { type: String },
+    phonePeApiSecret: { type: String },
+    phonePeApiVersion: { type: String },
     securePaymentImages: [{ type: String }],
     securePaymentTitle: { type: String },
 }, { timestamps: true });

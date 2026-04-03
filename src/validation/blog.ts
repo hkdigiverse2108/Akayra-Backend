@@ -4,7 +4,7 @@ import { getPaginationAndFilterSchema } from "./common";
 export const addBlogSchema = Joi.object({
     titleTag: Joi.string().optional(),
     metaDescription: Joi.string().optional(),
-    urlSlug: Joi.string().required(),
+    urlSlug: Joi.string().optional(),
     imageAltText: Joi.string().optional(),
     thumbnail: Joi.string().optional(),
     title: Joi.string().required(),

@@ -80,6 +80,28 @@ const findUploadRequestValue = (req: Request) => {
     return "";
 };
 
+const listAllUploadFiles = (rootDir: string) => {
+    const files: string[] = [];
+    const stack: string[] = [rootDir];
+
+    while (stack.length) {
+        const current = stack.pop() as string;
+        const entries = fs.readdirSync(current, { withFileTypes: true });
+        for (const entry of entries) {
+            const entryPath = path.join(current, entry.name);
+            if (entry.isDirectory()) {
+                stack.push(entryPath);
+                continue;
+            }
+            if (entry.isFile()) {
+                files.push(entryPath);
+            }
+        }
+    }
+
+    return files;
+};
+
 export const upload_image = async (req: Request, res: Response) => {
     reqInfo(req);
     try {
@@ -108,6 +130,57 @@ export const upload_image = async (req: Request, res: Response) => {
         return res
             .status(HTTP_STATUS.OK)
             .json(new apiResponse(HTTP_STATUS.OK, responseMessage.fileUploadSuccess, payload, {}));
+    } catch (error) {
+        console.log(error);
+        return res
+            .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+            .json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
+    }
+};
+
+export const get_all_images = async (req: Request, res: Response) => {
+    reqInfo(req);
+    try {
+        const folderValue =
+            typeof req.query?.folder === "string"
+                ? req.query.folder
+                : typeof req.body?.folder === "string"
+                    ? req.body.folder
+                    : "";
+        const folder = folderValue ? sanitizeFolderName(folderValue) : "";
+
+        const targetRoot = folder ? path.resolve(uploadRoot, folder) : uploadRoot;
+        if (targetRoot !== uploadRoot && !targetRoot.startsWith(`${uploadRoot}${path.sep}`)) {
+            return res
+                .status(HTTP_STATUS.BAD_REQUEST)
+                .json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Invalid folder", {}, {}));
+        }
+
+        if (!fs.existsSync(targetRoot) || !fs.statSync(targetRoot).isDirectory()) {
+            return res
+                .status(HTTP_STATUS.NOT_FOUND)
+                .json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("folder"), {}, {}));
+        }
+
+        const host = req.get("host");
+        const urlPrefix = host ? `${req.protocol}://${host}` : "";
+
+        const filePaths = listAllUploadFiles(targetRoot);
+        const images = filePaths.map((absolutePath) => {
+            const relativePath = path.relative(uploadRoot, absolutePath).replace(/\\/g, "/");
+            const publicPath = `uploads/${relativePath}`;
+            const stats = fs.statSync(absolutePath);
+            return {
+                fileName: path.basename(absolutePath),
+                size: stats.size,
+                path: publicPath,
+                url: urlPrefix ? `${urlPrefix}/${publicPath}` : `/${publicPath}`,
+            };
+        });
+
+        return res
+            .status(HTTP_STATUS.OK)
+            .json(new apiResponse(HTTP_STATUS.OK, "Images fetched successfully", images, {}));
     } catch (error) {
         console.log(error);
         return res

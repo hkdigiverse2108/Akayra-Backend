@@ -78,7 +78,7 @@ const collectFiles = (req) => {
     return Array.isArray(files) ? files : [];
 };
 const listImagesRecursively = (dir: string) => {
-    const images: { name: string; url: string }[] = [];
+    const images: { url: string }[] = [];
     const entries = fs.readdirSync(dir, { withFileTypes: true });
 
     for (const entry of entries) {
@@ -90,7 +90,7 @@ const listImagesRecursively = (dir: string) => {
         }
 
         const relativePath = path.relative(process.cwd(), fullPath).replace(/\\/g, "/");
-        images.push({name: entry.name,url: getFileUrl(relativePath),});
+        images.push({ url: getFileUrl(relativePath) });
     }
 
     return images;
@@ -104,3 +104,4 @@ const normalizeDeletePathFromUrl = (fileUrl: string) => {
         return "";
     }
 };
+

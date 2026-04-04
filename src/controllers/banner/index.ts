@@ -28,8 +28,13 @@ export const edit_banner_by_id = async (req, res) => {
     const { error, value } = editBannerSchema.validate(req.body || {});
     if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-    const isExist = await getFirstMatch(bannerModel, { type: value.type, priority: value.priority, isDeleted: false, _id: { $ne: new ObjectId(value?.bannerId) } }, {}, {});
-    if (isExist) return res.status(HTTP_STATUS.CONFLICT).json(new apiResponse(HTTP_STATUS.CONFLICT, responseMessage?.dataAlreadyExist("Banner priority"), {}, {}))
+    let isExist = await getFirstMatch(bannerModel, { _id: new ObjectId(value.bannerId), isDeleted: false }, {}, {});
+    if (!isExist) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage.getDataNotFound("banner"), {}, {}));
+
+    if (value.priority) {
+      let isNumberExist = await getFirstMatch(bannerModel, { priority: value.priority, isDeleted: false, _id: { $ne: new ObjectId(value?.bannerId) } }, {}, {});
+      if (isNumberExist) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage.dataAlreadyExist("Banner priority"), {}, {}));
+    }
 
     const response = await updateData(bannerModel, { _id: isValidObjectId(value.bannerId) }, value, {});
     if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("Banner"), {}, {}));

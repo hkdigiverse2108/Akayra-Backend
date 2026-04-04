@@ -5,15 +5,109 @@ import path from "path";
 import { HTTP_STATUS, apiResponse } from "../../common";
 import { reqInfo, responseMessage } from "../../helper";
 
+export const upload_image = async (req: Request, res: Response) => {
+    reqInfo(req);
+    try {
+        const uploadedFiles = (req as any).files || {};
+        const uploadedFile = uploadedFiles?.image?.[0] || uploadedFiles?.file?.[0];
+
+        if (!uploadedFile) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Please upload an image file", {}, {}));
+        }
+
+        const relativePath = path.relative(uploadRoot, uploadedFile.path).replace(/\\/g, "/");
+        const publicPath = `uploads/${relativePath}`;
+        const urlPrefix = process.env.Bakend_URL;
+
+        const payload = {fileName: uploadedFile.filename,mimeType: uploadedFile.mimetype,size: uploadedFile.size,path: publicPath,url: urlPrefix ? `${urlPrefix}/${publicPath}` : `/${publicPath}`,};
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.fileUploadSuccess, payload, {}));
+    } catch (error) {
+        console.log(error);
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
+    }
+};
+
+export const get_all_images = async (req: Request, res: Response) => {
+    reqInfo(req);
+    try {
+        const folderValue =typeof req.query?.folder === "string"    ? req.query.folder    : typeof req.body?.folder === "string"        ? req.body.folder        : "";
+        const folder = folderValue ? sanitizeFolderName(folderValue) : "";
+
+        const targetRoot = folder ? path.resolve(uploadRoot, folder) : uploadRoot;
+        if (targetRoot !== uploadRoot && !targetRoot.startsWith(`${uploadRoot}${path.sep}`)) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Invalid folder", {}, {}));
+        }
+
+        if (!fs.existsSync(targetRoot) || !fs.statSync(targetRoot).isDirectory()) {
+            return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("folder"), {}, {}));
+        }
+
+        const urlPrefix = process.env.Bakend_URL;
+
+        const filePaths = listAllUploadFiles(targetRoot);
+        const images = filePaths.map((absolutePath) => {
+            const relativePath = path.relative(uploadRoot, absolutePath).replace(/\\/g, "/");
+            const publicPath = `uploads/${relativePath}`;
+            const stats = fs.statSync(absolutePath);
+            return {fileName: path.basename(absolutePath),size: stats.size,path: publicPath,url: urlPrefix ? `${urlPrefix}/${publicPath}` : `/${publicPath}`,};
+        });
+
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, "Images fetched successfully", images, {}));
+    } catch (error) {
+        console.log(error);
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
+    }
+};
+
+export const get_uploaded_image = async (req: Request, res: Response) => {
+    reqInfo(req);
+    try {
+        const requestedPath = extractUploadPath(findUploadRequestValue(req));
+
+        if (!requestedPath) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Please provide image path or URL", {}, {}));
+        }
+
+        const absolutePath = resolveUploadFilePath(requestedPath);
+        if (!absolutePath || !fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {
+            return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("file"), {}, {}));
+        }
+
+        return res.sendFile(absolutePath);
+    } catch (error) {
+        console.log(error);
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
+    }
+};
+
+export const delete_uploaded_image = async (req: Request, res: Response) => {
+    reqInfo(req);
+    try {
+        const requestedPath = extractUploadPath(findUploadRequestValue(req));
+
+        if (!requestedPath) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Please provide image path or URL", {}, {}));
+        }
+
+        const absolutePath = resolveUploadFilePath(requestedPath);
+        if (!absolutePath || !fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {
+            return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("file"), {}, {}));
+        }
+
+        fs.unlinkSync(absolutePath);
+
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, "File deleted successfully", { path: requestedPath }, {}));
+    } catch (error) {
+        console.log(error);
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
+    }
+};
+
 const uploadRoot = path.resolve(process.cwd(), "uploads");
 
+
 const sanitizeFolderName = (folder?: string) => {
-    const normalized = `${folder || ""}`
-        .replace(/\\/g, "/")
-        .split("/")
-        .map((segment) => segment.replace(/[^a-zA-Z0-9_-]/g, ""))
-        .filter(Boolean)
-        .join("/");
+    const normalized = `${folder || ""}`.replace(/\\/g, "/").split("/").map((segment) => segment.replace(/[^a-zA-Z0-9_-]/g, "")).filter(Boolean).join("/");
 
     return normalized || "profile";
 };
@@ -26,10 +120,7 @@ const resolveUploadFilePath = (relativePath?: string) => {
         normalizedPath = normalizedPath.slice("uploads/".length);
     }
 
-    const segments = normalizedPath
-        .split("/")
-        .map((segment) => segment.trim().replace(/[^a-zA-Z0-9._-]/g, ""))
-        .filter(Boolean);
+    const segments = normalizedPath.split("/").map((segment) => segment.trim().replace(/[^a-zA-Z0-9._-]/g, "")).filter(Boolean);
 
     if (!segments.length || segments.some((segment) => segment === "." || segment === "..")) {
         return null;
@@ -60,14 +151,7 @@ const extractUploadPath = (value?: string) => {
 };
 
 const findUploadRequestValue = (req: Request) => {
-    const lookup = [
-        "path",
-        "url",
-        "filePath",
-        "imagePath",
-        "file",
-        "image",
-    ];
+    const lookup = ["path","url","filePath","imagePath","file","image",];
 
     for (const key of lookup) {
         const queryValue = typeof req.query?.[key] === "string" ? req.query?.[key] as string : undefined;
@@ -100,148 +184,4 @@ const listAllUploadFiles = (rootDir: string) => {
     }
 
     return files;
-};
-
-export const upload_image = async (req: Request, res: Response) => {
-    reqInfo(req);
-    try {
-        const uploadedFiles = (req as any).files || {};
-        const uploadedFile = uploadedFiles?.image?.[0] || uploadedFiles?.file?.[0];
-
-        if (!uploadedFile) {
-            return res
-                .status(HTTP_STATUS.BAD_REQUEST)
-                .json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Please upload an image file", {}, {}));
-        }
-
-        const relativePath = path.relative(uploadRoot, uploadedFile.path).replace(/\\/g, "/");
-        const publicPath = `uploads/${relativePath}`;
-        const urlPrefix = process.env.BACKEND_URL
-
-        const payload = {
-            fileName: uploadedFile.filename,
-            mimeType: uploadedFile.mimetype,
-            size: uploadedFile.size,
-            path: publicPath,
-            url: `${urlPrefix}/${publicPath}`,
-        };
-
-        return res
-            .status(HTTP_STATUS.OK)
-            .json(new apiResponse(HTTP_STATUS.OK, responseMessage.fileUploadSuccess, payload, {}));
-    } catch (error) {
-        console.log(error);
-        return res
-            .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-            .json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
-    }
-};
-
-export const get_all_images = async (req: Request, res: Response) => {
-    reqInfo(req);
-    try {
-        const folderValue =
-            typeof req.query?.folder === "string"
-                ? req.query.folder
-                : typeof req.body?.folder === "string"
-                    ? req.body.folder
-                    : "";
-        const folder = folderValue ? sanitizeFolderName(folderValue) : "";
-
-        const targetRoot = folder ? path.resolve(uploadRoot, folder) : uploadRoot;
-        if (targetRoot !== uploadRoot && !targetRoot.startsWith(`${uploadRoot}${path.sep}`)) {
-            return res
-                .status(HTTP_STATUS.BAD_REQUEST)
-                .json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Invalid folder", {}, {}));
-        }
-
-        if (!fs.existsSync(targetRoot) || !fs.statSync(targetRoot).isDirectory()) {
-            return res
-                .status(HTTP_STATUS.NOT_FOUND)
-                .json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("folder"), {}, {}));
-        }
-
-        const host = req.get("host");
-        const urlPrefix = host ? `${req.protocol}://${host}` : "";
-
-        const filePaths = listAllUploadFiles(targetRoot);
-        const images = filePaths.map((absolutePath) => {
-            const relativePath = path.relative(uploadRoot, absolutePath).replace(/\\/g, "/");
-            const publicPath = `uploads/${relativePath}`;
-            const stats = fs.statSync(absolutePath);
-            return {
-                fileName: path.basename(absolutePath),
-                size: stats.size,
-                path: publicPath,
-                url: urlPrefix ? `${urlPrefix}/${publicPath}` : `/${publicPath}`,
-            };
-        });
-
-        return res
-            .status(HTTP_STATUS.OK)
-            .json(new apiResponse(HTTP_STATUS.OK, "Images fetched successfully", images, {}));
-    } catch (error) {
-        console.log(error);
-        return res
-            .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-            .json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
-    }
-};
-
-export const get_uploaded_image = async (req: Request, res: Response) => {
-    reqInfo(req);
-    try {
-        const requestedPath = extractUploadPath(findUploadRequestValue(req));
-
-        if (!requestedPath) {
-            return res
-                .status(HTTP_STATUS.BAD_REQUEST)
-                .json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Please provide image path or URL", {}, {}));
-        }
-
-        const absolutePath = resolveUploadFilePath(requestedPath);
-        if (!absolutePath || !fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {
-            return res
-                .status(HTTP_STATUS.NOT_FOUND)
-                .json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("file"), {}, {}));
-        }
-
-        return res.sendFile(absolutePath);
-    } catch (error) {
-        console.log(error);
-        return res
-            .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-            .json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
-    }
-};
-
-export const delete_uploaded_image = async (req: Request, res: Response) => {
-    reqInfo(req);
-    try {
-        const requestedPath = extractUploadPath(findUploadRequestValue(req));
-
-        if (!requestedPath) {
-            return res
-                .status(HTTP_STATUS.BAD_REQUEST)
-                .json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Please provide image path or URL", {}, {}));
-        }
-
-        const absolutePath = resolveUploadFilePath(requestedPath);
-        if (!absolutePath || !fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {
-            return res
-                .status(HTTP_STATUS.NOT_FOUND)
-                .json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("file"), {}, {}));
-        }
-
-        fs.unlinkSync(absolutePath);
-
-        return res
-            .status(HTTP_STATUS.OK)
-            .json(new apiResponse(HTTP_STATUS.OK, "File deleted successfully", { path: requestedPath }, {}));
-    } catch (error) {
-        console.log(error);
-        return res
-            .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
-            .json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
-    }
 };

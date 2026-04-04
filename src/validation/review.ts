@@ -9,6 +9,7 @@ export const addReviewSchema = Joi.object({
   image: Joi.string().optional(),
   description: Joi.string().optional(),
   rating: Joi.number().min(1).max(5).required(),
+  date: Joi.date().optional(),
   isActive: Joi.boolean().optional(),
 });
 
@@ -20,6 +21,7 @@ export const editReviewSchema = Joi.object({
   image: Joi.string().optional(),
   description: Joi.string().optional(),
   rating: Joi.number().min(1).max(5).optional(),
+  date: Joi.date().optional(),
   isActive: Joi.boolean().optional(),
 });
 

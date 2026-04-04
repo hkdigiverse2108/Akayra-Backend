@@ -14,6 +14,7 @@ export const addReviewSchema = Joi.object({
 });
 
 export const editReviewSchema = Joi.object({
+  productId: Joi.string().optional(),
   reviewId: Joi.string().required(),
   name: Joi.string().optional(),
   personName: Joi.string().optional(),

@@ -116,15 +116,14 @@ export const upload_image = async (req: Request, res: Response) => {
 
         const relativePath = path.relative(uploadRoot, uploadedFile.path).replace(/\\/g, "/");
         const publicPath = `uploads/${relativePath}`;
-        const host = req.get("host");
-        const urlPrefix = host ? `${req.protocol}://${host}` : "";
+        const urlPrefix = process.env.BACKEND_URL
 
         const payload = {
             fileName: uploadedFile.filename,
             mimeType: uploadedFile.mimetype,
             size: uploadedFile.size,
             path: publicPath,
-            url: urlPrefix ? `${urlPrefix}/${publicPath}` : `/${publicPath}`,
+            url: `${urlPrefix}/${publicPath}`,
         };
 
         return res

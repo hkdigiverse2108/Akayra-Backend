@@ -28,6 +28,8 @@ export const responseMessage = {
     tokenNotFound: "We can't find tokens in header!",
     logout: "Logout Successful!",
     fileUploadSuccess: "Your requested file uploaded successfully!",
+    noFileUploaded: "No file uploaded!",
+    unsupportedFileType: "Unsupported file type!",
     addDataError: "Oops! Something went wrong!",
     buySubscription: 'Please buy a subscription!',
     buyCommercialLicense: 'Please buy a commercial license!',

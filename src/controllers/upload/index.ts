@@ -1,25 +1,25 @@
-"use strict";
-import { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
 import { HTTP_STATUS, apiResponse } from "../../common";
 import { reqInfo, responseMessage } from "../../helper";
 
-export const upload_image = async (req: Request, res: Response) => {
+export const upload_image = async (req, res) => {
     reqInfo(req);
-    try {
-        const uploadedFiles = (req as any).files || {};
-        const uploadedFile = uploadedFiles?.image?.[0] || uploadedFiles?.file?.[0];
 
-        if (!uploadedFile) {
-            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Please upload an image file", {}, {}));
+    try {
+        const files = extractUploadedFiles(req);
+
+        if (!files.length) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Please upload at least one image file", {}, {}));
         }
 
-        const relativePath = path.relative(uploadRoot, uploadedFile.path).replace(/\\/g, "/");
-        const publicPath = `uploads/${relativePath}`;
-        const urlPrefix = process.env.Bakend_URL;
+        const images = files.map((file) => getFilePayload(req, file));
+        const payload = {
+            ...images[0],
+            images,
+            imageUrls: images.map((image) => image.url),
+        };
 
-        const payload = {fileName: uploadedFile.filename,mimeType: uploadedFile.mimetype,size: uploadedFile.size,path: publicPath,url: urlPrefix ? `${urlPrefix}/${publicPath}` : `/${publicPath}`,};
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.fileUploadSuccess, payload, {}));
     } catch (error) {
         console.log(error);
@@ -27,10 +27,11 @@ export const upload_image = async (req: Request, res: Response) => {
     }
 };
 
-export const get_all_images = async (req: Request, res: Response) => {
+export const get_all_images = async (req, res) => {
     reqInfo(req);
+
     try {
-        const folderValue =typeof req.query?.folder === "string"    ? req.query.folder    : typeof req.body?.folder === "string"        ? req.body.folder        : "";
+        const folderValue =typeof req.query?.folder === "string"? req.query.folder: typeof req.body?.folder === "string"    ? req.body.folder    : "";
         const folder = folderValue ? sanitizeFolderName(folderValue) : "";
 
         const targetRoot = folder ? path.resolve(uploadRoot, folder) : uploadRoot;
@@ -39,28 +40,32 @@ export const get_all_images = async (req: Request, res: Response) => {
         }
 
         if (!fs.existsSync(targetRoot) || !fs.statSync(targetRoot).isDirectory()) {
-            return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("folder"), {}, {}));
+            return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess("images"), [], {}));
         }
 
-        const urlPrefix = process.env.Bakend_URL;
-
-        const filePaths = listAllUploadFiles(targetRoot);
-        const images = filePaths.map((absolutePath) => {
-            const relativePath = path.relative(uploadRoot, absolutePath).replace(/\\/g, "/");
-            const publicPath = `uploads/${relativePath}`;
+        const images = listAllUploadFiles(targetRoot).map((absolutePath) => {
             const stats = fs.statSync(absolutePath);
-            return {fileName: path.basename(absolutePath),size: stats.size,path: publicPath,url: urlPrefix ? `${urlPrefix}/${publicPath}` : `/${publicPath}`,};
+            const publicPath = getPublicPath(absolutePath);
+            const baseUrl = getUploadBaseUrl();
+
+            return {
+                name: path.basename(absolutePath),
+                size: stats.size,
+                path: publicPath,
+                url: baseUrl ? `${baseUrl}/${publicPath}` : `/${publicPath}`,
+            };
         });
 
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, "Images fetched successfully", images, {}));
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess("images"), images, {}));
     } catch (error) {
         console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
     }
 };
 
-export const get_uploaded_image = async (req: Request, res: Response) => {
+export const get_uploaded_image = async (req, res) => {
     reqInfo(req);
+
     try {
         const requestedPath = extractUploadPath(findUploadRequestValue(req));
 
@@ -80,8 +85,9 @@ export const get_uploaded_image = async (req: Request, res: Response) => {
     }
 };
 
-export const delete_uploaded_image = async (req: Request, res: Response) => {
+export const delete_uploaded_image = async (req, res) => {
     reqInfo(req);
+
     try {
         const requestedPath = extractUploadPath(findUploadRequestValue(req));
 
@@ -96,7 +102,7 @@ export const delete_uploaded_image = async (req: Request, res: Response) => {
 
         fs.unlinkSync(absolutePath);
 
-        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, "File deleted successfully", { path: requestedPath }, {}));
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.deleteDataSuccess("image"), { path: requestedPath }, {}));
     } catch (error) {
         console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
@@ -105,30 +111,75 @@ export const delete_uploaded_image = async (req: Request, res: Response) => {
 
 const uploadRoot = path.resolve(process.cwd(), "uploads");
 
+type UploadedFile = {
+    path: string;
+    filename: string;
+    mimetype: string;
+    size: number;
+};
+
+type UploadedFileContainer = UploadedFile[] | Record<string, UploadedFile[]>;
 
 const sanitizeFolderName = (folder?: string) => {
-    const normalized = `${folder || ""}`.replace(/\\/g, "/").split("/").map((segment) => segment.replace(/[^a-zA-Z0-9_-]/g, "")).filter(Boolean).join("/");
+    const normalized = `${folder || ""}`
+        .replace(/\\/g, "/")
+        .split("/")
+        .map((segment) => segment.replace(/[^a-zA-Z0-9_-]/g, ""))
+        .filter(Boolean)
+        .join("/");
 
     return normalized || "profile";
 };
 
-const resolveUploadFilePath = (relativePath?: string) => {
-    let normalizedPath = `${relativePath || ""}`.trim().replace(/\\/g, "/").replace(/^\/+/, "");
-    if (!normalizedPath) return null;
+const getUploadBaseUrl = () => {
+    const configuredBaseUrl = `${process.env.Bakend_URL || process.env.BACKEND_URL || ""}`.trim().replace(/\/+$/, "");
 
-    if (normalizedPath.toLowerCase().startsWith("uploads/")) {
-        normalizedPath = normalizedPath.slice("uploads/".length);
+    return configuredBaseUrl;
+};
+
+const getPublicPath = (absolutePath: string) => {
+    const relativePath = path.relative(uploadRoot, absolutePath).replace(/\\/g, "/");
+    return `uploads/${relativePath}`;
+};
+
+const getFilePayload = (req: any, file: UploadedFile) => {
+    const publicPath = getPublicPath(file.path);
+    const baseUrl = getUploadBaseUrl();
+
+    return {
+        fileName: file.filename,
+        mimeType: file.mimetype,
+        path: publicPath,
+        url: baseUrl ? `${baseUrl}/${publicPath}` : `/${publicPath}`,
+    };
+};
+
+const extractUploadedFiles = (req: any): UploadedFile[] => {
+    const files = (req as { files?: UploadedFileContainer }).files;
+    if (!files) return [];
+    if (Array.isArray(files)) return files;
+    return Object.values(files).flat().filter(Boolean);
+};
+
+const listAllUploadFiles = (rootDir: string) => {
+    const files: string[] = [];
+    const stack: string[] = [rootDir];
+
+    while (stack.length) {
+        const current = stack.pop() as string;
+        const entries = fs.readdirSync(current, { withFileTypes: true });
+
+        for (const entry of entries) {
+            const entryPath = path.join(current, entry.name);
+            if (entry.isDirectory()) {
+                stack.push(entryPath);
+                continue;
+            }
+            if (entry.isFile()) files.push(entryPath);
+        }
     }
 
-    const segments = normalizedPath.split("/").map((segment) => segment.trim().replace(/[^a-zA-Z0-9._-]/g, "")).filter(Boolean);
-
-    if (!segments.length || segments.some((segment) => segment === "." || segment === "..")) {
-        return null;
-    }
-
-    const absolutePath = path.resolve(uploadRoot, ...segments);
-    if (!absolutePath.startsWith(`${uploadRoot}${path.sep}`)) return null;
-    return absolutePath;
+    return files;
 };
 
 const extractUploadPath = (value?: string) => {
@@ -150,38 +201,40 @@ const extractUploadPath = (value?: string) => {
     return normalized;
 };
 
-const findUploadRequestValue = (req: Request) => {
-    const lookup = ["path","url","filePath","imagePath","file","image",];
+const findUploadRequestValue = (req: any) => {
+    const lookup = ["fileUrl", "path", "url", "filePath", "imagePath", "file", "image"];
 
     for (const key of lookup) {
-        const queryValue = typeof req.query?.[key] === "string" ? req.query?.[key] as string : undefined;
+        const queryValue = typeof req.query?.[key] === "string" ? (req.query[key] as string) : undefined;
         if (queryValue) return queryValue;
 
-        const bodyValue = typeof req.body?.[key] === "string" ? req.body?.[key] as string : undefined;
+        const bodyValue = typeof req.body?.[key] === "string" ? (req.body[key] as string) : undefined;
         if (bodyValue) return bodyValue;
     }
 
     return "";
 };
 
-const listAllUploadFiles = (rootDir: string) => {
-    const files: string[] = [];
-    const stack: string[] = [rootDir];
+const resolveUploadFilePath = (relativePath?: string) => {
+    let normalizedPath = `${relativePath || ""}`.trim().replace(/\\/g, "/").replace(/^\/+/, "");
+    if (!normalizedPath) return null;
 
-    while (stack.length) {
-        const current = stack.pop() as string;
-        const entries = fs.readdirSync(current, { withFileTypes: true });
-        for (const entry of entries) {
-            const entryPath = path.join(current, entry.name);
-            if (entry.isDirectory()) {
-                stack.push(entryPath);
-                continue;
-            }
-            if (entry.isFile()) {
-                files.push(entryPath);
-            }
-        }
+    if (normalizedPath.toLowerCase().startsWith("uploads/")) {
+        normalizedPath = normalizedPath.slice("uploads/".length);
     }
 
-    return files;
+    const segments = normalizedPath
+        .split("/")
+        .map((segment) => segment.trim().replace(/[^a-zA-Z0-9._-]/g, ""))
+        .filter(Boolean);
+
+    if (!segments.length || segments.some((segment) => segment === "." || segment === "..")) {
+        return null;
+    }
+
+    const absolutePath = path.resolve(uploadRoot, ...segments);
+    if (!absolutePath.startsWith(`${uploadRoot}${path.sep}`)) return null;
+
+    return absolutePath;
 };
+

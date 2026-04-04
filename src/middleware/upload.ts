@@ -51,11 +51,15 @@ const uploadImage = multer({
         return cb(new Error("Only image files are allowed"));
     },
 }).fields([
-    { name: "image", maxCount: 1 },
-    { name: "file", maxCount: 1 },
+    { name: "image", maxCount: 10 },
+    { name: "file", maxCount: 10 },
+    { name: "images", maxCount: 10 },
+    { name: "files", maxCount: 10 },
 ]);
 
 export const upload_image_middleware = (req: Request, res: Response, next: NextFunction) => {
+    reqInfo(req);
+
     uploadImage(req, res, (error: any) => {
         if (!error) return next();
 

@@ -22,6 +22,6 @@ const productSchema = new mongoose.Schema({
     colorIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'color' }],
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false }
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 export const productModel = mongoose.model('product', productSchema);

@@ -18,6 +18,6 @@ const userSchema: any = new mongoose.Schema({
     isEmailVerified: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
-}, { timestamps: true })
+}, { timestamps: true, versionKey: false })
 
 export const userModel = mongoose.model('user', userSchema);

@@ -14,6 +14,6 @@ const bannerSchema = new mongoose.Schema({
     priority: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 export const bannerModel = mongoose.model('banner', bannerSchema);

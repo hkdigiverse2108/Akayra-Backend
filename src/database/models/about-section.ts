@@ -8,6 +8,6 @@ const aboutSectionSchema = new mongoose.Schema({
     priority: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
-}, { timestamps: true });
+}, { timestamps: true ,versionKey: false});
 
 export const aboutSectionModel = mongoose.model('about_section', aboutSectionSchema);

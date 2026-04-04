@@ -22,6 +22,6 @@ const settingsSchema = new mongoose.Schema({
     phonePeApiVersion: { type: String },
     securePaymentImages: [{ type: String }],
     securePaymentTitle: { type: String },
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 export const settingsModel = mongoose.model('settings', settingsSchema);

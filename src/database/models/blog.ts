@@ -13,6 +13,6 @@ const blogSchema = new mongoose.Schema({
     categoryIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'category' }],
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 export const blogModel = mongoose.model('blog', blogSchema);

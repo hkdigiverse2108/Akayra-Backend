@@ -7,6 +7,6 @@ const contactSchema = new mongoose.Schema({
     subject: { type: String },
     message: { type: String, required: true },
     isDeleted: { type: Boolean, default: false },
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 export const contactModel = mongoose.model('contact', contactSchema);

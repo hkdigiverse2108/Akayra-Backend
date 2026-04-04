@@ -9,10 +9,7 @@ export const upload_image = async (req, res) => {
     try {
         const files = collectFiles(req);
 
-        if (!files.length) {
-            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse( HTTP_STATUS.BAD_REQUEST,responseMessage?.noFileUploaded || "No file uploaded", {},{}));
-        }
-
+        if (!files.length) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse( HTTP_STATUS.BAD_REQUEST,responseMessage?.noFileUploaded || "No file uploaded", {},{}));
         const uploadedImages = files.map((file) => {
             const cleanPath = toPublicPath(file.path);
             return getFileUrl(cleanPath);
@@ -30,10 +27,7 @@ export const get_all_images = async (req, res) => {
     try {
         const baseDir = uploadDir;
 
-        if (!fs.existsSync(baseDir)) {
-            return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK,responseMessage?.getDataSuccess("images"),[],{}));
-        }
-
+        if (!fs.existsSync(baseDir)) return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK,responseMessage?.getDataSuccess("images"),[],{}));
         const images = listImagesRecursively(baseDir);
 
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK,responseMessage?.getDataSuccess("images"), images,{}));
@@ -49,13 +43,11 @@ export const delete_uploaded_image= async (req, res) => {
         if (error) {return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST,error?.details[0]?.message,{},{}));}
         const { fileUrl } = value;
         const pathname = normalizeDeletePathFromUrl(fileUrl);
-        if (!pathname || !pathname.includes("/uploads/")) {
-            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST,responseMessage?.unsupportedFileType || "Unsupported file path",{},{}));
-        }
+        if (!pathname || !pathname.includes("/uploads/")) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST,responseMessage?.unsupportedFileType || "Unsupported file path",{},{}));
+    
         const filePath = path.join(process.cwd(), pathname.replace(/^\//, ""));
-        if (!fs.existsSync(filePath)) {
-            return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND,responseMessage?.getDataNotFound("image"),{},{}));
-        }
+        if (!fs.existsSync(filePath))  return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND,responseMessage?.getDataNotFound("image"),{},{}));
+        
         fs.unlinkSync(filePath);
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK,responseMessage?.deleteDataSuccess("images"),{},{}));
     } catch (error) {

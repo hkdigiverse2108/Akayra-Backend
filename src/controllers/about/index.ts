@@ -8,6 +8,9 @@ export const add_about_section = async (req, res) => {
     try {
         const { error, value } = addAboutSectionSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
+        
+        const isExist = await getFirstMatch(aboutSectionModel, { priority: value.priority, isDeleted: false }, {}, {});
+        if (isExist) return res.status(HTTP_STATUS.CONFLICT).json(new apiResponse(HTTP_STATUS.CONFLICT, responseMessage?.dataAlreadyExist("About us priority"), {}, {}));
 
         const response = await createData(aboutSectionModel, value);
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.addDataSuccess('About Section'), response, {}));
@@ -22,6 +25,9 @@ export const edit_about_section_by_id = async (req, res) => {
     try {
         const { error, value } = editAboutSectionSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
+
+        const isExist = await getFirstMatch(aboutSectionModel, { priority: value.priority, isDeleted: false }, {}, {});
+        if (isExist) return res.status(HTTP_STATUS.CONFLICT).json(new apiResponse(HTTP_STATUS.CONFLICT, responseMessage?.dataAlreadyExist("About us priority"), {}, {}));
 
         const response = await updateData(aboutSectionModel, { _id: isValidObjectId(value.sectionId) }, value, {});
         if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound('About Section'), {}, {}));

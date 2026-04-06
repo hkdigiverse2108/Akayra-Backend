@@ -3,8 +3,6 @@ import { faqModel } from "../../database";
 import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from "../../helper";
 import { addFaqSchema, editFaqSchema, deleteFaqSchema, getFaqByIdSchema, getFaqsSchema } from "../../validation";
 
-const { ObjectId } = require("mongoose");
-
 export const add_faq = async (req, res) => {
   reqInfo(req);
   try {
@@ -28,7 +26,7 @@ export const edit_faq_by_id = async (req, res) => {
     const { error, value } = editFaqSchema.validate(req.body || {});
     if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-    const isPriorityExisting = await getFirstMatch(faqModel, { priority: value.priority, isDeleted: false, _id: { $ne: new ObjectId(value?.faqId) } }, {}, {});
+    const isPriorityExisting = await getFirstMatch(faqModel, { priority: value.priority, isDeleted: false, _id: { $ne: isValidObjectId(value?.faqId) } }, {}, {});
     if (isPriorityExisting) return res.status(HTTP_STATUS.CONFLICT).json(new apiResponse(HTTP_STATUS.CONFLICT, responseMessage?.dataAlreadyExist("FAQ priority"), {}, {}));
 
     const response = await updateData(faqModel, { _id: isValidObjectId(value.faqId) }, value, {});

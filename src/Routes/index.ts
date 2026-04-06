@@ -23,6 +23,7 @@ import { faqCategoryRouter } from './faq-category'
 import { userRouter } from './user'
 import { uploadRouter } from './upload'
 import { addressRouter } from './address'
+import { orderRouter } from './order'
 
 const router = Router()
 
@@ -51,5 +52,6 @@ router.use('/color', colorRouter)
 router.use('/user', userRouter)
 router.use('/upload', uploadRouter)
 router.use('/address', addressRouter)
+router.use('/order', orderRouter)
 
 export { router }

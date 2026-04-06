@@ -13,7 +13,7 @@ const addressSchema = new mongoose.Schema(
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false },
 );
 
 export const addressModel = mongoose.model("address", addressSchema, "address");

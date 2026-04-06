@@ -135,7 +135,7 @@ export const forgot_password = async (req: Request, res: Response) => {
         }
 
         otp = await getUniqueOtp();
-        let response: any = { sendMail: true }
+        let response: any = await email_verification_mail(data, otp);
         if (response) {
             await updateData(userModel, value, { otp, otpExpireTime: getOtpExpireTime() }, {})
             return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, `${response}`, {}, {}));
@@ -153,12 +153,29 @@ export const reset_password = async (req: Request, res: Response) => {
         const { error, value } = resetPasswordSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
+        const userData: any = await getFirstMatch(
+            userModel,
+            { email: value?.email, isActive: true, isDeleted: false },
+            {},
+            {}
+        )
+        if (!userData) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage?.invalidEmail, {}, {}))
+        }
+        if (!userData?.otp || `${userData?.otp}` !== `${value?.otp}`) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage?.invalidOTP, {}, {}))
+        }
+        if (!userData?.otpExpireTime || new Date(userData.otpExpireTime).getTime() < new Date().getTime()) {
+            return res.status(HTTP_STATUS.GONE).json(new apiResponse(HTTP_STATUS.GONE, responseMessage?.expireOTP, {}, {}))
+        }
+
         const hashPassword = await generateHash(value.password)
         delete value.password
         delete value.id
         value.password = hashPassword
 
-        let response: any = await updateData(userModel, { email: value?.email, isActive: true, otp: null }, value, {})
+        let response: any = await updateData( userModel, { _id: userData._id, isActive: true, isDeleted: false }, { password: value.password, otp: null, otpExpireTime: null }, {} )
+        
         if (!response) return res.status(HTTP_STATUS.NOT_IMPLEMENTED).json(new apiResponse(HTTP_STATUS.NOT_IMPLEMENTED, responseMessage?.resetPasswordError, {}, {}))
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage?.resetPasswordSuccess, response, {}))
 

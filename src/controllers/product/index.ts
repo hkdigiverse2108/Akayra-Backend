@@ -83,13 +83,54 @@ export const get_all_product = async (req, res) => {
         const { error, value } = getProductsSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        const { categoryId, brandId, isTrending, isDealOfDay, sortFilter } = value;
+        const { categoryId, brandId, sizeIds, colorIds, minPrice, maxPrice, inStockOnly, inStock, isTrending, isDealOfDay, sortFilter } = value;
+        const sizeIdsFromBracket = value["sizeIds[]"];
+        const colorIdsFromBracket = value["colorIds[]"];
+        const resolvedSizeIds = sizeIds ?? sizeIdsFromBracket;
+        const resolvedColorIds = colorIds ?? colorIdsFromBracket;
         const { criteria, options, page, limit } = resolveSortAndFilter(value, ['title', 'sku']);
 
         if (categoryId) criteria.categoryId = isValidObjectId(categoryId);
         if (brandId) criteria.brandId = isValidObjectId(brandId);
-        if (isTrending === true) criteria.isTrending = true;
-        if (isDealOfDay === true) criteria.isDealOfDay = true;
+        const parseBool = (input: any) => {
+            if (input === true || input === false) return input;
+            if (input === 1 || input === 0) return Boolean(input);
+            const normalized = String(input || '').trim().toLowerCase();
+            if (normalized === 'true' || normalized === '1' || normalized === 'yes') return true;
+            if (normalized === 'false' || normalized === '0' || normalized === 'no') return false;
+            return null;
+        };
+
+        const trendingFlag = parseBool(isTrending);
+        if (trendingFlag === true) criteria.isTrending = true;
+
+        const dealFlag = parseBool(isDealOfDay);
+        if (dealFlag === true) criteria.isDealOfDay = true;
+
+        const stockFlag = parseBool(inStockOnly ?? inStock);
+        if (stockFlag === true) criteria.isActive = true;
+
+        const normalizeIds = (input: any) => {
+            if (!input) return [];
+            const rawList = Array.isArray(input) ? input : String(input).split(',');
+            return rawList
+                .map(id => isValidObjectId(String(id).trim()))
+                .filter(id => id !== null);
+        };
+
+        const sizeIdList = normalizeIds(resolvedSizeIds);
+        if (sizeIdList.length) criteria.sizeIds = { $in: sizeIdList };
+
+        const colorIdList = normalizeIds(resolvedColorIds);
+        if (colorIdList.length) criteria.colorIds = { $in: colorIdList };
+
+        const min = Number(minPrice);
+        const max = Number(maxPrice);
+        if (Number.isFinite(min) || Number.isFinite(max)) {
+            criteria.sellingPrice = {};
+            if (Number.isFinite(min)) criteria.sellingPrice.$gte = min;
+            if (Number.isFinite(max)) criteria.sellingPrice.$lte = max;
+        }
 
         if (sortFilter === "priceAsc") options.sort = { sellingPrice: 1 };
         else if (sortFilter === "priceDesc") options.sort = { sellingPrice: -1 };

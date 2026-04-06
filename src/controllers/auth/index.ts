@@ -1,9 +1,9 @@
 "use strict"
 import { Request, Response } from 'express'
 import { userModel, userSessionModel } from '../../database'
-import { apiResponse, HTTP_STATUS, getUniqueOtp, getOtpExpireTime, generateHash, compareHash, generateToken, USER_ROLES } from '../../common'
+import { apiResponse, HTTP_STATUS, getUniqueOtp, getOtpExpireTime, generateHash, compareHash, generateToken, USER_ROLES, isValidObjectId } from '../../common'
 import { email_verification_mail, reqInfo, responseMessage, getFirstMatch, createData, updateData } from '../../helper'
-import { signupSchema, verifyOtpSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } from '../../validation'
+import { signupSchema, verifyOtpSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema, changePasswordSchema } from '../../validation'
 
 export const signUp = async (req: Request, res: Response) => {
     reqInfo(req)
@@ -135,7 +135,7 @@ export const forgot_password = async (req: Request, res: Response) => {
         }
 
         otp = await getUniqueOtp();
-        let response: any = { sendMail: true }
+        let response: any = await email_verification_mail(data, otp);
         if (response) {
             await updateData(userModel, value, { otp, otpExpireTime: getOtpExpireTime() }, {})
             return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, `${response}`, {}, {}));
@@ -153,15 +153,65 @@ export const reset_password = async (req: Request, res: Response) => {
         const { error, value } = resetPasswordSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
+        const userData: any = await getFirstMatch(
+            userModel,
+            { email: value?.email, isActive: true, isDeleted: false },
+            {},
+            {}
+        )
+        if (!userData) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage?.invalidEmail, {}, {}))
+        }
+        if (!userData?.otp || `${userData?.otp}` !== `${value?.otp}`) {
+            return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage?.invalidOTP, {}, {}))
+        }
+        if (!userData?.otpExpireTime || new Date(userData.otpExpireTime).getTime() < new Date().getTime()) {
+            return res.status(HTTP_STATUS.GONE).json(new apiResponse(HTTP_STATUS.GONE, responseMessage?.expireOTP, {}, {}))
+        }
+
         const hashPassword = await generateHash(value.password)
         delete value.password
         delete value.id
         value.password = hashPassword
 
-        let response: any = await updateData(userModel, { email: value?.email, isActive: true, otp: null }, value, {})
+        let response: any = await updateData( userModel, { _id: userData._id, isActive: true, isDeleted: false }, { password: value.password, otp: null, otpExpireTime: null }, {} )
+        
         if (!response) return res.status(HTTP_STATUS.NOT_IMPLEMENTED).json(new apiResponse(HTTP_STATUS.NOT_IMPLEMENTED, responseMessage?.resetPasswordError, {}, {}))
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage?.resetPasswordSuccess, response, {}))
 
+    } catch (error) {
+        console.log(error);
+        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage?.internalServerError, {}, error))
+    }
+}
+
+export const change_password = async (req: Request, res: Response) => {
+    reqInfo(req)
+    const { user }: any = req.headers
+    try {
+        if (!user?._id) return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, responseMessage?.tokenNotFound, {}, {}))
+
+        const { error, value } = changePasswordSchema.validate(req.body || {});
+        if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
+
+        const userData: any = await getFirstMatch(userModel, { _id: isValidObjectId(user._id.toString()), isActive: true, isDeleted: false }, {}, {})
+        if (!userData) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage?.invalidUserPasswordEmail, {}, {}))
+        if (![USER_ROLES.USER, USER_ROLES.ADMIN].includes(userData?.role)) {
+            return res.status(HTTP_STATUS.FORBIDDEN).json(new apiResponse(HTTP_STATUS.FORBIDDEN, responseMessage?.accessDenied, {}, {}))
+        }
+
+        const isOldPasswordMatch = await compareHash(value.currentPassword, userData.password)
+        if (!isOldPasswordMatch) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, responseMessage?.oldPasswordError, {}, {}))
+
+        const isSamePassword = await compareHash(value.newPassword, userData.password)
+        if (isSamePassword) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "New password must be different from current password", {}, {}))
+
+        const hashPassword = await generateHash(value.newPassword)
+        const response: any = await updateData(
+            userModel,{ _id: isValidObjectId(user._id.toString()), isActive: true, isDeleted: false },{ password: hashPassword },{})
+
+        if (!response) return res.status(HTTP_STATUS.NOT_IMPLEMENTED).json(new apiResponse(HTTP_STATUS.NOT_IMPLEMENTED, responseMessage?.passwordChangeError, {}, {}))
+        return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage?.passwordChangeSuccess, {}, {}))
     } catch (error) {
         console.log(error);
         return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage?.internalServerError, {}, error))

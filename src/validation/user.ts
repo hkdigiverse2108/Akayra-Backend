@@ -7,6 +7,7 @@ export const addUserSchema = Joi.object({
     lastName: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
+    profilePhoto: Joi.string().allow('').optional(),
     role: Joi.string().valid(...Object.values(USER_ROLES)).default('USER'),
     contact: Joi.object({
         countryCode: Joi.string().default('+91'),
@@ -21,6 +22,7 @@ export const editUserSchema = Joi.object({
     lastName: Joi.string(),
     email: Joi.string().email(),
     password: Joi.string().min(6),
+    profilePhoto: Joi.string().allow('').optional(),
     role: Joi.string().valid(...Object.values(USER_ROLES)),
     contact: Joi.object({
         countryCode: Joi.string(),

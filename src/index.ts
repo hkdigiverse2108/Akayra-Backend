@@ -7,9 +7,11 @@ import * as bodyParser from 'body-parser';
 import express from 'express';  
 import http from 'http';
 import cors from 'cors'
+import path from 'path';
 import { mongooseConnection} from './database'
 import * as packageInfo from '../package.json'
 import { router } from './Routes'
+import { initCronJobs } from './helper';
  
 const app = express();
 
@@ -18,6 +20,10 @@ app.use(cors())
 app.use(mongooseConnection)
 app.use(bodyParser.json({ limit: '200mb' }))
 app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }))
+app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')))
+
+initCronJobs();
+
 const health = (req, res) => {
     return res.status(200).json({
         message: `Project Name Server is Running, Server health is green`,
@@ -42,3 +48,5 @@ app.all(/.*/, bad_gateway);
 
 let server = new http.Server(app);
 export default server;
+
+

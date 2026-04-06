@@ -13,7 +13,6 @@ const productSchema = new mongoose.Schema({
     discount: { type: Number, default: 0 },
     shortDescription: { type: String },
     longDescription: { type: String },
-    additionalInformation: { type: String },
     brandId: { type: mongoose.Schema.Types.ObjectId, ref: 'brand' },
     sku: { type: String },
     isTrending: { type: Boolean, default: false },
@@ -23,6 +22,6 @@ const productSchema = new mongoose.Schema({
     colorIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'color' }],
     isActive: { type: Boolean, default: true },
     isDeleted: { type: Boolean, default: false }
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 export const productModel = mongoose.model('product', productSchema);

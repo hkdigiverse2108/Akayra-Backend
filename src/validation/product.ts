@@ -13,7 +13,6 @@ export const addProductSchema = Joi.object({
     cogsPrice: Joi.number().optional(),
     shortDescription: Joi.string().optional(),
     longDescription: Joi.string().optional(),
-    additionalInformation: Joi.string().optional(),
     sizeIds: Joi.array().items(Joi.string()).optional(),
     colorIds: Joi.array().items(Joi.string()).optional(),
     isTrending: Joi.boolean().optional(),
@@ -34,7 +33,6 @@ export const editProductSchema = Joi.object({
     cogsPrice: Joi.number().optional(),
     shortDescription: Joi.string().optional(),
     longDescription: Joi.string().optional(),
-    additionalInformation: Joi.string().optional(),
     sizeIds: Joi.array().items(Joi.string()).optional(),
     colorIds: Joi.array().items(Joi.string()).optional(),
     isTrending: Joi.boolean().optional(),
@@ -49,8 +47,16 @@ export const deleteProductSchema = Joi.object({
 export const getProductsSchema = getPaginationAndFilterSchema.keys({
     categoryId: Joi.string().optional(),
     brandId: Joi.string().optional(),
-    isTrending: Joi.boolean().optional(),
-    isDealOfDay: Joi.boolean().optional(),
+    sizeIds: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()).optional(),
+    colorIds: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()).optional(),
+    "sizeIds[]": Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()).optional(),
+    "colorIds[]": Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()).optional(),
+    minPrice: Joi.number().optional(),
+    maxPrice: Joi.number().optional(),
+    inStockOnly: Joi.alternatives().try(Joi.boolean(), Joi.string()).optional(),
+    inStock: Joi.alternatives().try(Joi.boolean(), Joi.string()).optional(),
+    isTrending: Joi.alternatives().try(Joi.boolean(), Joi.string()).optional(),
+    isDealOfDay: Joi.alternatives().try(Joi.boolean(), Joi.string()).optional(),
 })
 
 export const getProductByIdSchema = Joi.object({

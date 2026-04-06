@@ -15,6 +15,11 @@ export const updateSettingsSchema = Joi.object({
     isPhonePe: Joi.boolean().optional(),
     isShipRocket: Joi.boolean().optional(),
     isCashFree: Joi.boolean().optional(),
+    razorpayApiKey: Joi.string().optional(),
+    razorpayApiSecret: Joi.string().optional(),
+    phonePeApiKey: Joi.string().optional(),
+    phonePeApiSecret: Joi.string().optional(),
+    phonePeApiVersion: Joi.string().optional(),
     securePaymentImages: Joi.array().items(Joi.string()).optional(),
     securePaymentTitle: Joi.string().optional(),
 })

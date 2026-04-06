@@ -40,6 +40,9 @@ export const resetPasswordSchema = Joi.object({
 })
 
 export const changePasswordSchema = Joi.object({
-  oldPassword: Joi.string().min(6).required(),
+  currentPassword: Joi.string().min(6).required(),
   newPassword: Joi.string().min(6).required(),
+  confirmNewPassword: Joi.string().valid(Joi.ref('newPassword')).required().messages({
+    "any.only": "Confirm new password must match new password",
+  }),
 })

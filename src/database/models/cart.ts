@@ -15,6 +15,6 @@ const cartSchema = new mongoose.Schema({
     note: { type: String },
     status: { type: String, enum: Object.values(CART_STATUS), default: CART_STATUS.PENDING },
     isDeleted: { type: Boolean, default: false },
-}, { timestamps: true });
+}, { timestamps: true, versionKey: false });
 
 export const cartModel = mongoose.model('cart', cartSchema);

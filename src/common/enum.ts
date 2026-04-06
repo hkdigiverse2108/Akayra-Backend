@@ -3,7 +3,7 @@ export const USER_ROLES = {
   USER: "user",
 } as const;
 
-export const BANNER_TYPE = {
+export const  BANNER_TYPE = {
   HERO: "hero",
   DISCOUNT: "discount",
 } as const;

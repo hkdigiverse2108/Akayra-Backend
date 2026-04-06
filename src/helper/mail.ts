@@ -2,7 +2,6 @@
 import nodemailer from 'nodemailer';
 
 const mail: any = process.env.MAIL;
-console.log("mail", mail)
 const option: any = {
     service: "gmail",
     host: 'smtp.gmail.com',

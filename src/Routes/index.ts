@@ -22,6 +22,7 @@ import { colorRouter } from './color'
 import { faqCategoryRouter } from './faq-category'
 import { userRouter } from './user'
 import { uploadRouter } from './upload'
+import { addressRouter } from './address'
 
 const router = Router()
 
@@ -49,5 +50,6 @@ router.use('/size', sizeRouter)
 router.use('/color', colorRouter)
 router.use('/user', userRouter)
 router.use('/upload', uploadRouter)
+router.use('/address', addressRouter)
 
 export { router }

@@ -1,7 +1,7 @@
-import { apiResponse, HTTP_STATUS, isValidObjectId, USER_ROLES } from "../../common";
-import { addressModel, productModel, userModel } from "../../database";
-import { checkIdExist, createData, getFirstMatch, reqInfo, responseMessage } from "../../helper";
-import { addOrderSchema } from "../../validation";
+import { apiResponse, HTTP_STATUS, isValidObjectId, resolvePagination, resolveSortAndFilter, USER_ROLES } from "../../common";
+import { addressModel, orderModel, productModel, userModel } from "../../database";
+import { checkIdExist, countData, createData, findAllWithPopulate, getData, getFirstMatch, reqInfo, responseMessage } from "../../helper";
+import { addOrderSchema, getOrdersSchema } from "../../validation";
 
 export const addOrder = async (req, res) => {
   reqInfo(req);
@@ -46,9 +46,37 @@ export const addOrder = async (req, res) => {
 
     if (value?.items?.length) await Promise.all(value.items.map((item) => checkIdExist(productModel, item.productId, "Product", res))).then((results) => results.some((r) => !r));
 
-    console.log("value",value);
-    
-    return res.status(HTTP_STATUS.CREATED).json(new apiResponse(HTTP_STATUS.CREATED, responseMessage.addDataSuccess("Order"), {}, {}));
+    const response = await createData(orderModel, value);
+    if (!response) return res.status(HTTP_STATUS.NOT_IMPLEMENTED).json(new apiResponse(HTTP_STATUS.NOT_IMPLEMENTED, responseMessage?.addDataError, {}, {}));
+
+    return res.status(HTTP_STATUS.CREATED).json(new apiResponse(HTTP_STATUS.CREATED, responseMessage.addDataSuccess("Order"), response, {}));
+  } catch (error) {
+    console.log(error);
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, {}));
+  }
+};
+
+export const getAllOrder = async (req, res) => {
+  reqInfo(req);
+  try {
+    const { error, value } = getOrdersSchema.validate(req.query || {});
+    if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
+
+    const { criteria, options, page, limit } = resolveSortAndFilter(value, ["orderId", "email"]);
+
+    if (value.orderStatusFilter) criteria.orderStatus = value.orderStatusFilter;
+    if (value.paymentStatusFilter) criteria.paymentStatus = value.paymentStatusFilter;
+
+    const populate = [
+      { path: "items.productId", select: "title" },
+      { path: "items.colorId", select: "name" },
+      { path: "items.sizeId", select: "name" },
+    ];
+
+    const response = await findAllWithPopulate(orderModel, criteria, {}, options, populate);
+    const totalCount = await countData(orderModel, criteria);
+
+    return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess("Orders"), { order_data: response, totalData: totalCount, state: resolvePagination(page, limit) }, {}));
   } catch (error) {
     console.log(error);
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, {}));

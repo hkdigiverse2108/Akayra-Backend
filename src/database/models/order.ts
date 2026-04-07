@@ -28,12 +28,13 @@ const orderSchema = new mongoose.Schema(
     items: [
       {
         productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
-        productName: { type: String, default: "" },
+        // productName: { type: String, default: "" },
         quantity: { type: Number },
         colorId: { type: mongoose.Schema.Types.ObjectId, ref: "color" },
         sizeId: { type: mongoose.Schema.Types.ObjectId, ref: "size" },
         price: { type: Number },
       },
+      { _id: false },
     ],
     discountCode: { type: String },
     subtotal: { type: Number },

@@ -14,7 +14,6 @@ const shippingAddressSchema = Joi.object({
 
 const orderItemSchema = Joi.object({
   productId: objectId().required(),
-  productName: Joi.string().optional(),
   quantity: Joi.number().min(1).required(),
   colorId: objectId().optional(),
   sizeId: objectId().optional(),
@@ -55,12 +54,11 @@ export const getOrdersSchema = Joi.object({
   search: Joi.string().optional(),
   startDateFilter: Joi.string().optional(),
   endDateFilter: Joi.string().optional(),
-  ActiveFilter: Joi.boolean().optional(),
-  status: Joi.string().valid("active", "inactive").lowercase().optional(),
-  orderStatus: Joi.string()
+  activeFilter: Joi.boolean().optional(),
+  orderStatusFilter: Joi.string()
     .valid(...Object.values(ORDER_STATUS))
     .optional(),
-  paymentStatus: Joi.string()
+  paymentStatusFilter: Joi.string()
     .valid(...Object.values(PAYMENT_STATUS))
     .optional(),
 });

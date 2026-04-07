@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "98d41353-dee6-4358-a0dc-af4dd02652d0",
+      "id": "d765cfe5-398c-45b0-a40f-40f6efde38ee",
       "name": "AUTH",
       "description": {
         "content": "Routes for auth",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "8c36d1d2-6427-4d7a-b5d9-5f451e9e0dec",
+          "id": "39a1a335-7195-4e27-a3df-43fe66ecebcf",
           "name": "Signup",
           "request": {
             "description": {
@@ -34,7 +34,7 @@
           "event": []
         },
         {
-          "id": "6ee8e3b0-4d22-45b0-be0d-f838ef3a031a",
+          "id": "8fd2d267-0994-4864-8455-c638f14c030d",
           "name": "Login",
           "request": {
             "description": {
@@ -59,7 +59,7 @@
           "event": []
         },
         {
-          "id": "84e4b27a-202b-435f-86b3-759be0abae44",
+          "id": "0b60a36b-8ee2-4429-8726-3b9093662c54",
           "name": "Forgot Password",
           "request": {
             "description": {
@@ -84,7 +84,7 @@
           "event": []
         },
         {
-          "id": "62012304-f5d4-4062-9614-3a3520da4ba9",
+          "id": "112d81b8-046c-4931-b18d-c08c32f54ab5",
           "name": "Reset Password",
           "request": {
             "description": {
@@ -109,7 +109,7 @@
           "event": []
         },
         {
-          "id": "1fe6c560-a2ee-4149-89b1-9fda1c8cd9e2",
+          "id": "34e3f941-0997-4c7e-85e5-bb9c06c03930",
           "name": "Verify Otp",
           "request": {
             "description": {
@@ -134,7 +134,7 @@
           "event": []
         },
         {
-          "id": "28596f64-c48b-445e-97c7-42896937d98d",
+          "id": "d1c89871-4f9e-43cb-909d-b8393288f778",
           "name": "Change Password",
           "request": {
             "description": {
@@ -172,7 +172,7 @@
       }
     },
     {
-      "id": "e75d67f2-a564-4fa9-b497-e182a61e6005",
+      "id": "9ece09c0-697f-401e-a8cb-6fbca9854a17",
       "name": "CATEGORY",
       "description": {
         "content": "Routes for category",
@@ -180,7 +180,7 @@
       },
       "item": [
         {
-          "id": "68a837c2-e854-4c0a-b41e-0841e4fd5108",
+          "id": "11a8dc61-0d33-4f6f-8095-ab020b2389b1",
           "name": "Add Category",
           "request": {
             "description": {
@@ -205,7 +205,7 @@
           "event": []
         },
         {
-          "id": "5218b8f1-2520-418c-8008-6acd98ccfbab",
+          "id": "b2c04680-57dc-46e5-96ea-73c733176038",
           "name": "Edit Category",
           "request": {
             "description": {
@@ -230,7 +230,7 @@
           "event": []
         },
         {
-          "id": "6ce74213-714d-4c1d-81f0-d1e472e80149",
+          "id": "1b382632-b8ea-4e18-a7c1-8533eb9663dc",
           "name": "Delete Category",
           "request": {
             "description": {
@@ -265,7 +265,7 @@
           "event": []
         },
         {
-          "id": "27b76baa-2958-4e0f-9402-b2be7a920611",
+          "id": "c9e9686f-8f66-4522-a6c8-816dd0431c2d",
           "name": "Get Categories",
           "request": {
             "description": {
@@ -290,7 +290,7 @@
           "event": []
         },
         {
-          "id": "16cfe1a9-5b82-4ac7-9dce-6c7bfdfbe3ff",
+          "id": "6bad1268-a3c7-43f7-a753-4d67f1a6a9c5",
           "name": "Get Category By Id",
           "request": {
             "description": {
@@ -338,7 +338,7 @@
       }
     },
     {
-      "id": "22b92616-a519-4868-bd5f-0b160f841c64",
+      "id": "204f87e4-efdd-4eed-8cdf-d3d2d92f59a9",
       "name": "BRAND",
       "description": {
         "content": "Routes for brand",
@@ -346,7 +346,7 @@
       },
       "item": [
         {
-          "id": "f5fc6b82-55d8-4944-be12-b6224678a6ba",
+          "id": "5e33e709-e44e-4a63-950c-e5d51d9ee0a3",
           "name": "Add Brand",
           "request": {
             "description": {
@@ -371,7 +371,7 @@
           "event": []
         },
         {
-          "id": "81a5579a-e837-4815-8f9f-4732d5981041",
+          "id": "bf600983-c3a9-4c3d-9f76-6133b7e0699f",
           "name": "Edit Brand",
           "request": {
             "description": {
@@ -396,7 +396,7 @@
           "event": []
         },
         {
-          "id": "73416599-6333-47a4-b155-e2d61ff9c700",
+          "id": "4d57c48a-d886-4de3-8f4d-5858fb24cf3b",
           "name": "Delete Brand",
           "request": {
             "description": {
@@ -431,7 +431,7 @@
           "event": []
         },
         {
-          "id": "6d9f7028-0238-472e-81ea-6e81aef8e725",
+          "id": "cdfd0244-f301-4e27-aa4b-c2b760c2f144",
           "name": "Get Brands",
           "request": {
             "description": {
@@ -456,7 +456,7 @@
           "event": []
         },
         {
-          "id": "3b5c333f-d98a-467c-bfa6-705127346811",
+          "id": "8070b770-f4f0-411a-af7d-a38a2c30aff7",
           "name": "Get Brand By Id",
           "request": {
             "description": {
@@ -504,7 +504,7 @@
       }
     },
     {
-      "id": "8be3f4c1-54c2-4a97-89d7-1ec22278cdc7",
+      "id": "3817c7f5-4ec1-4a61-a000-b333015aeddd",
       "name": "PRODUCT",
       "description": {
         "content": "Routes for product",
@@ -512,7 +512,7 @@
       },
       "item": [
         {
-          "id": "539d6ddd-9dab-4035-9a9a-5d70823c4d02",
+          "id": "2815a581-525b-4762-b3b1-63977efab72b",
           "name": "Add Product",
           "request": {
             "description": {
@@ -537,7 +537,7 @@
           "event": []
         },
         {
-          "id": "5d14a034-a7bf-4423-869f-dc7b09ed190f",
+          "id": "bd756ff1-3a88-4b26-bb60-58acc6094a0b",
           "name": "Edit Product",
           "request": {
             "description": {
@@ -562,7 +562,7 @@
           "event": []
         },
         {
-          "id": "5c05b12e-5b20-432a-b2d2-0d72482338a2",
+          "id": "22dcaf94-5d2e-4607-9a92-852b1536fb4b",
           "name": "Delete Product",
           "request": {
             "description": {
@@ -597,7 +597,7 @@
           "event": []
         },
         {
-          "id": "5daba9b2-b673-4005-a9ff-3f3fb3bfc14b",
+          "id": "4835ff78-eca5-49c8-beb6-6f440f977504",
           "name": "Get Products",
           "request": {
             "description": {
@@ -622,7 +622,7 @@
           "event": []
         },
         {
-          "id": "b95227de-e20f-4b5d-a8de-93937ebf8c32",
+          "id": "b82a90c9-1e00-4a87-9f37-390da7c8a812",
           "name": "Get Product By Id",
           "request": {
             "description": {
@@ -670,7 +670,7 @@
       }
     },
     {
-      "id": "986c1d6a-250e-4747-8dcb-2d452df56fdc",
+      "id": "0de7419c-9764-43c6-883a-4c4160470b84",
       "name": "REVIEW",
       "description": {
         "content": "Routes for review",
@@ -678,7 +678,7 @@
       },
       "item": [
         {
-          "id": "38f838b6-6768-4fc7-885f-9c9c8a5fff89",
+          "id": "e0dde3ff-edd0-4b4c-8b4d-016678883c33",
           "name": "Add Review",
           "request": {
             "description": {
@@ -703,7 +703,7 @@
           "event": []
         },
         {
-          "id": "99f80f7a-717e-47f7-b188-09a8f80ce4b4",
+          "id": "0cf7047a-e5eb-419c-987d-f4c7935553a3",
           "name": "Edit Review",
           "request": {
             "description": {
@@ -728,7 +728,7 @@
           "event": []
         },
         {
-          "id": "56388e58-cb17-4468-b108-a31483d43aa1",
+          "id": "874963fb-f86f-473a-8c6c-2d09ae6244bd",
           "name": "Delete Review",
           "request": {
             "description": {
@@ -763,7 +763,7 @@
           "event": []
         },
         {
-          "id": "b4d5940f-648e-44fc-89fd-f70e86f6806e",
+          "id": "2b131602-480f-4cdd-b250-7761efdeb97c",
           "name": "Get Reviews",
           "request": {
             "description": {
@@ -788,7 +788,7 @@
           "event": []
         },
         {
-          "id": "0195ed1e-b9c6-4d04-b797-b9b20bfca2c8",
+          "id": "d13acd41-4f79-448b-a7dd-0a89d8de561d",
           "name": "Get Review By Id",
           "request": {
             "description": {
@@ -836,7 +836,7 @@
       }
     },
     {
-      "id": "df371f00-cda9-4f32-abae-d13d9620f6ce",
+      "id": "b878628f-2cad-406a-b16f-67038b313816",
       "name": "BANNER",
       "description": {
         "content": "Routes for banner",
@@ -844,7 +844,7 @@
       },
       "item": [
         {
-          "id": "033aca3f-35ce-426d-94fe-812d55e22582",
+          "id": "3d8c371f-4166-438b-bc14-ef6a691e295d",
           "name": "Add Banner",
           "request": {
             "description": {
@@ -869,7 +869,7 @@
           "event": []
         },
         {
-          "id": "9544e02a-2a4c-4a70-b92a-30bd061862c2",
+          "id": "65499cbe-1710-48d9-b4ca-54e83ed81971",
           "name": "Edit Banner",
           "request": {
             "description": {
@@ -894,7 +894,7 @@
           "event": []
         },
         {
-          "id": "4026cff7-49e7-4aa5-81d9-8e449cb2eb8c",
+          "id": "57d289a7-7767-4df4-94c7-bc00fb31b8bc",
           "name": "Delete Banner",
           "request": {
             "description": {
@@ -929,7 +929,7 @@
           "event": []
         },
         {
-          "id": "9f6cfd01-ce2f-4fbb-8a0e-a08f19f1d0d3",
+          "id": "c9b3311e-50d8-4d73-9a85-24d8da0149ce",
           "name": "Get Banners",
           "request": {
             "description": {
@@ -954,7 +954,7 @@
           "event": []
         },
         {
-          "id": "a00ff546-dac1-4dce-86a1-e48fc25e4b35",
+          "id": "91ff7659-3535-49b1-89a8-b7e1d4f90989",
           "name": "Get Banner By Id",
           "request": {
             "description": {
@@ -1002,7 +1002,7 @@
       }
     },
     {
-      "id": "9829cf6d-1868-431c-9536-0783f01f7a20",
+      "id": "1067b679-d816-431d-992b-40d5e89b34e8",
       "name": "BLOG",
       "description": {
         "content": "Routes for blog",
@@ -1010,7 +1010,7 @@
       },
       "item": [
         {
-          "id": "dad52efe-7cde-4491-bac7-cf07b300caf6",
+          "id": "a35f7233-ad48-43de-9cd8-aa2c9db43e0d",
           "name": "Add Blog",
           "request": {
             "description": {
@@ -1035,7 +1035,7 @@
           "event": []
         },
         {
-          "id": "7d95c3a3-0941-4218-90c6-f2ee7d2f867e",
+          "id": "05c44d19-65bd-4599-9f0b-0a16b531a750",
           "name": "Edit Blog",
           "request": {
             "description": {
@@ -1060,7 +1060,7 @@
           "event": []
         },
         {
-          "id": "4afd4e7b-68c3-438c-a2fa-d3d10b6e70d6",
+          "id": "efbb559b-eff7-42e0-97a7-701725f827df",
           "name": "Delete Blog",
           "request": {
             "description": {
@@ -1095,7 +1095,7 @@
           "event": []
         },
         {
-          "id": "64dac3fe-3cb1-4847-9ece-dd90c605a21c",
+          "id": "434948f9-2b44-4865-9f15-d4a82f41e6f1",
           "name": "Get Blogs",
           "request": {
             "description": {
@@ -1120,7 +1120,7 @@
           "event": []
         },
         {
-          "id": "a5df5e1e-7e7d-45ca-83bc-e2e7e837e301",
+          "id": "74fc8f16-fccb-4077-b068-9deee73b14b9",
           "name": "Get Blog By Id",
           "request": {
             "description": {
@@ -1168,7 +1168,7 @@
       }
     },
     {
-      "id": "20d512cd-33f1-4622-86b5-07c0b98ee391",
+      "id": "d6198ec4-cef9-4c11-850a-fa930e503366",
       "name": "FAQ",
       "description": {
         "content": "Routes for faq",
@@ -1176,7 +1176,7 @@
       },
       "item": [
         {
-          "id": "0f98222e-5545-4b13-bc62-c43ec900f8d6",
+          "id": "b0b8780e-be93-4cb4-805b-00a582575fcc",
           "name": "Add Faq",
           "request": {
             "description": {
@@ -1201,7 +1201,7 @@
           "event": []
         },
         {
-          "id": "ebf52fbe-fbef-4e92-bc50-e3e288e49747",
+          "id": "3475fc55-ea41-4419-ac02-ab896fd9fcfe",
           "name": "Edit Faq",
           "request": {
             "description": {
@@ -1226,7 +1226,7 @@
           "event": []
         },
         {
-          "id": "0634431d-d199-4bbf-ac3c-ca81aabe1ea9",
+          "id": "fc05d08f-1f0a-4185-b2ff-19fef5e1b52d",
           "name": "Delete Faq",
           "request": {
             "description": {
@@ -1261,7 +1261,7 @@
           "event": []
         },
         {
-          "id": "f81898ab-fc68-4d25-9abd-c8cfa0e73343",
+          "id": "6470203b-77c9-4f26-b6db-d1693ae39e46",
           "name": "Get Faqs",
           "request": {
             "description": {
@@ -1286,7 +1286,7 @@
           "event": []
         },
         {
-          "id": "f5ac0e9f-8675-4dc7-ba4a-6cb027c4919e",
+          "id": "582a2960-b8a0-4023-bd7e-5ed972fb6632",
           "name": "Get Faq By Id",
           "request": {
             "description": {
@@ -1334,7 +1334,7 @@
       }
     },
     {
-      "id": "939f486a-2633-45d9-bc46-44ccfc7f84df",
+      "id": "4f220b73-a432-4eb8-8110-9a7aaa681677",
       "name": "NEWSLETTER",
       "description": {
         "content": "Routes for newsletter",
@@ -1342,7 +1342,7 @@
       },
       "item": [
         {
-          "id": "e95fadf2-f804-4a34-a35c-55649c044180",
+          "id": "244b019f-db86-491e-8951-7e57d5accfc1",
           "name": "Subscribe Newsletter",
           "request": {
             "description": {
@@ -1367,7 +1367,7 @@
           "event": []
         },
         {
-          "id": "dda5f9b0-be49-4612-bbc2-a44d9dd14619",
+          "id": "eaa0363c-ff90-4b8a-b789-4398f4269383",
           "name": "Delete Newsletter",
           "request": {
             "description": {
@@ -1402,7 +1402,7 @@
           "event": []
         },
         {
-          "id": "599056cd-b791-4430-b8cc-575702d0e034",
+          "id": "3b7da5da-fb49-49e3-89ed-5ffc839e20d6",
           "name": "Get Newsletter",
           "request": {
             "description": {
@@ -1440,7 +1440,7 @@
       }
     },
     {
-      "id": "c68c9388-36be-4d4b-ac43-36349902c131",
+      "id": "44740288-c3d1-4556-a8f0-a1252031df6b",
       "name": "CONTACT",
       "description": {
         "content": "Routes for contact",
@@ -1448,7 +1448,7 @@
       },
       "item": [
         {
-          "id": "ef4eda79-181d-42f3-9688-271173d5c027",
+          "id": "6e5fbe77-0687-4043-afa3-0865f09d1c78",
           "name": "Add Contact",
           "request": {
             "description": {
@@ -1473,7 +1473,7 @@
           "event": []
         },
         {
-          "id": "e222cf9d-e0d6-4ec6-8902-ba5954323b4a",
+          "id": "429ffdfa-407a-4eb7-a660-5862988cbed5",
           "name": "Delete Contact",
           "request": {
             "description": {
@@ -1508,7 +1508,7 @@
           "event": []
         },
         {
-          "id": "d904a023-9f40-4969-ada1-71964c28449f",
+          "id": "7033228b-290d-4227-826b-82d6e41557c2",
           "name": "Get Contacts",
           "request": {
             "description": {
@@ -1546,7 +1546,7 @@
       }
     },
     {
-      "id": "0965302e-88a8-4b3d-ae30-6552167f413a",
+      "id": "9abd53ad-9da5-450e-9c1c-55e193586abb",
       "name": "SETTINGS",
       "description": {
         "content": "Routes for settings",
@@ -1554,7 +1554,7 @@
       },
       "item": [
         {
-          "id": "e5c1dd05-f164-4cec-9044-3bd6edc07500",
+          "id": "e807899e-685e-4348-b92a-1c1e8535ace6",
           "name": "Update Settings",
           "request": {
             "description": {
@@ -1579,7 +1579,7 @@
           "event": []
         },
         {
-          "id": "3d04dd2c-9c08-48c9-9374-9be25ea32f5b",
+          "id": "a6bc4dd1-5a76-4966-9ecf-3fe2f68de9dc",
           "name": "Get Item",
           "request": {
             "description": {
@@ -1616,7 +1616,7 @@
       }
     },
     {
-      "id": "3b95f6bd-4ea6-4429-91c9-0fc5150be4ec",
+      "id": "b88b5bad-beab-4e3b-b73c-db2b39badcb5",
       "name": "COUPON",
       "description": {
         "content": "Routes for coupon",
@@ -1624,7 +1624,7 @@
       },
       "item": [
         {
-          "id": "95c0f8bc-fb37-485c-9610-fd5fcf8c1579",
+          "id": "ab510911-6b56-4f7e-abc2-ded5a74cec19",
           "name": "Add Coupon",
           "request": {
             "description": {
@@ -1649,7 +1649,7 @@
           "event": []
         },
         {
-          "id": "0d73e638-05c3-4a54-8270-92a609a6b4f2",
+          "id": "2cc54400-6544-4c1b-a736-39966b4f9fd9",
           "name": "Apply Coupon",
           "request": {
             "description": {
@@ -1674,7 +1674,7 @@
           "event": []
         },
         {
-          "id": "f04bbe13-c382-4680-b6d8-ef067043efd6",
+          "id": "058a7dde-4637-4595-a21c-8c3f6f6dbede",
           "name": "Edit Coupon",
           "request": {
             "description": {
@@ -1699,7 +1699,7 @@
           "event": []
         },
         {
-          "id": "8366edab-ddf1-4865-b142-c450b2900607",
+          "id": "f922209f-5fce-4162-a7fa-c8fec51ac56e",
           "name": "Delete Coupon",
           "request": {
             "description": {
@@ -1734,7 +1734,7 @@
           "event": []
         },
         {
-          "id": "9bbba414-e442-464e-a490-35ac358d53dd",
+          "id": "cc58fcaf-6f06-4987-948c-623b52cf66ac",
           "name": "Get Coupons",
           "request": {
             "description": {
@@ -1772,7 +1772,7 @@
       }
     },
     {
-      "id": "57e6fdaf-abe7-4035-a9c8-2429ca36e991",
+      "id": "27f45744-cf65-4028-a289-9110aad47063",
       "name": "POLICY",
       "description": {
         "content": "Routes for policy",
@@ -1780,7 +1780,7 @@
       },
       "item": [
         {
-          "id": "33ab3785-2e56-4fc8-a250-55be406c6388",
+          "id": "dcab0bde-a6ba-4636-b623-4adcbed4878e",
           "name": "Add Edit Policy",
           "request": {
             "description": {
@@ -1805,7 +1805,7 @@
           "event": []
         },
         {
-          "id": "38a12c2d-35da-4e7b-8864-4bea10aad1d0",
+          "id": "e5284de9-1a39-40cd-add6-bf43ff69629b",
           "name": "Add Edit Policy",
           "request": {
             "description": {
@@ -1830,7 +1830,7 @@
           "event": []
         },
         {
-          "id": "63b9bffe-f436-4c2c-9bb3-1e38ad84e32d",
+          "id": "4c1841e2-1e2b-4f82-929c-3ef1152f01d5",
           "name": "Get Policy By Type",
           "request": {
             "description": {
@@ -1868,7 +1868,7 @@
       }
     },
     {
-      "id": "ff763cff-8b4f-4e42-9abe-42b9b90681a0",
+      "id": "4db25a0a-e1ca-4b4f-ac03-115147765000",
       "name": "CART",
       "description": {
         "content": "Routes for cart",
@@ -1876,7 +1876,7 @@
       },
       "item": [
         {
-          "id": "82035095-5381-4d97-a0c8-ab672381c234",
+          "id": "0d5c91d3-1c9a-4270-80ec-370d12d9781e",
           "name": "Add To Cart",
           "request": {
             "description": {
@@ -1901,7 +1901,7 @@
           "event": []
         },
         {
-          "id": "a714e12a-9038-400f-a2ec-82805b15344a",
+          "id": "3e99def6-8eb0-4734-beb0-43db03fd107c",
           "name": "Update Cart Item",
           "request": {
             "description": {
@@ -1926,7 +1926,7 @@
           "event": []
         },
         {
-          "id": "e4ce0f19-8965-43e9-b2f3-c555cb864624",
+          "id": "587efd84-9f42-452c-802f-58a1cea57cc5",
           "name": "Clear Cart",
           "request": {
             "description": {
@@ -1951,7 +1951,7 @@
           "event": []
         },
         {
-          "id": "7b2533fa-081b-4989-afea-9d688d0c53b2",
+          "id": "ffacbf40-ad32-400a-bd1a-a6d96ea2306e",
           "name": "Get Cart",
           "request": {
             "description": {
@@ -1978,7 +1978,7 @@
       "event": []
     },
     {
-      "id": "b56608e3-bddf-47bc-a646-5083ca44662e",
+      "id": "4156bb8e-d554-43af-be9e-87774234cd84",
       "name": "WISHLIST",
       "description": {
         "content": "Routes for wishlist",
@@ -1986,7 +1986,7 @@
       },
       "item": [
         {
-          "id": "ac9e3d78-f624-4954-959d-5da9567dc539",
+          "id": "da42a67d-ac6e-4d4b-acb7-755c969f3f73",
           "name": "Add Wishlist",
           "request": {
             "description": {
@@ -2011,7 +2011,7 @@
           "event": []
         },
         {
-          "id": "330ff2fc-c3d6-488a-b9b4-854099632eef",
+          "id": "a7608f1f-55e2-405d-852a-0e6cbeeb61b8",
           "name": "Remove Wishlist",
           "request": {
             "description": {
@@ -2046,7 +2046,7 @@
           "event": []
         },
         {
-          "id": "00805bcc-0ce2-4d9c-aa5a-4ac02bc564ac",
+          "id": "44674a70-1448-4b40-b6b1-e09c5e980918",
           "name": "Get Wishlist",
           "request": {
             "description": {
@@ -2083,7 +2083,7 @@
       }
     },
     {
-      "id": "47ec018d-1524-4c9a-93e1-1f5273e42089",
+      "id": "dbe857fe-0ab3-4447-8b1c-8362854c0d67",
       "name": "ABOUT",
       "description": {
         "content": "Routes for about",
@@ -2091,7 +2091,7 @@
       },
       "item": [
         {
-          "id": "07693841-86a8-4a14-8420-ab4d7f8210df",
+          "id": "f5681b67-f387-4a31-9d06-76a21b679d6f",
           "name": "Add About Section",
           "request": {
             "description": {
@@ -2116,7 +2116,7 @@
           "event": []
         },
         {
-          "id": "597d0e67-ea0c-4661-b0bc-90adb7f05d2b",
+          "id": "387eead7-5ed7-41e6-a5fb-7ec2ae73afc6",
           "name": "Edit About Section",
           "request": {
             "description": {
@@ -2141,7 +2141,7 @@
           "event": []
         },
         {
-          "id": "3b7627f8-34be-43e2-af6d-d02a95752e7c",
+          "id": "44b86b86-1aab-46fb-98e1-8f5e58a2d531",
           "name": "Delete About Section",
           "request": {
             "description": {
@@ -2176,7 +2176,7 @@
           "event": []
         },
         {
-          "id": "1962a60d-ecb3-4738-9d16-628308a31899",
+          "id": "99c1174f-bc3a-4ba5-81fa-8df5024ca886",
           "name": "Get All About Sections",
           "request": {
             "description": {
@@ -2201,7 +2201,7 @@
           "event": []
         },
         {
-          "id": "0f4df3e4-1c17-4da0-95d2-a6786e1f3507",
+          "id": "19b66ddb-1cb9-4349-aa54-35224a119276",
           "name": "Get About Section By Id",
           "request": {
             "description": {
@@ -2249,7 +2249,7 @@
       }
     },
     {
-      "id": "8759d92a-14c6-42f0-bc77-b436fee08287",
+      "id": "662b2d2a-119a-4afe-b0f7-731bf7f150b4",
       "name": "SIZE",
       "description": {
         "content": "Routes for size",
@@ -2257,7 +2257,7 @@
       },
       "item": [
         {
-          "id": "14e3e7bc-b376-47c6-9b6e-f8c48e20916f",
+          "id": "03d5ec94-d4cc-43d2-99b4-3d325f2ae58c",
           "name": "Add Size",
           "request": {
             "description": {
@@ -2282,7 +2282,7 @@
           "event": []
         },
         {
-          "id": "301bb905-6799-4d19-9507-c514305499e6",
+          "id": "da05a179-a0de-4006-8d99-3a186bf13d46",
           "name": "Edit Size",
           "request": {
             "description": {
@@ -2307,7 +2307,7 @@
           "event": []
         },
         {
-          "id": "d3f5c608-b947-4878-a108-a52a22904bd4",
+          "id": "53cdbb41-7cb6-4ef3-9b95-b0593e79afc9",
           "name": "Delete Size",
           "request": {
             "description": {
@@ -2342,7 +2342,7 @@
           "event": []
         },
         {
-          "id": "4f243de2-efe9-467f-8abb-d337c4ad6eb5",
+          "id": "1402753c-a8da-4b5b-b903-3563226a0ac9",
           "name": "Get Sizes",
           "request": {
             "description": {
@@ -2367,7 +2367,7 @@
           "event": []
         },
         {
-          "id": "e099f7da-b9c8-4550-8071-3ff9f32f492b",
+          "id": "6ebce47f-0014-4059-aaac-618186bc37f3",
           "name": "Get Size By Id",
           "request": {
             "description": {
@@ -2415,7 +2415,7 @@
       }
     },
     {
-      "id": "49b07ecb-d610-4712-927a-9bee4f56847e",
+      "id": "975fabf4-7ba1-477c-a17b-9a1be997715d",
       "name": "COLOR",
       "description": {
         "content": "Routes for color",
@@ -2423,7 +2423,7 @@
       },
       "item": [
         {
-          "id": "5547827c-bbf9-4f8e-9c1e-e194f2a8a871",
+          "id": "92265d27-e7c1-401d-981f-be64689646da",
           "name": "Add Color",
           "request": {
             "description": {
@@ -2448,7 +2448,7 @@
           "event": []
         },
         {
-          "id": "a9d62a80-fc6e-4d66-a3ab-56463359c3d1",
+          "id": "715345fa-94da-414d-ae63-3a852add5e76",
           "name": "Edit Color",
           "request": {
             "description": {
@@ -2473,7 +2473,7 @@
           "event": []
         },
         {
-          "id": "5e8a2b06-9161-424f-9e52-d795951dc632",
+          "id": "6346225e-88cf-45fb-b441-87eaf09ff564",
           "name": "Delete Color",
           "request": {
             "description": {
@@ -2508,7 +2508,7 @@
           "event": []
         },
         {
-          "id": "c1c2b66d-3878-4ef7-85ae-ed130de48a00",
+          "id": "87be9b13-9284-4b68-942f-8167ccddc916",
           "name": "Get All Color",
           "request": {
             "description": {
@@ -2533,7 +2533,7 @@
           "event": []
         },
         {
-          "id": "31d7d14b-3cf9-42d5-a896-85dfd51be0d9",
+          "id": "f6c49d16-0809-48a0-81a6-4942564eeaf8",
           "name": "Get Color By Id",
           "request": {
             "description": {
@@ -2581,7 +2581,7 @@
       }
     },
     {
-      "id": "1c6457d7-cdaa-4841-a8f9-486093fa9d01",
+      "id": "0a6ee70c-6cdd-4a84-bf8c-b76fc1e8b905",
       "name": "USER",
       "description": {
         "content": "Routes for user",
@@ -2589,7 +2589,7 @@
       },
       "item": [
         {
-          "id": "67fe4b39-6858-4810-9d99-b5d4d238a781",
+          "id": "03bd2315-fe6c-4b66-92e1-0b64a24abf49",
           "name": "Add User",
           "request": {
             "description": {
@@ -2614,7 +2614,7 @@
           "event": []
         },
         {
-          "id": "a3a876e0-8e34-4dfb-ab4c-e84c1e055688",
+          "id": "e1524c5e-bfa0-4d8d-a785-5768e4484b70",
           "name": "Edit User",
           "request": {
             "description": {
@@ -2639,7 +2639,7 @@
           "event": []
         },
         {
-          "id": "a35aa3ca-31ef-48fa-9146-44f2d4b99b16",
+          "id": "ad678810-da6b-48a0-b7f3-78902d97d20b",
           "name": "Delete User",
           "request": {
             "description": {
@@ -2674,7 +2674,7 @@
           "event": []
         },
         {
-          "id": "c254599a-a717-4d09-b05b-5a8e6e1810ae",
+          "id": "2bfd4772-94b0-4536-86f1-38422575880f",
           "name": "Get Users",
           "request": {
             "description": {
@@ -2699,7 +2699,7 @@
           "event": []
         },
         {
-          "id": "3a991d99-a966-42d1-bc05-70803f898553",
+          "id": "1fa4112c-0aa0-4ce4-86e8-fb8714b9d231",
           "name": "Get User By Id",
           "request": {
             "description": {
@@ -2737,7 +2737,7 @@
       "event": []
     },
     {
-      "id": "7e99b8ea-c6e4-4974-8006-656fd9b3b132",
+      "id": "6a813d87-d532-4036-82ba-848529f6b28d",
       "name": "UPLOAD",
       "description": {
         "content": "Routes for upload",
@@ -2745,7 +2745,7 @@
       },
       "item": [
         {
-          "id": "5bebbf82-d2d8-46f8-9b3c-d4b5cccf82b4",
+          "id": "0ba280e8-0b1e-4087-8eb7-f4b499b50038",
           "name": "Create Image",
           "request": {
             "description": {
@@ -2770,7 +2770,7 @@
           "event": []
         },
         {
-          "id": "34eabc1d-42c1-4b65-9dc1-de1d895afcae",
+          "id": "049b9150-c54f-46c3-a491-eef5fbd0b9a1",
           "name": "Get Images",
           "request": {
             "description": {
@@ -2795,7 +2795,7 @@
           "event": []
         },
         {
-          "id": "81cd9f29-8c91-4cca-919b-cff7e7204557",
+          "id": "393749b9-9434-4d54-b3ca-8bcd13ee5d94",
           "name": "Delete Image",
           "request": {
             "description": {
@@ -2823,7 +2823,7 @@
       "event": []
     },
     {
-      "id": "c6c061e7-df17-4c0c-b5cd-0608a6b1784a",
+      "id": "f10155bf-2cf7-425e-b677-80e3f97d7cfc",
       "name": "ADDRESS",
       "description": {
         "content": "Routes for address",
@@ -2831,7 +2831,7 @@
       },
       "item": [
         {
-          "id": "812ce48c-09eb-4bcc-a16e-ca1a2c8117d7",
+          "id": "c7194564-9b71-4cf6-be42-f69a143b8a63",
           "name": "Add Address",
           "request": {
             "description": {
@@ -2856,7 +2856,7 @@
           "event": []
         },
         {
-          "id": "a7824ea6-391c-4874-bb0c-167026267980",
+          "id": "0fe71f90-e222-424e-8938-6883b7207dcb",
           "name": "Edit Address",
           "request": {
             "description": {
@@ -2881,7 +2881,7 @@
           "event": []
         },
         {
-          "id": "272376ce-b3a4-4a42-ab6f-c5f701863bd8",
+          "id": "d4ad4260-a590-4a6a-83b0-28c6b725ea2a",
           "name": "Delete Address",
           "request": {
             "description": {
@@ -2916,7 +2916,7 @@
           "event": []
         },
         {
-          "id": "db7e807c-2db0-4777-be9d-d496330fa3e9",
+          "id": "dc29acb0-e551-4c91-993b-687208bdcbeb",
           "name": "Get All Address",
           "request": {
             "description": {
@@ -2954,7 +2954,7 @@
       }
     },
     {
-      "id": "4790cdd3-1c1f-4dcd-a12e-ff6625c992e6",
+      "id": "4f4b145f-61dc-41ef-b355-eaa1c2303c9d",
       "name": "ORDER",
       "description": {
         "content": "Routes for order",
@@ -2962,7 +2962,7 @@
       },
       "item": [
         {
-          "id": "9e81e0f1-f921-461d-9447-c45b14fcbaa7",
+          "id": "6e954f7c-4418-4c2a-b8ec-7438d1c7ae36",
           "name": "Add Order",
           "request": {
             "description": {
@@ -2987,7 +2987,7 @@
           "event": []
         },
         {
-          "id": "53c595d3-15d7-446c-8c5a-e75e570ba24b",
+          "id": "9b7456ed-4a88-4ab5-90b8-758f4b90be4a",
           "name": "Get Orders",
           "request": {
             "description": {
@@ -3004,6 +3004,41 @@
               ],
               "query": [],
               "variable": []
+            },
+            "method": "GET",
+            "body": {}
+          },
+          "response": [],
+          "event": []
+        },
+        {
+          "id": "2274bc59-106c-4e9f-8f6f-827add6738e8",
+          "name": "Get Order By Id",
+          "request": {
+            "description": {
+              "content": "Controller: getOrderById\nSchema: getOrderByIdSchema",
+              "type": "text/markdown"
+            },
+            "url": {
+              "path": [
+                "order",
+                ":id"
+              ],
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "type": "any",
+                  "key": "id"
+                },
+                {
+                  "type": "any",
+                  "value": "sample_id",
+                  "key": "id"
+                }
+              ]
             },
             "method": "GET",
             "body": {}
@@ -3039,7 +3074,7 @@
     }
   ],
   "info": {
-    "_postman_id": "97881806-2e8a-42ee-8ad4-3a9c41340f34",
+    "_postman_id": "878b0bf5-e8ab-479e-9d31-2c8e4b52b91c",
     "name": "Delvoura API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

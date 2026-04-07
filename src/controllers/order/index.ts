@@ -1,6 +1,6 @@
 import { apiResponse, HTTP_STATUS, isValidObjectId, resolvePagination, resolveSortAndFilter, USER_ROLES } from "../../common";
 import { addressModel, orderModel, productModel, userModel } from "../../database";
-import { checkIdExist, countData, createData, findAllWithPopulate, getData, getFirstMatch, reqInfo, responseMessage } from "../../helper";
+import { checkIdExist, countData, createData, findAllWithPopulate, findOneAndPopulate, getData, getFirstMatch, reqInfo, responseMessage } from "../../helper";
 import { addOrderSchema, getOrderByIdSchema, getOrdersSchema } from "../../validation";
 
 export const addOrder = async (req, res) => {
@@ -64,6 +64,7 @@ export const getAllOrder = async (req, res) => {
 
     const { criteria, options, page, limit } = resolveSortAndFilter(value, ["orderId", "email"]);
 
+    if (value.sortFilter) options.sort = { priority: -1, createdAt: -1 };
     if (value.orderStatusFilter) criteria.orderStatus = value.orderStatusFilter;
     if (value.paymentStatusFilter) criteria.paymentStatus = value.paymentStatusFilter;
 
@@ -87,17 +88,19 @@ export const getOrderById = async (req, res) => {
   reqInfo(req);
   try {
     const { value, error } = getOrderByIdSchema.validate(req.params || {});
-    if (error) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.message, {}, {}));
-    }
+    if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.message, {}, {}));
 
-    const order = await orderModel.findById(value.id).populate("items.productId", "name").lean();
-    if (!order) {
-      return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, "Not found", {}, {}));
-    }
+    const populate = [
+      { path: "items.productId", select: "title" },
+      { path: "items.colorId", select: "name" },
+      { path: "items.sizeId", select: "name" },
+    ];
+    const order = await findOneAndPopulate(orderModel, { _id: value.id }, {}, {}, populate);
+    if (!order) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("Order"), {}, {}));
 
-    return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, "Order", order, {}));
+    return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess("Order"), order, {}));
   } catch (error) {
-    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, "Server error", {}, error));
+    console.log(error);
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, {}));
   }
 };

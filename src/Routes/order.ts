@@ -6,5 +6,6 @@ const router = Router();
 
 router.post("/add", userJWT, orderController.addOrder);
 router.get("/all", userJWT, orderController.getAllOrder);
+router.get("/:id", userJWT, orderController.getOrderById);
 
 export const orderRouter = router;

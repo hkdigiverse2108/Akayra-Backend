@@ -42,6 +42,7 @@ const orderSchema = new mongoose.Schema(
     currency: { type: String, default: "INR" },
     razorpayId: { type: String, default: null },
     phonePeId: { type: String, default: null },
+    merchantId: { type: String, default: null },
     paymentStatus: { type: String, default: PAYMENT_STATUS.PENDING },
     orderStatus: { type: String, default: ORDER_STATUS.PENDING },
     isDeleted: { type: Boolean, default: false },

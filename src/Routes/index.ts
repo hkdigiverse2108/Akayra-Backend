@@ -24,6 +24,8 @@ import { userRouter } from './user'
 import { uploadRouter } from './upload'
 import { addressRouter } from './address'
 import { orderRouter } from './order'
+import { razorpayRouter } from './razorpay'
+import { phonepeRouter } from './phonepe'
 
 const router = Router()
 
@@ -53,5 +55,7 @@ router.use('/user', userRouter)
 router.use('/upload', uploadRouter)
 router.use('/address', addressRouter)
 router.use('/order', orderRouter)
+router.use('/razorpay', razorpayRouter)
+router.use('/phonepe', phonepeRouter)
 
 export { router }

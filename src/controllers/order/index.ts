@@ -1,7 +1,8 @@
 import { apiResponse, HTTP_STATUS, isValidObjectId, resolvePagination, resolveSortAndFilter, USER_ROLES } from "../../common";
-import { addressModel, orderModel, productModel, userModel } from "../../database";
-import { checkIdExist, countData, createData, findAllWithPopulate, findOneAndPopulate, getData, getFirstMatch, reqInfo, responseMessage } from "../../helper";
+import { addressModel, orderModel, productModel, settingsModel, userModel } from "../../database";
+import { checkIdExist, countData, createData, findAllWithPopulate, findOneAndPopulate, getFirstMatch, reqInfo, responseMessage, updateData } from "../../helper";
 import { addOrderSchema, getOrderByIdSchema, getOrdersSchema } from "../../validation";
+import { createRazorpayOrder } from "../razorpay";
 
 export const addOrder = async (req, res) => {
   reqInfo(req);
@@ -48,8 +49,22 @@ export const addOrder = async (req, res) => {
 
     const response = await createData(orderModel, value);
     if (!response) return res.status(HTTP_STATUS.NOT_IMPLEMENTED).json(new apiResponse(HTTP_STATUS.NOT_IMPLEMENTED, responseMessage?.addDataError, {}, {}));
+    let setting = await getFirstMatch(settingsModel, {}, {}, {});
 
-    return res.status(HTTP_STATUS.CREATED).json(new apiResponse(HTTP_STATUS.CREATED, responseMessage.addDataSuccess("Order"), response, {}));
+    if (setting?.isRazorpay) {
+      const razorpayOrder = await createRazorpayOrder({
+        amount: response.total,
+        currency: "INR",
+        receipt: response._id.toString(),
+      });
+
+      if (!razorpayOrder) return res.status(HTTP_STATUS.NOT_IMPLEMENTED).json(new apiResponse(HTTP_STATUS.NOT_IMPLEMENTED, responseMessage?.addDataError, {}, {}));
+
+      const updatedOrder = await updateData(orderModel, { _id: response._id }, { razorpayId: razorpayOrder.id }, {});
+      return res.status(HTTP_STATUS.CREATED).json(new apiResponse(HTTP_STATUS.CREATED, responseMessage?.addDataSuccess("Order"), { updatedOrder, razorpayOrder }, {}));
+    } else {
+      return res.status(HTTP_STATUS.CREATED).json(new apiResponse(HTTP_STATUS.CREATED, responseMessage?.addDataSuccess("Order"), response, {}));
+    }
   } catch (error) {
     console.log(error);
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, {}));

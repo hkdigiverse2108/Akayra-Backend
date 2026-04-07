@@ -55,6 +55,7 @@ export const getOrdersSchema = Joi.object({
   startDateFilter: Joi.string().optional(),
   endDateFilter: Joi.string().optional(),
   activeFilter: Joi.boolean().optional(),
+  sortFilter: Joi.string().allow("", null).optional(),
   orderStatusFilter: Joi.string()
     .valid(...Object.values(ORDER_STATUS))
     .optional(),
@@ -65,9 +66,4 @@ export const getOrdersSchema = Joi.object({
 
 export const getOrderByIdSchema = Joi.object({
   id: objectId().required(),
-});
-
-export const updateOrderShippingAddressSchema = Joi.object({
-  orderId: objectId().required(),
-  shippingAddress: Joi.alternatives().try(Joi.array().items(shippingAddressSchema).min(1), shippingAddressSchema).required(),
 });

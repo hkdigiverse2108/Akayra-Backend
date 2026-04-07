@@ -23,3 +23,5 @@ export * from './user'
 export * from './upload'
 export * from './address'
 export * from './order'
+export * from './razorpay'
+

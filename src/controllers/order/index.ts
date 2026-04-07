@@ -1,7 +1,7 @@
 import { apiResponse, HTTP_STATUS, isValidObjectId, resolvePagination, resolveSortAndFilter, USER_ROLES } from "../../common";
 import { addressModel, orderModel, productModel, userModel } from "../../database";
 import { checkIdExist, countData, createData, findAllWithPopulate, getData, getFirstMatch, reqInfo, responseMessage } from "../../helper";
-import { addOrderSchema, getOrdersSchema } from "../../validation";
+import { addOrderSchema, getOrderByIdSchema, getOrdersSchema } from "../../validation";
 
 export const addOrder = async (req, res) => {
   reqInfo(req);
@@ -80,5 +80,24 @@ export const getAllOrder = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, {}));
+  }
+};
+
+export const getOrderById = async (req, res) => {
+  reqInfo(req);
+  try {
+    const { value, error } = getOrderByIdSchema.validate(req.params || {});
+    if (error) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.message, {}, {}));
+    }
+
+    const order = await orderModel.findById(value.id).populate("items.productId", "name").lean();
+    if (!order) {
+      return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, "Not found", {}, {}));
+    }
+
+    return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, "Order", order, {}));
+  } catch (error) {
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, "Server error", {}, error));
   }
 };

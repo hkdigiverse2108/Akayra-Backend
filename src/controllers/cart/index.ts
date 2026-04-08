@@ -8,26 +8,20 @@ export const add_to_cart = async (req, res) => {
     try {
         const { error, value } = addToCartSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
-
-        // Check if product exists
         const product = await getFirstMatch(productModel, { _id: isValidObjectId(value.productId), isDeleted: false }, {}, {});
         if (!product) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound('Product'), {}, {}));
-
-        // Find existing cart for user or guest
         const userId = req?.user?._id;
         const criteria: any = userId ? { userId: isValidObjectId(userId.toString()), isDeleted: false } : { sessionId: value.sessionId, isDeleted: false };
 
         let cart: any = await getFirstMatch(cartModel, criteria, {}, {});
 
         if (!cart) {
-            // Create new cart
             const cartData: any = { items: [{ productId: value.productId, quantity: value.quantity || 1, size: value.size, color: value.color }] };
             if (userId) cartData.userId = userId;
             else cartData.sessionId = value.sessionId;
             if (value.note) cartData.note = value.note;
             cart = await createData(cartModel, cartData);
         } else {
-            // Add or update item in existing cart
             const items: any[] = cart.items || [];
             const existingIndex = items.findIndex(i => i.productId?.toString() === value.productId);
             if (existingIndex > -1) {

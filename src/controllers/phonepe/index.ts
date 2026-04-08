@@ -1,8 +1,10 @@
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { apiResponse, HTTP_STATUS, isValidObjectId, ORDER_STATUS, PAYMENT_STATUS } from "../../common";
+import { apiResponse, HTTP_STATUS, isValidObjectId, PAYMENT_STATUS } from "../../common";
 import { logsModel, orderModel, settingsModel } from "../../database";
 import { getFirstMatch, reqInfo, updateData } from "../../helper";
+
+const isProd = process.env.NODE_ENV === "production";
 
 const getPhonePeAccessToken = async () => {
   try {
@@ -12,8 +14,7 @@ const getPhonePeAccessToken = async () => {
     const CLIENT_SECRET = settings?.phonePeApiSecret;
     const CLIENT_VERSION = settings?.phonePeApiVersion;
 
-    // const authUrl = "https://api.phonepe.com/apis/identity-manager/v1/oauth/token";
-    const authUrl = "https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token";
+    const authUrl = isProd ? "https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token" : "https://api.phonepe.com/apis/identity-manager/v1/oauth/token";
 
     // Prepare form data as URL-encoded
     const params = new URLSearchParams();
@@ -53,9 +54,8 @@ export const create_phonepe_payment = async (req, res) => {
     if (!amount) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Amount is required", {}, {}));
 
     let uuid = uuidv4();
-    const createPaymentUrl = "https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay";
-    // const createPaymentUrl = "https://api.phonepe.com/apis/pg/checkout/v2/pay";
-    const merchantRedirectUrl = redirectUrl || "https://www.bharatexamfest.com";
+    const createPaymentUrl = isProd ? "https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay" : "https://api.phonepe.com/apis/pg/checkout/v2/pay";
+    const merchantRedirectUrl = redirectUrl;
 
     const accessToken = await getPhonePeAccessToken();
 

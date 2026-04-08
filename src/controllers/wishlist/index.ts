@@ -50,7 +50,7 @@ export const get_my_wishlist = async (req, res) => {
         const { criteria, options, page, limit } = resolveSortAndFilter(value);
         criteria.userId = isValidObjectId(userId.toString());
 
-        const response = await getData(wishlistModel, criteria, {}, options);
+        const response = await wishlistModel.find(criteria, {}, options).populate("productId");
         const totalCount = await countData(wishlistModel, criteria);
         return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.getDataSuccess('Wishlist'), { wishlist_data: response, totalData: totalCount, state: resolvePagination(page, limit) }, {}));
     } catch (error) {

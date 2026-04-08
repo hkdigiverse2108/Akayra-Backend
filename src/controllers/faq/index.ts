@@ -1,6 +1,6 @@
 import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from "../../common";
 import { faqModel } from "../../database";
-import { countData, createData, deleteData, getData, getFirstMatch, reqInfo, responseMessage, updateData } from "../../helper";
+import { countData, createData, deleteData, findAllWithPopulate, getData, getFirstMatch, reqInfo, responseMessage, updateData } from "../../helper";
 import { addFaqSchema, editFaqSchema, deleteFaqSchema, getFaqByIdSchema, getFaqsSchema } from "../../validation";
 
 export const add_faq = async (req, res) => {
@@ -65,7 +65,7 @@ export const get_all_faq = async (req, res) => {
     if (faqCategoryFilter) criteria.faqCategoryId = isValidObjectId(faqCategoryFilter);
     if (!sortFilter) options.sort = { priority: 1, createdAt: -1 };
 
-    const response = await getData(faqModel, criteria, {}, options);
+    const response = await findAllWithPopulate(faqModel, criteria, {}, options, "faqCategoryId");
     const totalCount = await countData(faqModel, criteria);
     return res.status(HTTP_STATUS.OK).json(
       new apiResponse(

@@ -1,6 +1,6 @@
 import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from "../../common";
-import { productModel } from "../../database";
-import { countData, createData, deleteData, findOneAndPopulate, getData, getFirstMatch, reqInfo, responseMessage, updateData } from "../../helper";
+import { productModel, reviewModel } from "../../database";
+import { aggregateData, countData, createData, deleteData, findOneAndPopulate, getData, getFirstMatch, reqInfo, responseMessage, updateData } from "../../helper";
 import { addProductSchema, editProductSchema, deleteProductSchema, getProductsSchema, getProductByIdSchema } from "../../validation";
 
 export const add_product = async (req, res) => {
@@ -140,12 +140,31 @@ export const get_all_product = async (req, res) => {
     const totalCount = await countData(productModel, criteria);
     const stateObj = resolvePagination(page, limit);
 
+    const productIds = response.map((product) => product?._id).filter(Boolean);
+    const ratingSummaryMap = new Map<string, { avgRating: number; ratingCount: number }>();
+
+    if (productIds.length > 0) {
+      const ratingStats = await aggregateData(reviewModel, [{ $match: { productId: { $in: productIds }, isDeleted: false } }, { $group: { _id: "$productId", avgRating: { $avg: "$rating" }, ratingCount: { $sum: 1 } } }]);
+
+      ratingStats.forEach((stat) => {
+        ratingSummaryMap.set(String(stat._id), {
+          avgRating: Number(stat.avgRating?.toFixed(2) || 0),
+          ratingCount: stat.ratingCount || 0,
+        });
+      });
+    }
+
+    const enrichedResponse = response.map((product) => ({
+      ...product,
+      ratingSummary: ratingSummaryMap.get(String(product?._id)) || { avgRating: 0, ratingCount: 0 },
+    }));
+
     return res.status(HTTP_STATUS.OK).json(
       new apiResponse(
         HTTP_STATUS.OK,
         responseMessage.getDataSuccess("Product"),
         {
-          product_data: response,
+          product_data: enrichedResponse,
           totalData: totalCount,
           state: stateObj,
         },
@@ -169,12 +188,23 @@ export const get_product_by_id = async (req, res) => {
       { path: "sizeIds", select: "name" },
       { path: "colorIds", select: "name" },
     ];
-
     const response = await findOneAndPopulate(productModel, { _id: isValidObjectId(value.id), isDeleted: false }, {}, {}, populate);
     if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage?.getDataNotFound("Product"), {}, {}));
-    return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage?.getDataSuccess("Product"), response, {}));
+    const ratingSummary = await getRatingSummary(response._id);
+
+    return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage?.getDataSuccess("Product"), { ...response, ratingSummary }, {}));
   } catch (error) {
     console.log(error);
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage?.internalServerError, {}, error));
   }
+};
+const getRatingSummary = async (productId) => {
+  const ratingStats = await aggregateData(reviewModel, [{ $match: { productId, isDeleted: false } }, { $group: { _id: "$productId", avgRating: { $avg: "$rating" }, ratingCount: { $sum: 1 } } }]);
+
+  if (!ratingStats?.length) return { avgRating: 0, ratingCount: 0 };
+
+  return {
+    avgRating: Number(ratingStats[0].avgRating.toFixed(2)),
+    ratingCount: ratingStats[0].ratingCount,
+  };
 };

@@ -9,7 +9,9 @@ export const add_to_wishlist = async (req, res) => {
         const { error, value } = addWishlistSchema.validate(req.body || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        const userId = req?.user?._id;
+        const userId = req?.headers?.user?._id;
+        if (!userId) return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, 'Unauthorized access', {}, {}));
+
         let isExist = await getFirstMatch(wishlistModel, { userId: isValidObjectId(userId.toString()), productId: isValidObjectId(value.productId), isDeleted: false }, {}, {});
         if (isExist) return res.status(HTTP_STATUS.CONFLICT).json(new apiResponse(HTTP_STATUS.CONFLICT, 'Product already in wishlist', {}, {}));
 
@@ -42,7 +44,9 @@ export const get_my_wishlist = async (req, res) => {
         const { error, value } = getWishlistSchema.validate(req.query || {});
         if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-        const userId = req?.user?._id;
+        const userId = req?.headers?.user?._id;
+        if (!userId) return res.status(HTTP_STATUS.UNAUTHORIZED).json(new apiResponse(HTTP_STATUS.UNAUTHORIZED, "Unauthorized access", {}, {}));
+
         const { criteria, options, page, limit } = resolveSortAndFilter(value);
         criteria.userId = isValidObjectId(userId.toString());
 

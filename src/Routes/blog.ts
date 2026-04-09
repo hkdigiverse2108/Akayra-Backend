@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { blogController } from "../controllers";
-import { adminJWT, userJWT } from "../helper";
+import { adminJWT } from "../helper";
 
 const router = Router();
 

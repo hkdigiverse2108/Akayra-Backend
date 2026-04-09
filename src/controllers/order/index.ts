@@ -79,6 +79,7 @@ export const getAllOrder = async (req, res) => {
 
     const { criteria, options, page, limit } = resolveSortAndFilter(value, ["orderId", "email"]);
 
+    if (value.userId) criteria.userId = isValidObjectId(value.userId);
     if (value.sortFilter) options.sort = { priority: -1, createdAt: -1 };
     if (value.orderStatusFilter) criteria.orderStatus = value.orderStatusFilter;
     if (value.paymentStatusFilter) criteria.paymentStatus = value.paymentStatusFilter;

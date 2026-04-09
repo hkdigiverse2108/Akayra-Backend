@@ -5,7 +5,7 @@ import { userJWT } from "../helper";
 const router = Router();
 
 router.post("/add" , wishlistController.add_to_wishlist);
-router.delete("/:id", wishlistController.remove_from_wishlist);
-router.get("/", wishlistController.get_my_wishlist);
+router.delete("/:id", userJWT,wishlistController.remove_from_wishlist);
+router.get("/",userJWT,wishlistController.get_my_wishlist);
 
 export const wishlistRouter = router;

@@ -41,14 +41,15 @@ export const addOrderSchema = Joi.object({
   paymentStatus: Joi.string()
     .valid(...Object.values(PAYMENT_STATUS))
     .default(PAYMENT_STATUS.PENDING)
-    .required(),
+    .optional(),
   orderStatus: Joi.string()
     .valid(...Object.values(ORDER_STATUS))
     .default(ORDER_STATUS.PENDING)
-    .required(),
+    .optional(),
 });
 
 export const getOrdersSchema = Joi.object({
+  userId: objectId().optional(),
   page: Joi.number().optional(),
   limit: Joi.number().optional(),
   search: Joi.string().optional(),

@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { BANNER_TYPE } from '../../common';
 
-// Hero Banner
 const bannerSchema = new mongoose.Schema({
     type: { type: String, enum: Object.values(BANNER_TYPE), required: true },
     title: { type: String, required: true },

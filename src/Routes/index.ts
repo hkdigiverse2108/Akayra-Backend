@@ -26,6 +26,7 @@ import { addressRouter } from './address'
 import { orderRouter } from './order'
 import { razorpayRouter } from './razorpay'
 import { phonepeRouter } from './phonepe'
+import { saleBannerRouter } from './sale-banner'
 
 const router = Router()
 
@@ -57,5 +58,6 @@ router.use('/address', addressRouter)
 router.use('/order', orderRouter)
 router.use('/razorpay', razorpayRouter)
 router.use('/phonepe', phonepeRouter)
+router.use('/sale-banner', saleBannerRouter)
 
 export { router }

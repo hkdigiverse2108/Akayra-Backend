@@ -24,4 +24,5 @@ export * from './upload'
 export * from './address'
 export * from './order'
 export * from './razorpay'
+export * from './sale-banner'
 

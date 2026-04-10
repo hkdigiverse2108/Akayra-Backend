@@ -17,6 +17,7 @@ export const addProductSchema = Joi.object({
     colorIds: Joi.array().items(Joi.string()).optional(),
     isTrending: Joi.boolean().optional(),
     isDealOfDay: Joi.boolean().optional(),
+    isSale: Joi.boolean().optional(),
     isActive: Joi.boolean().optional(),
 })
 
@@ -37,6 +38,7 @@ export const editProductSchema = Joi.object({
     colorIds: Joi.array().items(Joi.string()).optional(),
     isTrending: Joi.boolean().optional(),
     isDealOfDay: Joi.boolean().optional(),
+    isSale: Joi.boolean().optional(),
     isActive: Joi.boolean().optional(),
 })
 
@@ -57,6 +59,7 @@ export const getProductsSchema = getPaginationAndFilterSchema.keys({
     inStock: Joi.alternatives().try(Joi.boolean(), Joi.string()).optional(),
     isTrending: Joi.alternatives().try(Joi.boolean(), Joi.string()).optional(),
     isDealOfDay: Joi.alternatives().try(Joi.boolean(), Joi.string()).optional(),
+    isSale: Joi.alternatives().try(Joi.boolean(), Joi.string()).optional(),
 })
 
 export const getProductByIdSchema = Joi.object({

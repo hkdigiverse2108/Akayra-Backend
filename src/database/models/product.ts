@@ -18,6 +18,7 @@ const productSchema = new mongoose.Schema({
     isTrending: { type: Boolean, default: false },
     isDealOfDay: { type: Boolean, default: false },
     isOurTrendingProduct: { type: Boolean, default: false },
+    isSale: { type: Boolean, default: false },
     sizeIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'size' }],
     colorIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'color' }],
     isActive: { type: Boolean, default: true },

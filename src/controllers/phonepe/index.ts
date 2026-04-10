@@ -5,6 +5,8 @@ import { logsModel, orderModel, settingsModel } from "../../database";
 import { getFirstMatch, reqInfo, updateData } from "../../helper";
 
 const isProd = process.env.NODE_ENV === "production";
+const PHONEPE_AUTH_URL = isProd ? "https://api.phonepe.com/apis/identity-manager/v1/oauth/token" : "https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token";
+const PHONEPE_PAY_URL = isProd ? "https://api.phonepe.com/apis/pg/checkout/v2/pay" : "https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay";
 
 const getPhonePeAccessToken = async () => {
   try {
@@ -14,16 +16,18 @@ const getPhonePeAccessToken = async () => {
     const CLIENT_SECRET = settings?.phonePeApiSecret;
     const CLIENT_VERSION = settings?.phonePeApiVersion;
 
-    const authUrl = isProd ? "https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token" : "https://api.phonepe.com/apis/identity-manager/v1/oauth/token";
+    if (!CLIENT_ID || !CLIENT_SECRET || !CLIENT_VERSION) {
+      throw new Error("PhonePe configuration missing. Please set phonePeApiKey, phonePeApiSecret and phonePeApiVersion in settings.");
+    }
 
     // Prepare form data as URL-encoded
     const params = new URLSearchParams();
     params.append("client_id", CLIENT_ID);
-    params.append("client_version", CLIENT_VERSION);
+    params.append("client_version", String(CLIENT_VERSION));
     params.append("client_secret", CLIENT_SECRET);
     params.append("grant_type", "client_credentials");
 
-    const response = await axios.post(authUrl, params.toString(), {
+    const response = await axios.post(PHONEPE_AUTH_URL, params.toString(), {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
@@ -54,7 +58,6 @@ export const create_phonepe_payment = async (req, res) => {
     if (!amount) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, "Amount is required", {}, {}));
 
     let uuid = uuidv4();
-    const createPaymentUrl = isProd ? "https://api-preprod.phonepe.com/apis/pg-sandbox/checkout/v2/pay" : "https://api.phonepe.com/apis/pg/checkout/v2/pay";
     const merchantRedirectUrl = redirectUrl;
 
     const accessToken = await getPhonePeAccessToken();
@@ -76,7 +79,7 @@ export const create_phonepe_payment = async (req, res) => {
     };
 
     // Step 3: Create Payment Request
-    const response = await axios.post(createPaymentUrl, paymentPayload, {
+    const response = await axios.post(PHONEPE_PAY_URL, paymentPayload, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `O-Bearer ${accessToken}`, // PhonePe uses O-Bearer format
@@ -97,8 +100,16 @@ export const create_phonepe_payment = async (req, res) => {
 
     return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, "Payment order created successfully", { merchantOrderId: uuid, paymentUrl: paymentUrl, amount: amount }, {}));
   } catch (error) {
-    console.error("PhonePe Payment Error:", error);
-    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, "Failed to initiate payment", {}, error));
+    if (axios.isAxiosError(error)) {
+      console.error("PhonePe Payment Error:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+      });
+    } else {
+      console.error("PhonePe Payment Error:", error);
+    }
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, "Failed to initiate payment", {}, { message: error?.message || "Unknown error" }));
   }
 };
 

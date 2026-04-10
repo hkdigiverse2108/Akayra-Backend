@@ -1,5 +1,5 @@
 import { HTTP_STATUS, apiResponse, isValidObjectId, resolvePagination, resolveSortAndFilter } from "../../common";
-import { productModel, reviewModel } from "../../database";
+import { productModel, reviewModel, categoryModel, brandModel } from "../../database";
 import { aggregateData, countData, createData, deleteData, findOneAndPopulate, getData, getFirstMatch, reqInfo, responseMessage, updateData } from "../../helper";
 import { addProductSchema, editProductSchema, deleteProductSchema, getProductsSchema, getProductByIdSchema } from "../../validation";
 
@@ -93,14 +93,45 @@ export const get_all_product = async (req, res) => {
     const { error, value } = getProductsSchema.validate(req.query || {});
     if (error) return res.status(HTTP_STATUS.BAD_REQUEST).json(new apiResponse(HTTP_STATUS.BAD_REQUEST, error.details[0].message, {}, {}));
 
-    const { categoryId, brandId, sizeIds, colorIds, minPrice, maxPrice, inStockOnly, inStock, isTrending, isDealOfDay, sortFilter } = value;
+    const { categoryId, category, brandId, sizeIds, colorIds, minPrice, maxPrice, inStockOnly, inStock, isTrending, isDealOfDay, sortFilter } = value;
     const sizeIdsFromBracket = value["sizeIds[]"];
     const colorIdsFromBracket = value["colorIds[]"];
     const resolvedSizeIds = sizeIds ?? sizeIdsFromBracket;
     const resolvedColorIds = colorIds ?? colorIdsFromBracket;
     const { criteria, options, page, limit } = resolveSortAndFilter(value, ["title", "sku"]);
 
+    if (value.search) {
+        const matchingCategories = await categoryModel.find({ name: { $regex: value.search, $options: "i" }, isDeleted: false }, { _id: 1 });
+        const matchingBrands = await brandModel.find({ name: { $regex: value.search, $options: "i" }, isDeleted: false }, { _id: 1 });
+        
+        const categoryIdsSearch = matchingCategories.map(c => c._id);
+        const brandIdsSearch = matchingBrands.map(b => b._id);
+
+        if (categoryIdsSearch.length > 0 || brandIdsSearch.length > 0) {
+            if (!criteria.$or) criteria.$or = [];
+            if (categoryIdsSearch.length > 0) criteria.$or.push({ categoryId: { $in: categoryIdsSearch } });
+            if (brandIdsSearch.length > 0) criteria.$or.push({ brandId: { $in: brandIdsSearch } });
+        }
+    }
+
     if (categoryId) criteria.categoryId = isValidObjectId(categoryId);
+
+    if (category) {
+      const categoryDoc = await getFirstMatch(categoryModel, { name: category, isDeleted: false }, {}, {});
+      if (categoryDoc) {
+        criteria.categoryId = isValidObjectId(categoryDoc._id);
+      } else {
+        return res.status(HTTP_STATUS.OK).json(
+          new apiResponse(
+            HTTP_STATUS.OK,
+            responseMessage.getDataSuccess("Product"),
+            { product_data: [], totalData: 0, state: resolvePagination(page, limit) },
+            {}
+          )
+        );
+      }
+    }
+
     if (brandId) criteria.brandId = isValidObjectId(brandId);
     const parseBool = (input: any) => {
       if (input === true || input === false) return input;

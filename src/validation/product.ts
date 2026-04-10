@@ -51,6 +51,7 @@ export const deleteProductSchema = Joi.object({
 
 export const getProductsSchema = getPaginationAndFilterSchema.keys({
     categoryId: Joi.string().optional(),
+    category: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()).optional(),
     brandId: Joi.string().optional(),
     sizeIds: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()).optional(),
     colorIds: Joi.alternatives().try(Joi.array().items(Joi.string()), Joi.string()).optional(),

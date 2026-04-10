@@ -56,9 +56,10 @@ export const generateToken = async (data = {}, expiresIn = {}) => {
   return token;
 };
 
-export const isValidObjectId = (id = "") => {
-  return Types.ObjectId.isValid(id) ? new Types.ObjectId(id) : false;
+export const isValidObjectId = (id: any) => {
+  return Types.ObjectId.isValid(id) ? new Types.ObjectId(id) : null;
 };
+
 
 export const parseDateRange = (start?: any, end?: any) => {
   if (!start || !end) return null;

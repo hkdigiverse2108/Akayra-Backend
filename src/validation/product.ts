@@ -17,9 +17,10 @@ export const addProductSchema = Joi.object({
     colorIds: Joi.array().items(Joi.string()).optional(),
     isTrending: Joi.boolean().optional(),
     isDealOfDay: Joi.boolean().optional(),
+    isOurTrendingProduct: Joi.boolean().optional(),
     isSale: Joi.boolean().optional(),
     isActive: Joi.boolean().optional(),
-})
+}).unknown(true)
 
 export const editProductSchema = Joi.object({
     productId: Joi.string().required(),
@@ -38,9 +39,11 @@ export const editProductSchema = Joi.object({
     colorIds: Joi.array().items(Joi.string()).optional(),
     isTrending: Joi.boolean().optional(),
     isDealOfDay: Joi.boolean().optional(),
+    isOurTrendingProduct: Joi.boolean().optional(),
     isSale: Joi.boolean().optional(),
     isActive: Joi.boolean().optional(),
-})
+}).unknown(true)
+
 
 export const deleteProductSchema = Joi.object({
     id: Joi.string().required(),

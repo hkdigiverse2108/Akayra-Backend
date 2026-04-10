@@ -39,12 +39,14 @@ export const edit_product_by_id = async (req, res) => {
     // Validate other ObjectIds if they are being updated
     if (value.categoryId) value.categoryId = isValidObjectId(value.categoryId);
     if (value.brandId) value.brandId = isValidObjectId(value.brandId);
-    if (value.sizeIds) value.sizeIds = value.sizeIds.map((id) => isValidObjectId(id)).filter((id) => id !== null);
-    if (value.colorIds) value.colorIds = value.colorIds.map((id) => isValidObjectId(id)).filter((id) => id !== null);
+    if (value.sizeIds) value.sizeIds = value.sizeIds.map((id) => isValidObjectId(id)).filter((id) => id !== false);
+    if (value.colorIds) value.colorIds = value.colorIds.map((id) => isValidObjectId(id)).filter((id) => id !== false);
 
     // Auto-recalculate if prices change
-    if (value.mrp !== undefined || value.sellingPrice !== undefined) {
+    if (value.mrp !== undefined || value.sellingPrice !== undefined || value.cogsPrice !== undefined) {
       const product = await getFirstMatch(productModel, { _id: productId }, {}, {});
+      if (!product) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("Product"), {}, {}));
+
       const mrp = value.mrp !== undefined ? value.mrp : product.mrp;
       const sellingPrice = value.sellingPrice !== undefined ? value.sellingPrice : product.sellingPrice;
       const cogsPrice = value.cogsPrice !== undefined ? value.cogsPrice : product.cogsPrice;
@@ -53,7 +55,14 @@ export const edit_product_by_id = async (req, res) => {
       if (sellingPrice !== undefined && cogsPrice !== undefined) value.netProfit = sellingPrice - cogsPrice;
     }
 
-    const response = await updateData(productModel, { _id: productId }, value, {});
+    // Sanitize value: remove fields that shouldn't be updated in the set
+    const updateDataObj = { ...value };
+    delete updateDataObj.productId;
+    delete updateDataObj._id;
+    delete updateDataObj.createdAt;
+    delete updateDataObj.updatedAt;
+
+    const response = await updateData(productModel, { _id: productId }, updateDataObj, {});
     if (!response) return res.status(HTTP_STATUS.NOT_FOUND).json(new apiResponse(HTTP_STATUS.NOT_FOUND, responseMessage.getDataNotFound("Product"), {}, {}));
     return res.status(HTTP_STATUS.OK).json(new apiResponse(HTTP_STATUS.OK, responseMessage.updateDataSuccess("Product"), response, {}));
   } catch (error) {
@@ -61,6 +70,7 @@ export const edit_product_by_id = async (req, res) => {
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(new apiResponse(HTTP_STATUS.INTERNAL_SERVER_ERROR, responseMessage.internalServerError, {}, error));
   }
 };
+
 
 export const delete_product_by_id = async (req, res) => {
   reqInfo(req);
@@ -108,6 +118,9 @@ export const get_all_product = async (req, res) => {
 
     const dealFlag = parseBool(isDealOfDay);
     if (dealFlag === true) criteria.isDealOfDay = true;
+
+    const saleFlag = parseBool(value.isSale);
+    if (saleFlag === true) criteria.isSale = true;
 
     const stockFlag = parseBool(inStockOnly ?? inStock);
     if (stockFlag === true) criteria.isActive = true;
